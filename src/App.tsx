@@ -2,6 +2,7 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebase";
 import DashboardPage from "./Dashboard";
+import UpdatePage from "./UpdatePage";
 
 type Page = "home" | "dashboard" | "update" | "tasks" | "team" | "knowledge";
 type Role = "manager" | "employee";
@@ -189,7 +190,7 @@ export default function App() {
       <div>
         {currentPage === "home" && <HomePage setPage={setCurrentPage} />}
         {currentPage === "dashboard" && <DashboardPage role={role} />}
-        {currentPage === "update" && <div style={{ padding: "40px" }}><h1>✏️ หน้า Update งาน</h1></div>}
+        {currentPage === "update" && <UpdatePage />}
         {currentPage === "tasks" && <div style={{ padding: "40px" }}><h1>📋 หน้า Tasks</h1></div>}
         {currentPage === "team" && <div style={{ padding: "40px" }}><h1>👥 หน้า Team</h1></div>}
         {currentPage === "knowledge" && <div style={{ padding: "40px" }}><h1>📚 หน้า Knowledge Base</h1></div>}
