@@ -6,68 +6,8 @@ type Role = 'manager' | 'employee';
 
 const mockUser = { name: 'สมชาย', role: 'employee' as Role };
 
-const mockKPI = [
-  {
-    name: 'สมชาย',
-    role: 'employee',
-    po: 400,
-    poTarget: 1000,
-    pr: 25,
-    prTarget: 50,
-  },
-  {
-    name: 'สมหญิง',
-    role: 'employee',
-    po: 600,
-    poTarget: 1000,
-    pr: 40,
-    prTarget: 50,
-  },
-  {
-    name: 'วิชัย',
-    role: 'employee',
-    po: 200,
-    poTarget: 1000,
-    pr: 15,
-    prTarget: 50,
-  },
-  { name: 'นภา', role: 'manager', po: 0, poTarget: 0, pr: 0, prTarget: 0 },
-];
 
-const budgetData = { actual: 60, plan: 100, unit: 'ล้านบาท' };
 
-function ProgressBar({
-  value,
-  max,
-  color = '#1a3c6e',
-}: {
-  value: number;
-  max: number;
-  color?: string;
-}) {
-  const pct = Math.min((value / max) * 100, 100);
-  return (
-    <div
-      style={{
-        background: '#eee',
-        borderRadius: '999px',
-        height: '10px',
-        width: '100%',
-        overflow: 'hidden',
-      }}
-    >
-      <div
-        style={{
-          width: `${pct}%`,
-          height: '100%',
-          background: color,
-          borderRadius: '999px',
-          transition: 'width 0.5s',
-        }}
-      />
-    </div>
-  );
-}
 
 function HomePage({ setPage }: { setPage: (p: Page) => void }) {
   return (
