@@ -130,12 +130,13 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
 
   return (
     <div style={{
-      width: "100%", minHeight: "100vh",
+      position: "fixed",
+      inset: 0,
       display: "flex", alignItems: "center", justifyContent: "center",
       backgroundImage: "url('/bg-financial.webp')",
       backgroundSize: "cover", backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
-      position: "relative", fontFamily: "sans-serif",
+      fontFamily: "sans-serif",
       overflow: "hidden"
     }}>
       <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet" />
