@@ -1,3 +1,4 @@
+import VendorPage from "./VendorPage";
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebase";
@@ -5,7 +6,7 @@ import DashboardPage from "./Dashboard";
 import UpdatePage from "./UpdatePage";
 import TaskPage from "./TaskPage";
 
-type Page = "home" | "dashboard" | "update" | "tasks" | "team" | "knowledge";
+type Page = "home" | "dashboard" | "update" | "tasks" | "vendor" | "team" | "knowledge";
 type Role = "manager" | "employee";
 
 const mockUser = { name: "สมชาย", role: "employee" as Role };
@@ -159,6 +160,7 @@ export default function App() {
     { page: "dashboard" as Page, label: "📊 Dashboard" },
     { page: "update" as Page, label: "✏️ Update" },
     { page: "tasks" as Page, label: "📋 Tasks" },
+    { page: "vendor" as Page, label: "🏢 Vendor" },
     { page: "team" as Page, label: "👥 Team" },
     { page: "knowledge" as Page, label: "📚 Knowledge" },
   ];
@@ -193,6 +195,7 @@ export default function App() {
         {currentPage === "dashboard" && <DashboardPage role={role} />}
         {currentPage === "update" && <UpdatePage />}
         {currentPage === "tasks" && <TaskPage />}
+        {currentPage === "vendor" && <VendorPage />}
         {currentPage === "team" && <div style={{ padding: "40px" }}><h1>👥 หน้า Team</h1></div>}
         {currentPage === "knowledge" && <div style={{ padding: "40px" }}><h1>📚 หน้า Knowledge Base</h1></div>}
       </div>
