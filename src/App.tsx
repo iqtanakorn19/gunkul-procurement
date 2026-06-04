@@ -13,8 +13,6 @@ const mockUser = { name: "สมชาย", role: "employee" as Role };
 
 type Lang = "en" | "th";
 
-type Lang = "en" | "th";
-
 function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
