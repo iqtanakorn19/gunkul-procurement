@@ -1,6 +1,7 @@
 import VendorPage from "./VendorPage";
 import { useState } from "react";
-import { signInWithEmailAndPassword, onAuthStateChanged, User } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import type { User } from "firebase/auth";
 import { auth } from "./firebase";
 import DashboardPage from "./Dashboard";
 import UpdatePage from "./UpdatePage";
@@ -9,7 +10,6 @@ import TaskPage from "./TaskPage";
 type Page = "home" | "dashboard" | "update" | "tasks" | "vendor" | "team" | "knowledge";
 type Role = "manager" | "employee";
 
-const mockUser = { name: "สมชาย", role: "employee" as Role };
 
 type Lang = "en" | "th";
 
