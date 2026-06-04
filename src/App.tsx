@@ -13,58 +13,102 @@ const mockUser = { name: "สมชาย", role: "employee" as Role };
 
 type Lang = "en" | "th";
 
+type Lang = "en" | "th";
+
 function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [lang, setLang] = useState<Lang>("en");
   const [showForgot, setShowForgot] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotSent, setForgotSent] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   const t = {
     en: {
       title: "PROCUREMENT",
       signin: "Sign In",
+      signup: "Create Account",
+      switchToSignUp: "Don't have an account? Sign up",
+      switchToSignIn: "Already have an account? Sign in",
       email: "Email Address",
       password: "Password",
+      confirmPassword: "Confirm Password",
       button: "Sign In",
-      loading: "Signing in...",
-      error: "Invalid email or password",
+      signUpButton: "Create Account",
+      loading: "Please wait...",
+      error_invalid: "Invalid email or password",
+      error_domain: "Only @gunkul.com emails are allowed",
+      error_password_match: "Passwords do not match",
+      error_password_length: "Password must be at least 6 characters",
       forgot: "Forgot password?",
       forgotTitle: "Reset Password",
       forgotDesc: "Enter your email and we'll send you a reset link.",
       forgotButton: "Send Reset Link",
       forgotSent: "Reset link sent! Please check your email.",
       back: "← Back to Sign In",
+      signUpSuccess: "Account created! You can now sign in.",
     },
     th: {
       title: "ฝ่ายจัดซื้อ",
       signin: "เข้าสู่ระบบ",
+      signup: "สร้างบัญชีใหม่",
+      switchToSignUp: "ยังไม่มีบัญชี? สมัครสมาชิก",
+      switchToSignIn: "มีบัญชีแล้ว? เข้าสู่ระบบ",
       email: "อีเมล",
       password: "รหัสผ่าน",
+      confirmPassword: "ยืนยันรหัสผ่าน",
       button: "เข้าสู่ระบบ",
-      loading: "กำลังเข้าสู่ระบบ...",
-      error: "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+      signUpButton: "สร้างบัญชี",
+      loading: "กรุณารอสักครู่...",
+      error_invalid: "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+      error_domain: "อนุญาตเฉพาะอีเมล @gunkul.com เท่านั้น",
+      error_password_match: "รหัสผ่านไม่ตรงกัน",
+      error_password_length: "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
       forgot: "ลืมรหัสผ่าน?",
       forgotTitle: "รีเซ็ตรหัสผ่าน",
       forgotDesc: "กรอกอีเมลของคุณ เราจะส่งลิงก์รีเซ็ตให้",
       forgotButton: "ส่งลิงก์รีเซ็ต",
       forgotSent: "ส่งลิงก์แล้ว! กรุณาตรวจสอบอีเมลของคุณ",
       back: "← กลับไปเข้าสู่ระบบ",
+      signUpSuccess: "สร้างบัญชีสำเร็จ! กรุณาเข้าสู่ระบบ",
     }
   }[lang];
 
+  const validateDomain = (e: string) => e.endsWith("@gunkul.com");
+
   const handleLogin = async () => {
-    setLoading(true);
     setError("");
+    if (!validateDomain(email)) { setError(t.error_domain); return; }
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       onLogin("employee");
     } catch {
-      setError(t.error);
+      setError(t.error_invalid);
+    }
+    setLoading(false);
+  };
+
+  const handleSignUp = async () => {
+    setError("");
+    if (!validateDomain(email)) { setError(t.error_domain); return; }
+    if (password.length < 6) { setError(t.error_password_length); return; }
+    if (password !== confirmPassword) { setError(t.error_password_match); return; }
+    setLoading(true);
+    try {
+      const { createUserWithEmailAndPassword } = await import("firebase/auth");
+      await createUserWithEmailAndPassword(auth, email, password);
+      setSignUpSuccess(true);
+      setShowSignUp(false);
+      setEmail(""); setPassword(""); setConfirmPassword("");
+    } catch {
+      setError(t.error_invalid);
     }
     setLoading(false);
   };
@@ -74,6 +118,18 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
     setForgotSent(true);
   };
 
+  const inputStyle = {
+    width: "100%", padding: "12px 14px", borderRadius: "10px",
+    border: "1.5px solid #e0e0e0", boxSizing: "border-box" as const,
+    fontSize: "14px", outline: "none", background: "#fafafa"
+  };
+
+  const buttonPrimary = {
+    width: "100%", padding: "14px", backgroundColor: "#1a3c6e", color: "white",
+    border: "none", borderRadius: "10px", cursor: "pointer",
+    fontWeight: "700" as const, fontSize: "15px", letterSpacing: "0.03em"
+  };
+
   return (
     <div style={{
       minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
@@ -81,7 +137,8 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
       backgroundSize: "cover", backgroundPosition: "center",
       position: "relative", fontFamily: "sans-serif"
     }}>
-      {/* Overlay */}
+      <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet" />
+
       <div style={{ position: "absolute", inset: 0, background: "rgba(8, 20, 45, 0.62)" }} />
 
       {/* Language Toggle */}
@@ -93,7 +150,6 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
             background: lang === l ? "white" : "rgba(255,255,255,0.15)",
             color: lang === l ? "#1a3c6e" : "white",
             border: lang === l ? "none" : "1px solid rgba(255,255,255,0.35)",
-            transition: "all 0.2s"
           }}>
             {l === "en" ? "EN" : "TH"}
           </button>
@@ -108,12 +164,12 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
           <img src="/logo-default.svg" alt="Gunkul Logo"
             style={{ height: "72px", filter: "brightness(0) invert(1)", marginBottom: "16px" }} />
           <h1 style={{
-            margin: 0, color: "white", fontWeight: "800",
-            letterSpacing: lang === "en" ? "0.25em" : "0.1em",
-            fontSize: lang === "en" ? "28px" : "32px",
-            fontFamily: lang === "en" ? "'Georgia', serif" : "'Sarabun', sans-serif",
+            margin: 0, color: "white", fontWeight: "700",
+            letterSpacing: lang === "en" ? "0.3em" : "0.05em",
+            fontSize: lang === "en" ? "26px" : "34px",
+            fontFamily: lang === "en" ? "'Cormorant Garamond', serif" : "'Sarabun', sans-serif",
             textTransform: lang === "en" ? "uppercase" : "none",
-            textShadow: "0 2px 12px rgba(0,0,0,0.3)"
+            textShadow: "0 2px 16px rgba(0,0,0,0.4)"
           }}>
             {t.title}
           </h1>
@@ -121,135 +177,102 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
 
         {/* Form Card */}
         <div style={{
-          background: "rgba(255,255,255,0.96)", borderRadius: "20px",
-          padding: "36px 32px", boxShadow: "0 24px 64px rgba(0,0,0,0.35)",
-          backdropFilter: "blur(10px)"
+          background: "rgba(255,255,255,0.97)", borderRadius: "20px",
+          padding: "36px 32px", boxShadow: "0 24px 64px rgba(0,0,0,0.35)"
         }}>
+
+          {signUpSuccess && (
+            <div style={{ background: "#d1fae5", color: "#065f46", padding: "12px", borderRadius: "8px", fontSize: "13px", textAlign: "center", marginBottom: "16px" }}>
+              ✅ {t.signUpSuccess}
+            </div>
+          )}
 
           {!showForgot ? (
             <>
-              <h2 style={{ margin: "0 0 28px", color: "#1a3c6e", fontSize: "18px", textAlign: "center", fontWeight: "700" }}>
-                {t.signin}
+              <h2 style={{ margin: "0 0 24px", color: "#1a3c6e", fontSize: "18px", textAlign: "center", fontWeight: "700" }}>
+                {showSignUp ? t.signup : t.signin}
               </h2>
 
               <div style={{ marginBottom: "16px" }}>
-                <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#444" }}>
-                  {t.email}
-                </label>
+                <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#444" }}>{t.email}</label>
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                  placeholder="name@gunkul.com"
-                  onKeyDown={e => e.key === "Enter" && handleLogin()}
-                  style={{
-                    width: "100%", padding: "12px 14px", borderRadius: "10px",
-                    border: "1.5px solid #e0e0e0", boxSizing: "border-box",
-                    fontSize: "14px", outline: "none", transition: "border 0.2s",
-                    background: "#fafafa"
-                  }} />
+                  placeholder="name@gunkul.com" style={inputStyle}
+                  onKeyDown={e => !showSignUp && e.key === "Enter" && handleLogin()} />
               </div>
 
-              <div style={{ marginBottom: "8px" }}>
-                <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#444" }}>
-                  {t.password}
-                </label>
+              <div style={{ marginBottom: showSignUp ? "16px" : "8px" }}>
+                <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#444" }}>{t.password}</label>
                 <div style={{ position: "relative" }}>
                   <input type={showPassword ? "text" : "password"} value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    onKeyDown={e => e.key === "Enter" && handleLogin()}
-                    style={{
-                      width: "100%", padding: "12px 44px 12px 14px", borderRadius: "10px",
-                      border: "1.5px solid #e0e0e0", boxSizing: "border-box",
-                      fontSize: "14px", outline: "none", background: "#fafafa"
-                    }} />
+                    onChange={e => setPassword(e.target.value)} placeholder="••••••••"
+                    style={{ ...inputStyle, paddingRight: "44px" }}
+                    onKeyDown={e => !showSignUp && e.key === "Enter" && handleLogin()} />
                   <button onClick={() => setShowPassword(!showPassword)} style={{
                     position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)",
                     background: "none", border: "none", cursor: "pointer", fontSize: "16px", color: "#888"
-                  }}>
-                    {showPassword ? "🙈" : "👁️"}
-                  </button>
+                  }}>{showPassword ? "🙈" : "👁️"}</button>
                 </div>
               </div>
 
-              <div style={{ textAlign: "right", marginBottom: "20px" }}>
-                <button onClick={() => setShowForgot(true)} style={{
-                  background: "none", border: "none", color: "#2d6abf",
-                  fontSize: "13px", cursor: "pointer", fontWeight: "600"
-                }}>
-                  {t.forgot}
-                </button>
-              </div>
+              {showSignUp && (
+                <div style={{ marginBottom: "16px" }}>
+                  <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#444" }}>{t.confirmPassword}</label>
+                  <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
+                    placeholder="••••••••" style={inputStyle} />
+                </div>
+              )}
+
+              {!showSignUp && (
+                <div style={{ textAlign: "right", marginBottom: "20px" }}>
+                  <button onClick={() => setShowForgot(true)} style={{
+                    background: "none", border: "none", color: "#2d6abf", fontSize: "13px", cursor: "pointer", fontWeight: "600"
+                  }}>{t.forgot}</button>
+                </div>
+              )}
 
               {error && (
-                <div style={{
-                  background: "#fee2e2", color: "#dc2626", padding: "10px 14px",
-                  borderRadius: "8px", fontSize: "13px", marginBottom: "16px",
-                  textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px"
-                }}>
+                <div style={{ background: "#fee2e2", color: "#dc2626", padding: "10px 14px", borderRadius: "8px", fontSize: "13px", marginBottom: "16px", textAlign: "center" }}>
                   ⚠️ {error}
                 </div>
               )}
 
-              <button onClick={handleLogin} disabled={loading} style={{
-                width: "100%", padding: "14px", backgroundColor: "#1a3c6e", color: "white",
-                border: "none", borderRadius: "10px", cursor: loading ? "not-allowed" : "pointer",
-                fontWeight: "700", fontSize: "15px", opacity: loading ? 0.7 : 1,
-                transition: "all 0.2s", letterSpacing: "0.03em"
+              <button onClick={showSignUp ? handleSignUp : handleLogin} disabled={loading} style={{ ...buttonPrimary, opacity: loading ? 0.7 : 1, marginBottom: "12px" }}>
+                {loading ? t.loading : showSignUp ? t.signUpButton : t.button}
+              </button>
+
+              <button onClick={() => { setShowSignUp(!showSignUp); setError(""); setPassword(""); setConfirmPassword(""); }} style={{
+                width: "100%", padding: "11px", background: "none", border: "none",
+                color: "#2d6abf", cursor: "pointer", fontSize: "13px", fontWeight: "600"
               }}>
-                {loading ? t.loading : t.button}
+                {showSignUp ? t.switchToSignIn : t.switchToSignUp}
               </button>
             </>
           ) : (
             <>
-              <h2 style={{ margin: "0 0 8px", color: "#1a3c6e", fontSize: "18px", textAlign: "center", fontWeight: "700" }}>
-                {t.forgotTitle}
-              </h2>
-              <p style={{ margin: "0 0 24px", color: "#888", fontSize: "13px", textAlign: "center", lineHeight: "1.6" }}>
-                {t.forgotDesc}
-              </p>
-
+              <h2 style={{ margin: "0 0 8px", color: "#1a3c6e", fontSize: "18px", textAlign: "center", fontWeight: "700" }}>{t.forgotTitle}</h2>
+              <p style={{ margin: "0 0 24px", color: "#888", fontSize: "13px", textAlign: "center", lineHeight: "1.6" }}>{t.forgotDesc}</p>
               {!forgotSent ? (
                 <>
                   <div style={{ marginBottom: "16px" }}>
-                    <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#444" }}>
-                      {t.email}
-                    </label>
+                    <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#444" }}>{t.email}</label>
                     <input type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)}
-                      placeholder="name@gunkul.com"
-                      style={{
-                        width: "100%", padding: "12px 14px", borderRadius: "10px",
-                        border: "1.5px solid #e0e0e0", boxSizing: "border-box",
-                        fontSize: "14px", background: "#fafafa"
-                      }} />
+                      placeholder="name@gunkul.com" style={inputStyle} />
                   </div>
-                  <button onClick={handleForgot} style={{
-                    width: "100%", padding: "14px", backgroundColor: "#1a3c6e", color: "white",
-                    border: "none", borderRadius: "10px", cursor: "pointer",
-                    fontWeight: "700", fontSize: "15px", marginBottom: "12px"
-                  }}>
-                    {t.forgotButton}
-                  </button>
+                  <button onClick={handleForgot} style={{ ...buttonPrimary, marginBottom: "12px" }}>{t.forgotButton}</button>
                 </>
               ) : (
-                <div style={{
-                  background: "#d1fae5", color: "#065f46", padding: "16px",
-                  borderRadius: "10px", fontSize: "13px", textAlign: "center",
-                  marginBottom: "16px", lineHeight: "1.6"
-                }}>
+                <div style={{ background: "#d1fae5", color: "#065f46", padding: "16px", borderRadius: "10px", fontSize: "13px", textAlign: "center", marginBottom: "16px" }}>
                   ✅ {t.forgotSent}
                 </div>
               )}
-
               <button onClick={() => { setShowForgot(false); setForgotSent(false); setForgotEmail(""); }} style={{
                 width: "100%", padding: "12px", background: "#f5f5f5", border: "none",
                 borderRadius: "10px", cursor: "pointer", color: "#555", fontWeight: "600", fontSize: "13px"
-              }}>
-                {t.back}
-              </button>
+              }}>{t.back}</button>
             </>
           )}
         </div>
 
-        {/* Footer */}
         <p style={{ textAlign: "center", color: "rgba(255,255,255,0.45)", fontSize: "12px", marginTop: "24px" }}>
           © 2026 Gunkul Engineering — Procurement Department
         </p>
