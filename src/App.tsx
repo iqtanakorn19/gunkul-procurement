@@ -168,7 +168,10 @@ export default function App() {
   return (
     <div style={{ fontFamily: "sans-serif", minHeight: "100vh", backgroundColor: "#f5f5f5" }}>
       <nav style={{ backgroundColor: "#1a3c6e", padding: "12px 24px", display: "flex", gap: "12px", alignItems: "center" }}>
-        <span style={{ color: "white", fontWeight: "bold", marginRight: "16px" }}>Gunkul Procurement</span>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginRight: "16px" }}>
+  <img src="/logo-default.svg" alt="Gunkul Logo" style={{ height: "32px", filter: "brightness(0) invert(1)" }} />
+  <span style={{ color: "white", fontWeight: "bold" }}>Gunkul Procurement</span>
+</div>
         {navItems.map(({ page, label }) => (
           <button key={page} onClick={() => setCurrentPage(page)} style={{
             background: currentPage === page ? "white" : "transparent",
