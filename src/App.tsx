@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebase";
 import DashboardPage from "./Dashboard";
 import UpdatePage from "./UpdatePage";
+import TaskPage from "./TaskPage";
 
 type Page = "home" | "dashboard" | "update" | "tasks" | "team" | "knowledge";
 type Role = "manager" | "employee";
@@ -191,7 +192,7 @@ export default function App() {
         {currentPage === "home" && <HomePage setPage={setCurrentPage} />}
         {currentPage === "dashboard" && <DashboardPage role={role} />}
         {currentPage === "update" && <UpdatePage />}
-        {currentPage === "tasks" && <div style={{ padding: "40px" }}><h1>📋 หน้า Tasks</h1></div>}
+        {currentPage === "tasks" && <TaskPage />}
         {currentPage === "team" && <div style={{ padding: "40px" }}><h1>👥 หน้า Team</h1></div>}
         {currentPage === "knowledge" && <div style={{ padding: "40px" }}><h1>📚 หน้า Knowledge Base</h1></div>}
       </div>
