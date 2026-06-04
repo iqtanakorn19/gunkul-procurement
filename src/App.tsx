@@ -13,6 +13,8 @@ const mockUser = { name: "สมชาย", role: "employee" as Role };
 
 type Lang = "en" | "th";
 
+type Lang = "en" | "th";
+
 function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,11 +24,11 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
   const [showForgot, setShowForgot] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotSent, setForgotSent] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const t = {
     en: {
-      title: "Procurement Portal",
-      subtitle: "Not only the energy, we care",
+      title: "PROCUREMENT",
       signin: "Sign In",
       email: "Email Address",
       password: "Password",
@@ -41,8 +43,7 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
       back: "← Back to Sign In",
     },
     th: {
-      title: "ระบบจัดซื้อ",
-      subtitle: "ไม่ใช่แค่พลังงาน เราใส่ใจ",
+      title: "ฝ่ายจัดซื้อ",
       signin: "เข้าสู่ระบบ",
       email: "อีเมล",
       password: "รหัสผ่าน",
@@ -83,18 +84,20 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
       position: "relative", fontFamily: "sans-serif"
     }}>
       {/* Overlay */}
-      <div style={{ position: "absolute", inset: 0, background: "rgba(10, 25, 50, 0.55)" }} />
+      <div style={{ position: "absolute", inset: 0, background: "rgba(8, 20, 45, 0.62)" }} />
 
       {/* Language Toggle */}
       <div style={{ position: "absolute", top: "20px", right: "24px", zIndex: 10, display: "flex", gap: "8px" }}>
         {(["en", "th"] as Lang[]).map(l => (
           <button key={l} onClick={() => setLang(l)} style={{
-            padding: "6px 14px", borderRadius: "999px", cursor: "pointer", fontWeight: "600", fontSize: "13px",
-            background: lang === l ? "white" : "rgba(255,255,255,0.2)",
+            padding: "6px 16px", borderRadius: "999px", cursor: "pointer",
+            fontWeight: "600", fontSize: "13px", letterSpacing: "0.05em",
+            background: lang === l ? "white" : "rgba(255,255,255,0.15)",
             color: lang === l ? "#1a3c6e" : "white",
-            border: lang === l ? "none" : "1px solid rgba(255,255,255,0.4)",
+            border: lang === l ? "none" : "1px solid rgba(255,255,255,0.35)",
+            transition: "all 0.2s"
           }}>
-            {l === "en" ? "🇬🇧 EN" : "🇹🇭 TH"}
+            {l === "en" ? "EN" : "TH"}
           </button>
         ))}
       </div>
@@ -103,87 +106,144 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
       <div style={{ position: "relative", zIndex: 10, width: "100%", maxWidth: "420px", margin: "0 16px" }}>
 
         {/* Logo + Title */}
-        <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <img src="/logo-default.svg" alt="Gunkul Logo" style={{ height: "48px", filter: "brightness(0) invert(1)", marginBottom: "12px" }} />
-          <h1 style={{ margin: "0 0 6px", color: "white", fontSize: "22px", fontWeight: "700", letterSpacing: "0.5px" }}>
+        <div style={{ textAlign: "center", marginBottom: "32px" }}>
+          <img src="/logo-default.svg" alt="Gunkul Logo"
+            style={{ height: "72px", filter: "brightness(0) invert(1)", marginBottom: "16px" }} />
+          <h1 style={{
+            margin: 0, color: "white", fontWeight: "800",
+            letterSpacing: lang === "en" ? "0.25em" : "0.1em",
+            fontSize: lang === "en" ? "28px" : "32px",
+            fontFamily: lang === "en" ? "'Georgia', serif" : "'Sarabun', sans-serif",
+            textTransform: lang === "en" ? "uppercase" : "none",
+            textShadow: "0 2px 12px rgba(0,0,0,0.3)"
+          }}>
             {t.title}
           </h1>
-          <p style={{ margin: 0, color: "rgba(255,255,255,0.7)", fontSize: "13px" }}>{t.subtitle}</p>
         </div>
 
         {/* Form Card */}
-        <div style={{ background: "rgba(255,255,255,0.97)", borderRadius: "16px", padding: "32px", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" }}>
+        <div style={{
+          background: "rgba(255,255,255,0.96)", borderRadius: "20px",
+          padding: "36px 32px", boxShadow: "0 24px 64px rgba(0,0,0,0.35)",
+          backdropFilter: "blur(10px)"
+        }}>
 
           {!showForgot ? (
             <>
-              <h2 style={{ margin: "0 0 24px", color: "#1a3c6e", fontSize: "18px", textAlign: "center" }}>{t.signin}</h2>
+              <h2 style={{ margin: "0 0 28px", color: "#1a3c6e", fontSize: "18px", textAlign: "center", fontWeight: "700" }}>
+                {t.signin}
+              </h2>
 
               <div style={{ marginBottom: "16px" }}>
-                <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#555" }}>{t.email}</label>
+                <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#444" }}>
+                  {t.email}
+                </label>
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                   placeholder="name@gunkul.com"
                   onKeyDown={e => e.key === "Enter" && handleLogin()}
-                  style={{ width: "100%", padding: "11px 14px", borderRadius: "8px", border: "1.5px solid #ddd", boxSizing: "border-box", fontSize: "14px", outline: "none" }} />
+                  style={{
+                    width: "100%", padding: "12px 14px", borderRadius: "10px",
+                    border: "1.5px solid #e0e0e0", boxSizing: "border-box",
+                    fontSize: "14px", outline: "none", transition: "border 0.2s",
+                    background: "#fafafa"
+                  }} />
               </div>
 
               <div style={{ marginBottom: "8px" }}>
-                <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#555" }}>{t.password}</label>
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  onKeyDown={e => e.key === "Enter" && handleLogin()}
-                  style={{ width: "100%", padding: "11px 14px", borderRadius: "8px", border: "1.5px solid #ddd", boxSizing: "border-box", fontSize: "14px", outline: "none" }} />
+                <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#444" }}>
+                  {t.password}
+                </label>
+                <div style={{ position: "relative" }}>
+                  <input type={showPassword ? "text" : "password"} value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    onKeyDown={e => e.key === "Enter" && handleLogin()}
+                    style={{
+                      width: "100%", padding: "12px 44px 12px 14px", borderRadius: "10px",
+                      border: "1.5px solid #e0e0e0", boxSizing: "border-box",
+                      fontSize: "14px", outline: "none", background: "#fafafa"
+                    }} />
+                  <button onClick={() => setShowPassword(!showPassword)} style={{
+                    position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)",
+                    background: "none", border: "none", cursor: "pointer", fontSize: "16px", color: "#888"
+                  }}>
+                    {showPassword ? "🙈" : "👁️"}
+                  </button>
+                </div>
               </div>
 
               <div style={{ textAlign: "right", marginBottom: "20px" }}>
-                <button onClick={() => setShowForgot(true)} style={{ background: "none", border: "none", color: "#2d6abf", fontSize: "13px", cursor: "pointer", fontWeight: "600" }}>
+                <button onClick={() => setShowForgot(true)} style={{
+                  background: "none", border: "none", color: "#2d6abf",
+                  fontSize: "13px", cursor: "pointer", fontWeight: "600"
+                }}>
                   {t.forgot}
                 </button>
               </div>
 
               {error && (
-                <div style={{ background: "#fee2e2", color: "#dc2626", padding: "10px 14px", borderRadius: "8px", fontSize: "13px", marginBottom: "16px", textAlign: "center" }}>
+                <div style={{
+                  background: "#fee2e2", color: "#dc2626", padding: "10px 14px",
+                  borderRadius: "8px", fontSize: "13px", marginBottom: "16px",
+                  textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px"
+                }}>
                   ⚠️ {error}
                 </div>
               )}
 
               <button onClick={handleLogin} disabled={loading} style={{
-                width: "100%", padding: "13px", backgroundColor: "#1a3c6e", color: "white",
-                border: "none", borderRadius: "8px", cursor: loading ? "not-allowed" : "pointer",
+                width: "100%", padding: "14px", backgroundColor: "#1a3c6e", color: "white",
+                border: "none", borderRadius: "10px", cursor: loading ? "not-allowed" : "pointer",
                 fontWeight: "700", fontSize: "15px", opacity: loading ? 0.7 : 1,
-                transition: "opacity 0.2s"
+                transition: "all 0.2s", letterSpacing: "0.03em"
               }}>
                 {loading ? t.loading : t.button}
               </button>
             </>
           ) : (
             <>
-              <h2 style={{ margin: "0 0 8px", color: "#1a3c6e", fontSize: "18px", textAlign: "center" }}>{t.forgotTitle}</h2>
-              <p style={{ margin: "0 0 20px", color: "#888", fontSize: "13px", textAlign: "center" }}>{t.forgotDesc}</p>
+              <h2 style={{ margin: "0 0 8px", color: "#1a3c6e", fontSize: "18px", textAlign: "center", fontWeight: "700" }}>
+                {t.forgotTitle}
+              </h2>
+              <p style={{ margin: "0 0 24px", color: "#888", fontSize: "13px", textAlign: "center", lineHeight: "1.6" }}>
+                {t.forgotDesc}
+              </p>
 
               {!forgotSent ? (
                 <>
                   <div style={{ marginBottom: "16px" }}>
-                    <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#555" }}>{t.email}</label>
+                    <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#444" }}>
+                      {t.email}
+                    </label>
                     <input type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)}
                       placeholder="name@gunkul.com"
-                      style={{ width: "100%", padding: "11px 14px", borderRadius: "8px", border: "1.5px solid #ddd", boxSizing: "border-box", fontSize: "14px" }} />
+                      style={{
+                        width: "100%", padding: "12px 14px", borderRadius: "10px",
+                        border: "1.5px solid #e0e0e0", boxSizing: "border-box",
+                        fontSize: "14px", background: "#fafafa"
+                      }} />
                   </div>
                   <button onClick={handleForgot} style={{
-                    width: "100%", padding: "13px", backgroundColor: "#1a3c6e", color: "white",
-                    border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "700", fontSize: "15px", marginBottom: "12px"
+                    width: "100%", padding: "14px", backgroundColor: "#1a3c6e", color: "white",
+                    border: "none", borderRadius: "10px", cursor: "pointer",
+                    fontWeight: "700", fontSize: "15px", marginBottom: "12px"
                   }}>
                     {t.forgotButton}
                   </button>
                 </>
               ) : (
-                <div style={{ background: "#d1fae5", color: "#065f46", padding: "14px", borderRadius: "8px", fontSize: "13px", textAlign: "center", marginBottom: "16px" }}>
+                <div style={{
+                  background: "#d1fae5", color: "#065f46", padding: "16px",
+                  borderRadius: "10px", fontSize: "13px", textAlign: "center",
+                  marginBottom: "16px", lineHeight: "1.6"
+                }}>
                   ✅ {t.forgotSent}
                 </div>
               )}
 
               <button onClick={() => { setShowForgot(false); setForgotSent(false); setForgotEmail(""); }} style={{
-                width: "100%", padding: "11px", background: "#f5f5f5", border: "none",
-                borderRadius: "8px", cursor: "pointer", color: "#555", fontWeight: "600", fontSize: "13px"
+                width: "100%", padding: "12px", background: "#f5f5f5", border: "none",
+                borderRadius: "10px", cursor: "pointer", color: "#555", fontWeight: "600", fontSize: "13px"
               }}>
                 {t.back}
               </button>
@@ -192,7 +252,7 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
         </div>
 
         {/* Footer */}
-        <p style={{ textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: "12px", marginTop: "20px" }}>
+        <p style={{ textAlign: "center", color: "rgba(255,255,255,0.45)", fontSize: "12px", marginTop: "24px" }}>
           © 2026 Gunkul Engineering — Procurement Department
         </p>
       </div>
