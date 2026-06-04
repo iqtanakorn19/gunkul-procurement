@@ -130,12 +130,13 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
 
   return (
     <div style={{
-      width: "100vw", minHeight: "100vh",
+      width: "100%", minHeight: "100vh",
       display: "flex", alignItems: "center", justifyContent: "center",
       backgroundImage: "url('/bg-financial.webp')",
       backgroundSize: "cover", backgroundPosition: "center",
-      backgroundAttachment: "fixed",
-      position: "relative", fontFamily: "sans-serif"
+      backgroundRepeat: "no-repeat",
+      position: "relative", fontFamily: "sans-serif",
+      overflow: "hidden"
     }}>
       <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet" />
 
@@ -160,9 +161,9 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
       <div style={{ position: "relative", zIndex: 10, width: "100%", maxWidth: "420px", margin: "0 16px" }}>
 
         {/* Logo + Title */}
-        <div style={{ textAlign: "center", marginBottom: "32px" }}>
-          <img src="/logo-default.svg" alt="Gunkul Logo"
-            style={{ height: "144px", filter: "brightness(0) invert(1)", marginBottom: "16px" }} />
+        <div style={{ textAlign: "center", marginBottom: "32px", width: "100%" }}>
+        <img src="/logo-default.svg" alt="Gunkul Logo"
+            style={{ height: "144px", filter: "brightness(0) invert(1)", display: "block", margin: "0 auto 16px auto" }} />
           <h1 style={{
             margin: 0, color: "white", fontWeight: "700",
             letterSpacing: lang === "en" ? "0.3em" : "0.05em",
