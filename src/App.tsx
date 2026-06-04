@@ -1,6 +1,6 @@
 import VendorPage from "./VendorPage";
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./firebase";
 import DashboardPage from "./Dashboard";
 import UpdatePage from "./UpdatePage";
@@ -359,6 +359,14 @@ export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [role, setRole] = useState<Role>("employee");
   const [currentPage, setCurrentPage] = useState<Page>("home");
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  useState(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) { setCurrentUser(user); setLoggedIn(true); }
+      else { setCurrentUser(null); setLoggedIn(false); }
+    });
+  });
 
   if (!loggedIn) {
     return <LoginPage onLogin={(r) => { setRole(r); setLoggedIn(true); }} />;
@@ -391,7 +399,7 @@ export default function App() {
           </button>
         ))}
         <span style={{ marginLeft: "auto", color: "white", fontSize: "13px" }}>
-          👤 {mockUser.name} ({role === "manager" ? "หัวหน้า" : "พนักงาน"})
+        👤 {currentUser?.email?.split("@")[0]} ({role === "manager" ? "หัวหน้า" : "พนักงาน"})
         </span>
         <button onClick={() => setLoggedIn(false)} style={{
           background: "transparent", color: "white", border: "1px solid white",
