@@ -13,8 +13,6 @@ const mockUser = { name: "สมชาย", role: "employee" as Role };
 
 type Lang = "en" | "th";
 
-type Lang = "en" | "th";
-
 function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -132,11 +130,11 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
 
   return (
     <div style={{
-      minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
+      width: "100vw", minHeight: "100vh",
+      display: "flex", alignItems: "center", justifyContent: "center",
       backgroundImage: "url('/bg-financial.webp')",
       backgroundSize: "cover", backgroundPosition: "center",
       backgroundAttachment: "fixed",
-      width: "100vw", minHeight: "100vh",
       position: "relative", fontFamily: "sans-serif"
     }}>
       <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet" />
