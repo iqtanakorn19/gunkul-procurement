@@ -126,7 +126,6 @@ export default function VendorPage() {
   const [filterStatus, setFilterStatus] = useState("ทั้งหมด");
   const [showModal, setShowModal] = useState(false);
   const [editVendor, setEditVendor] = useState<Vendor | undefined>();
-  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const filtered = vendors.filter(v => {
     const matchSearch = search === "" ||
