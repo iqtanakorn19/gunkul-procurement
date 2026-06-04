@@ -164,7 +164,7 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
         {/* Logo + Title */}
         <div style={{ textAlign: "center", marginBottom: "48px", width: "100%" }}>
         <img src="/logo-default.svg" alt="Gunkul Logo"
-            style={{ height: "144px", width: "auto", filter: "brightness(0) invert(1)", display: "block", margin: "-40px auto 48px auto", transform: "translateX(-8%)" }} />
+            style={{ height: "144px", width: "auto", filter: "brightness(0) invert(1)", display: "block", margin: "-40px auto 48px auto", transform: "translateX(-10%)" }} />
           <h1 style={{
             margin: 0, color: "white", fontWeight: "700",
             letterSpacing: lang === "en" ? "0.3em" : "0.05em",
