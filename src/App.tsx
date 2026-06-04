@@ -135,6 +135,8 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
       minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
       backgroundImage: "url('/bg-financial.webp')",
       backgroundSize: "cover", backgroundPosition: "center",
+      backgroundAttachment: "fixed",
+      width: "100vw", minHeight: "100vh",
       position: "relative", fontFamily: "sans-serif"
     }}>
       <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -162,7 +164,7 @@ function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
         {/* Logo + Title */}
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <img src="/logo-default.svg" alt="Gunkul Logo"
-            style={{ height: "72px", filter: "brightness(0) invert(1)", marginBottom: "16px" }} />
+            style={{ height: "144px", filter: "brightness(0) invert(1)", marginBottom: "16px" }} />
           <h1 style={{
             margin: 0, color: "white", fontWeight: "700",
             letterSpacing: lang === "en" ? "0.3em" : "0.05em",
