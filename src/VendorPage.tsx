@@ -424,9 +424,9 @@ export default function VendorPage() {
               <label style={{ display: "block", marginBottom: "7px", fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.07em" }}>🔍 ค้นหา</label>
               <input value={search} onChange={e => setSearch(e.target.value)}
                 placeholder="ค้นหาชื่อบริษัท, หมวดหมู่, เจ้าหน้าที่..."
-                style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: "1.5px solid #e2e8f0", boxSizing: "border-box", fontSize: "14px", outline: "none" }}
-                onFocus={e => e.target.style.borderColor = "#1a3c6e"}
-                onBlur={e => e.target.style.borderColor = "#e2e8f0"} />
+                style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: "2px solid #e2c97e", boxSizing: "border-box", fontSize: "14px", outline: "none", background: "#fffdf5" }}
+                onFocus={e => { e.target.style.borderColor = "#1a3c6e"; e.target.style.boxShadow = "0 0 0 3px rgba(226,201,126,0.25)"; }}
+                onBlur={e => { e.target.style.borderColor = "#e2c97e"; e.target.style.boxShadow = "none"; }} />
             </div>
             {[
               { label: "หมวดหมู่", value: filterCategory, setter: setFilterCategory, options: ["ทั้งหมด", ...CATEGORIES] },
