@@ -26,8 +26,6 @@ interface Vendor {
   createdAt: string;
 }
 
-const mockVendors: Vendor[] = [];
-
 interface VendorModalProps {
   vendor?: Vendor;
   onClose: () => void;
