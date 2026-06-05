@@ -26,13 +26,7 @@ interface Vendor {
   createdAt: string;
 }
 
-const mockVendors: Vendor[] = [
-  { id: "1", name: "บริษัท สยามสายไฟ จำกัด", address: "123 ถ.พระราม 2 กรุงเทพฯ", phone: "02-123-4567", email: "info@siamcable.com", contact: "คุณสมชาย", category: "สายไฟ AC", website: "www.siamcable.com", note: "", status: "active", createdAt: "2026-01-15" },
-  { id: "2", name: "บริษัท โซลาร์เทค จำกัด", address: "456 ถ.สุขุมวิท กรุงเทพฯ", phone: "02-987-6543", email: "sales@solartech.co.th", contact: "คุณนภา", category: "แผงโซลาร์ (Solar Panel)", website: "www.solartech.co.th", note: "ราคาดี ส่งเร็ว", status: "active", createdAt: "2026-02-01" },
-  { id: "3", name: "บริษัท พาวเวอร์อินเวอร์เตอร์ จำกัด", address: "789 ถ.รัชดา กรุงเทพฯ", phone: "02-456-7890", email: "info@powerinverter.com", contact: "คุณวิชัย", category: "Inverter", website: "", note: "", status: "active", createdAt: "2026-02-15" },
-  { id: "4", name: "บริษัท ไทยนั่งร้าน จำกัด", address: "321 ถ.บางนา สมุทรปราการ", phone: "02-111-2222", email: "thai.scaffold@gmail.com", contact: "คุณสมหญิง", category: "นั่งร้าน (Scaffolding)", website: "", note: "ติดต่อยาก", status: "inactive", createdAt: "2026-03-01" },
-  { id: "5", name: "บริษัท เมาท์ติ้งโปร จำกัด", address: "654 ถ.พหลโยธิน กรุงเทพฯ", phone: "02-333-4444", email: "mounting@pro.co.th", contact: "คุณมานะ", category: "Mounting Structure", website: "www.mountingpro.co.th", note: "", status: "active", createdAt: "2026-03-15" },
-];
+const mockVendors: Vendor[] = [];
 
 interface VendorModalProps {
   vendor?: Vendor;
@@ -120,7 +114,7 @@ function VendorModal({ vendor, onClose, onSave }: VendorModalProps) {
 }
 
 export default function VendorPage() {
-  const [vendors, setVendors] = useState<Vendor[]>(mockVendors);
+  const [vendors, setVendors] = useState<Vendor[]>([]);
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState("ทั้งหมด");
   const [filterStatus, setFilterStatus] = useState("ทั้งหมด");
