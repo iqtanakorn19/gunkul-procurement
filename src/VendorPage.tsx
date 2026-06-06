@@ -302,7 +302,8 @@ export default function VendorPage() {
       const matchSearch = search === "" ||
         v.name.toLowerCase().includes(search.toLowerCase()) ||
         v.category.toLowerCase().includes(search.toLowerCase()) ||
-        v.contact.toLowerCase().includes(search.toLowerCase());
+        v.contact.toLowerCase().includes(search.toLowerCase()) ||
+        v.note.toLowerCase().includes(search.toLowerCase());
       const matchCategory = filterCategory === "ทั้งหมด" || v.category === filterCategory;
       const matchStatus = filterStatus === "ทั้งหมด" || v.status === filterStatus;
       return matchSearch && matchCategory && matchStatus;
