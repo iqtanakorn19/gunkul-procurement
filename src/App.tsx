@@ -6,6 +6,7 @@ import { auth } from "./firebase";
 import DashboardPage from "./Dashboard";
 import UpdatePage from "./UpdatePage";
 import TaskPage from "./TaskPage";
+import KnowledgePage from "./KnowledgePage";
 
 type Page = "home" | "dashboard" | "update" | "tasks" | "vendor" | "team" | "knowledge";
 type Role = "manager" | "employee";
@@ -416,7 +417,7 @@ export default function App() {
         {currentPage === "tasks" && <TaskPage />}
         {currentPage === "vendor" && <VendorPage />}
         {currentPage === "team" && <div style={{ padding: "40px" }}><h1>👥 หน้า Team</h1></div>}
-        {currentPage === "knowledge" && <div style={{ padding: "40px" }}><h1>📚 หน้า Knowledge Base</h1></div>}
+        {currentPage === "knowledge" && <KnowledgePage />}
       </div>
     </div>
   );
