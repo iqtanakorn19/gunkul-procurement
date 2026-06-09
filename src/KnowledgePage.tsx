@@ -11,12 +11,12 @@ interface Doc {
 }
 
 const DOCS: Doc[] = [
-  { id: "wi001", title: "WI-001 — Add Vendor", description: "ขั้นตอนการเพิ่ม Vendor ใหม่เข้าระบบ D365 พร้อมเอกสารที่ต้องเตรียม", type: "wi", pages: "19 หน้า", url: "/documents/WI-001.pdf", icon: "👤" },
-  { id: "wi002", title: "WI-002 — Purchase Order", description: "ขั้นตอนการสร้าง PO ในระบบ D365 ตั้งแต่รับ PR จนถึงส่งให้ Supplier", type: "wi", pages: "33 หน้า", url: "/documents/WI-002.pdf", icon: "🛒" },
-  { id: "wi003", title: "WI-003 — Price Approval", description: "กระบวนการขออนุมัติราคา PA ตามระดับวงเงิน Manager / VP / CEO", type: "wi", pages: "30 หน้า", url: "/documents/WI-003.pdf", icon: "✅" },
-  { id: "wi004", title: "WI-004 — Good Receipt", description: "ขั้นตอนการทำ Good Receive หลัง Supplier ส่งของ เพื่อให้บัญชีจ่ายเงินได้", type: "wi", pages: "16 หน้า", url: "/documents/WI-004.pdf", icon: "📦" },
-  { id: "manual", title: "GK User Manual — D365 PU", description: "คู่มือการใช้งาน Microsoft Dynamics 365 สำหรับฝ่ายจัดซื้อ", type: "manual", pages: "", url: "/documents/manual-d365.pdf", icon: "💻" },
-  { id: "scope", title: "Procurement Scope & Overview", description: "ภาพรวมฝ่ายจัดซื้อ Stakeholder, กระบวนการทำงาน, โครงการปัจจุบัน EPC/PPA", type: "scope", pages: "", url: "/documents/procurement-scope.pdf", icon: "🗂️" },
+  { id: "wi001", title: "WI-001 — Add Vendor", description: "ขั้นตอนการเพิ่ม Vendor ใหม่เข้าระบบ D365 พร้อมเอกสารที่ต้องเตรียม", type: "wi", pages: "19 หน้า", url: "/documents/draft%20WI_Add%20Vendor_01.pdf", icon: "👤" },
+  { id: "wi002", title: "WI-002 — Purchase Order", description: "ขั้นตอนการสร้าง PO ในระบบ D365 ตั้งแต่รับ PR จนถึงส่งให้ Supplier", type: "wi", pages: "33 หน้า", url: "/documents/draft%20WI_Purchase%20Order_01.pdf", icon: "🛒" },
+  { id: "wi003", title: "WI-003 — Price Approval", description: "กระบวนการขออนุมัติราคา PA ตามระดับวงเงิน Manager / VP / CEO", type: "wi", pages: "30 หน้า", url: "/documents/draft%20WI_Price%20Approval_01.pdf", icon: "✅" },
+  { id: "wi004", title: "WI-004 — Good Receipt", description: "ขั้นตอนการทำ Good Receive หลัง Supplier ส่งของ เพื่อให้บัญชีจ่ายเงินได้", type: "wi", pages: "16 หน้า", url: "/documents/draft%20WI_Good%20Receipt_01.pdf", icon: "📦" },
+  { id: "manual", title: "GK User Manual — D365 PU", description: "คู่มือการใช้งาน Microsoft Dynamics 365 สำหรับฝ่ายจัดซื้อ", type: "manual", pages: "", url: "/documents/GK_User_Manual_PU_V1.0.pdf", icon: "💻" },
+  { id: "scope", title: "Procurement Scope & Overview", description: "ภาพรวมฝ่ายจัดซื้อ Stakeholder, กระบวนการทำงาน, โครงการปัจจุบัน EPC/PPA", type: "scope", pages: "", url: "/documents/procurement_scope.pdf", icon: "🗂️" },
 ];
 
 const STEPS = [
