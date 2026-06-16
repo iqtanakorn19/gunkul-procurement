@@ -1,0 +1,7620 @@
+[
+  {
+    "vendorCode": "V000906",
+    "name": "บจก. วี.เอ.พี.เซอร์วิส (1997)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "อื่นๆ"
+    ],
+    "totalSpend": 651728595.84,
+    "numPOs": 8,
+    "lastPurchase": "2026-06-10",
+    "topPaymentTerms": "30D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011845",
+    "name": "บจก. วีเอพี วินด์ พาวเวอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งาน Subcontract",
+      "อื่นๆ"
+    ],
+    "totalSpend": 305112977.23,
+    "numPOs": 3,
+    "lastPurchase": "2026-01-19",
+    "topPaymentTerms": "30D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011683",
+    "name": "บจก.อิเรเดี๊ยน โซล่าเพาเวอร์ 1",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 294968726.99,
+    "numPOs": 2,
+    "lastPurchase": "2025-11-27",
+    "topPaymentTerms": "30D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011542",
+    "name": "บจก.อิเรเดี๊ยน โซล่า",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งาน Subcontract",
+      "อื่นๆ"
+    ],
+    "totalSpend": 253926804.38,
+    "numPOs": 3,
+    "lastPurchase": "2026-02-16",
+    "topPaymentTerms": "30D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010767",
+    "name": "Trina Solar Energy Development Pte Ltd.",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 233506943.84,
+    "numPOs": 18,
+    "lastPurchase": "2026-03-17",
+    "topPaymentTerms": "LC100C060",
+    "topProject": "SP026",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011174",
+    "name": "บจก. วราสิริคอนกรีต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 207194515.08,
+    "numPOs": 13,
+    "lastPurchase": "2026-05-18",
+    "topPaymentTerms": "30D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011578",
+    "name": "บจก. เอทู เทคโนโลยี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 167523214.35,
+    "numPOs": 1,
+    "lastPurchase": "2025-11-26",
+    "topPaymentTerms": "30D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003333",
+    "name": "บจก. ควอลิตี้ เอ็ม แอนด์ อี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 162560000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-05-13",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010190",
+    "name": "บจก. แซดทีอี (ไทยแลนด์)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 130055834.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-04-23",
+    "topPaymentTerms": "30D",
+    "topProject": "SP033",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012052",
+    "name": "บจก. หัวเว่ยเทคโนโลยี่ (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 119279110.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-03-10",
+    "topPaymentTerms": "30D",
+    "topProject": "SP033",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011692",
+    "name": "บจก. พาวเวอร์วอลท์ (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "อื่นๆ"
+    ],
+    "totalSpend": 115931400.0,
+    "numPOs": 6,
+    "lastPurchase": "2026-06-02",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003489",
+    "name": "บมจ. ทักษิณคอนกรีต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 80948856.0,
+    "numPOs": 11,
+    "lastPurchase": "2026-05-04",
+    "topPaymentTerms": "30D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002009",
+    "name": "บจก. บุญทวีชัย เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 78088250.17,
+    "numPOs": 45,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "30D",
+    "topProject": "SR225",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010133",
+    "name": "บจก. กัลฟ์1 (สำนักงานใหญ่)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ",
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 75386605.61,
+    "numPOs": 3,
+    "lastPurchase": "2026-04-24",
+    "topPaymentTerms": "45D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011588",
+    "name": "บจก. เคอาร์เบิ้ล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "ค่าแรง",
+      "งานบริหารโครงการ",
+      "อื่นๆ"
+    ],
+    "totalSpend": 57621084.0,
+    "numPOs": 48,
+    "lastPurchase": "2026-06-12",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002158",
+    "name": "บจก. อินเทกรา อาร์.อี.",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Battery & Energy Storage",
+      "Inverter & Optimizer",
+      "Monitoring System",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 54308155.65,
+    "numPOs": 36,
+    "lastPurchase": "2026-06-14",
+    "topPaymentTerms": "60D",
+    "topProject": "SR253",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003467",
+    "name": "บจก. สยาม โซล่าร์ เซลล์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Inverter & Optimizer",
+      "Monitoring System",
+      "อื่นๆ"
+    ],
+    "totalSpend": 51854240.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-02-10",
+    "topPaymentTerms": "30D",
+    "topProject": "SP026",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003392",
+    "name": "บจก. พร้อม โซลูชั่น ซัพพลาย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริหารโครงการ",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 49988268.7,
+    "numPOs": 25,
+    "lastPurchase": "2026-05-02",
+    "topPaymentTerms": "30D",
+    "topProject": "SR245",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011272",
+    "name": "หจก. ถุงทอง 68",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 47868519.69,
+    "numPOs": 60,
+    "lastPurchase": "2026-06-09",
+    "topPaymentTerms": "15D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011265",
+    "name": "บจก. สามัคคีผลิตภัณฑ์คอนกรีต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 46223187.0,
+    "numPOs": 20,
+    "lastPurchase": "2026-05-07",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000461",
+    "name": "หจก. ตรีการค้า 2008",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 42787092.04,
+    "numPOs": 9,
+    "lastPurchase": "2026-04-27",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010167",
+    "name": "บจก. เอ็นเอสเอส วิศวกรรม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Switchgear & MDB",
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 40285779.34,
+    "numPOs": 14,
+    "lastPurchase": "2026-04-04",
+    "topPaymentTerms": "30D",
+    "topProject": "SP010",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004178",
+    "name": "บจก. พี เอส ซี กรุ๊ป (1988)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 36732190.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-03-04",
+    "topPaymentTerms": "15D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010189",
+    "name": "บมจ. อินเตอร์ลิ้งค์ เทเลคอม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 32111120.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-04-24",
+    "topPaymentTerms": "30D",
+    "topProject": "SP033",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003574",
+    "name": "บจก. ดีพีที เอ็นเนอร์ยีแอนด์เอ็นจิเนียริง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 29914534.06,
+    "numPOs": 35,
+    "lastPurchase": "2026-06-05",
+    "topPaymentTerms": "30D",
+    "topProject": "SP025",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010244",
+    "name": "บจก. โมโน เอ็นเนอร์ยี่ คอนสตรัคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 28600152.0,
+    "numPOs": 28,
+    "lastPurchase": "2026-01-27",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR230",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010379",
+    "name": "Anhui Huasun Energy Co.,Ltd.",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 25726443.59,
+    "numPOs": 6,
+    "lastPurchase": "2025-09-22",
+    "topPaymentTerms": "LC100C030",
+    "topProject": "SR237",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010100",
+    "name": "บมจ. อินเตอร์ลิ้งค์ คอมมิวนิเคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network",
+      "ขนส่ง & โลจิสติกส์",
+      "สายไฟ DC",
+      "อื่นๆ"
+    ],
+    "totalSpend": 25529130.1,
+    "numPOs": 11,
+    "lastPurchase": "2026-05-18",
+    "topPaymentTerms": "60D",
+    "topProject": "SP026",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011929",
+    "name": "บจก. ทีบี คอนสตรัคชั่น โปรดักส์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 25300000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-02-06",
+    "topPaymentTerms": "30D",
+    "topProject": "SR252",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004189",
+    "name": "JA SOLAR INTERNATIONAL LIMITED",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 24351672.15,
+    "numPOs": 13,
+    "lastPurchase": "2025-12-08",
+    "topPaymentTerms": "LC100C090",
+    "topProject": "SR223",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011173",
+    "name": "บจก. วีเนอร์ยี่ ไทย จำกัด",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 23812304.0,
+    "numPOs": 6,
+    "lastPurchase": "2026-05-25",
+    "topPaymentTerms": "30D",
+    "topProject": "SP026",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004509",
+    "name": "บจก. ศิริประภา เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Switchgear & MDB",
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ",
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 22731920.0,
+    "numPOs": 70,
+    "lastPurchase": "2026-05-14",
+    "topPaymentTerms": "30D",
+    "topProject": "SR238",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010246",
+    "name": "บจก. เอสเค3 รูฟฟิ่ง ดีเวลลอปเมนท์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 22280600.0,
+    "numPOs": 12,
+    "lastPurchase": "2026-06-12",
+    "topPaymentTerms": "30D",
+    "topProject": "SP005",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010222",
+    "name": "บจก. เท็กซ์พลอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Mounting Structure",
+      "ค่าแรง",
+      "อื่นๆ"
+    ],
+    "totalSpend": 22005519.66,
+    "numPOs": 7,
+    "lastPurchase": "2025-10-14",
+    "topPaymentTerms": "15D",
+    "topProject": "SP026",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012153",
+    "name": "บจก. ซี.อี ดีเวลลอปเปอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 21783189.34,
+    "numPOs": 8,
+    "lastPurchase": "2026-05-13",
+    "topPaymentTerms": "15D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003230",
+    "name": "บจก. ซันฟอร์ซัน พาวเวอร์ (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Mounting Structure"
+    ],
+    "totalSpend": 21081636.05,
+    "numPOs": 67,
+    "lastPurchase": "2026-05-26",
+    "topPaymentTerms": "30D",
+    "topProject": "SR238",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003259",
+    "name": "บจก. กิโลโวลต์ เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าธรรมเนียม & สาธารณูปโภค",
+      "ค่าแรง",
+      "อื่นๆ"
+    ],
+    "totalSpend": 20940703.91,
+    "numPOs": 5,
+    "lastPurchase": "2026-06-01",
+    "topPaymentTerms": "15D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000691",
+    "name": "บจก. พรีฟอร์มด์ ไลน์ โปรดัคส์ (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Mounting Structure",
+      "ขนส่ง & โลจิสติกส์",
+      "ค่าแรง",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ",
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)",
+      "เครื่องมือ & อุปกรณ์ช่าง",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 20885917.95,
+    "numPOs": 22,
+    "lastPurchase": "2026-04-07",
+    "topPaymentTerms": "30D",
+    "topProject": "SP010",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000992",
+    "name": "บจก. สายไฟฟ้า เอ็มซีไอ-ดราก้า",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ DC"
+    ],
+    "totalSpend": 20414165.0,
+    "numPOs": 9,
+    "lastPurchase": "2025-09-28",
+    "topPaymentTerms": "30D",
+    "topProject": "SP026",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010308",
+    "name": "ZHEJIANG JINKO SOLAR CO.,LTD.",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 20310773.21,
+    "numPOs": 3,
+    "lastPurchase": "2025-12-24",
+    "topPaymentTerms": "LC100C090",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012143",
+    "name": "บจก. เทคโนโลยี โฮลดิ้ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 18324608.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-04-22",
+    "topPaymentTerms": "15D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011487",
+    "name": "บจก. จินหลง มอเตอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ยานพาหนะ",
+      "อื่นๆ"
+    ],
+    "totalSpend": 18261495.42,
+    "numPOs": 2,
+    "lastPurchase": "2025-11-13",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000965",
+    "name": "บจก. สมาร์ท อีเล็คทริค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ AC",
+      "อื่นๆ"
+    ],
+    "totalSpend": 17651466.84,
+    "numPOs": 9,
+    "lastPurchase": "2026-05-05",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011182",
+    "name": "บจก. ปัตตานีคอนกรีต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 17368000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-03-10",
+    "topPaymentTerms": "30D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002814",
+    "name": "บจก. พรชัยคอนกรีต 2002",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 16618918.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-06-12",
+    "topPaymentTerms": "30D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010159",
+    "name": "บจก. ไทย เอสแอนด์เอส เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 16584142.26,
+    "numPOs": 22,
+    "lastPurchase": "2026-06-09",
+    "topPaymentTerms": "30D",
+    "topProject": "SR219",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012192",
+    "name": "บจก. พีเอส เทเลคอม เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 16578373.5,
+    "numPOs": 2,
+    "lastPurchase": "2026-04-09",
+    "topPaymentTerms": "7D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001134",
+    "name": "บจก. เอ็ม ซี แอล เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 16000000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-01-27",
+    "topPaymentTerms": "15D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012191",
+    "name": "บจก. พี แอนด์ เอส โปรเจคท์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 15399038.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-04-20",
+    "topPaymentTerms": "15D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010177",
+    "name": "บจก. จีจีซี เทค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริหารโครงการ",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 13142112.09,
+    "numPOs": 14,
+    "lastPurchase": "2026-03-12",
+    "topPaymentTerms": "30D",
+    "topProject": "SP006",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000332",
+    "name": "บจก. จี.เค.แอสเซ็มบลี้",
+    "vendorGroup": "GROUP",
+    "categories": [
+      "Inverter & Optimizer",
+      "Mounting Structure",
+      "ค่าแรง"
+    ],
+    "totalSpend": 12824000.0,
+    "numPOs": 6,
+    "lastPurchase": "2026-04-07",
+    "topPaymentTerms": "60D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000994",
+    "name": "บจก. สายไฟฟ้าบางกอกเคเบิ้ล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ AC"
+    ],
+    "totalSpend": 12182337.26,
+    "numPOs": 27,
+    "lastPurchase": "2026-05-04",
+    "topPaymentTerms": "60D",
+    "topProject": "SP026",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004801",
+    "name": "บจก. ฟิวเจอร์ เอ็นเนอร์ยี คอร์เปอเรชั่น",
+    "vendorGroup": "GROUP",
+    "categories": [
+      "Inverter & Optimizer",
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 11804177.78,
+    "numPOs": 11,
+    "lastPurchase": "2026-05-21",
+    "topPaymentTerms": "60D",
+    "topProject": "SR237",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012067",
+    "name": "หจก. ตรีปั้นจั่น ๑",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 11757000.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-06-12",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011321",
+    "name": "บจก.หาดใหญ่ โซล่า อินโนเทค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 11634053.74,
+    "numPOs": 4,
+    "lastPurchase": "2026-04-16",
+    "topPaymentTerms": "30D",
+    "topProject": "SR241",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011275",
+    "name": "บจก. เอ็น เค พาวเวอร์ 88",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 11500232.5,
+    "numPOs": 3,
+    "lastPurchase": "2026-05-15",
+    "topPaymentTerms": "15D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000627",
+    "name": "บจก. บีเอส อินดัสตรี้ เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 11400000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-03-26",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011035",
+    "name": "บจก. บลู ไวท์ โซลูชั่น แอนด์ เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 11160365.78,
+    "numPOs": 6,
+    "lastPurchase": "2026-05-07",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000993",
+    "name": "บจก. สายไฟฟ้าไทย-ยาซากิ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ AC"
+    ],
+    "totalSpend": 10652119.2,
+    "numPOs": 3,
+    "lastPurchase": "2026-05-05",
+    "topPaymentTerms": "30D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010221",
+    "name": "บจก. โปรเจคทีม เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 10504600.0,
+    "numPOs": 11,
+    "lastPurchase": "2026-03-12",
+    "topPaymentTerms": "30D",
+    "topProject": "SP005",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010421",
+    "name": "Sungrow FPV Sci. & Tech. Co., Ltd.",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "Mounting Structure",
+      "อื่นๆ"
+    ],
+    "totalSpend": 10194526.02,
+    "numPOs": 2,
+    "lastPurchase": "2025-08-06",
+    "topPaymentTerms": "T10LCC030",
+    "topProject": "SP009",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011505",
+    "name": "บจก. เคทีเอส 88",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 9608000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-03-16",
+    "topPaymentTerms": "30D",
+    "topProject": "SR237",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009030",
+    "name": "บจก. เอโซลาร์ คอร์ปอเรชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 9350000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-02-16",
+    "topPaymentTerms": "30D",
+    "topProject": "SR250",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009001",
+    "name": "บจก. เคลิงค์  แอดวานซ์ เทคโนโลยี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Monitoring System",
+      "อื่นๆ",
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 9250000.2,
+    "numPOs": 4,
+    "lastPurchase": "2026-03-06",
+    "topPaymentTerms": "30D",
+    "topProject": "SP010",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012062",
+    "name": "บจก. รักษาความปลอดภัย เมล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 8883246.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-04-14",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002267",
+    "name": "บจก. เอ็นเนอร์ยี่ อินติเกรชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 8857742.4,
+    "numPOs": 7,
+    "lastPurchase": "2026-02-20",
+    "topPaymentTerms": "CASH",
+    "topProject": "OM6M_SP078",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002921",
+    "name": "บจก. โซโลมอนเทคโนโลยี่ไทยแลนด์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Inverter & Optimizer",
+      "Monitoring System"
+    ],
+    "totalSpend": 8743900.0,
+    "numPOs": 9,
+    "lastPurchase": "2025-12-01",
+    "topPaymentTerms": "30D",
+    "topProject": "SR244",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011569",
+    "name": "บจก. อรัญคอนกรีต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 8713900.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-02-11",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012219",
+    "name": "หจก. มุสลิมบางกอก",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 7999193.4,
+    "numPOs": 2,
+    "lastPurchase": "2026-05-25",
+    "topPaymentTerms": "7D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011945",
+    "name": "บจก. จีไอเอส กรุ๊ป",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Monitoring System",
+      "อื่นๆ"
+    ],
+    "totalSpend": 7990400.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-02-05",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012209",
+    "name": "บจก. เอ็มวายเอ็มโอ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 7915374.59,
+    "numPOs": 3,
+    "lastPurchase": "2026-05-07",
+    "topPaymentTerms": "15D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009752",
+    "name": "บจก. ซีบีอาร์อี (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 7875000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-18",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003251",
+    "name": "บจก. กันกุล โซลาร์ พาวเวอร์ 1",
+    "vendorGroup": "GROUP",
+    "categories": [
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 7779200.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-06-11",
+    "topPaymentTerms": "60D",
+    "topProject": "SR255",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011372",
+    "name": "บจก. บี.เค.เอ็น.วู้ด",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 7500000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-09-16",
+    "topPaymentTerms": "30D",
+    "topProject": "SR241",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002470",
+    "name": "หจก. เอ-เทค ยูติลิตี้",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 7483598.7,
+    "numPOs": 109,
+    "lastPurchase": "2026-05-26",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000301",
+    "name": "บมจ. คิวทีซี เอนเนอร์ยี่",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Transformer"
+    ],
+    "totalSpend": 7460000.0,
+    "numPOs": 7,
+    "lastPurchase": "2026-05-24",
+    "topPaymentTerms": "60D",
+    "topProject": "SP010",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012234",
+    "name": "หจก. เอบี ฟลอริชชิ่ง แอนด์ อิเล็คทริค ซิสเต็ม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 7249653.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-24",
+    "topPaymentTerms": "15D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011982",
+    "name": "นาย กูอามิ ดาจูดา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "ค่าแรง"
+    ],
+    "totalSpend": 7137498.25,
+    "numPOs": 6,
+    "lastPurchase": "2026-05-06",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012259",
+    "name": "บจก. พรอซเปอร์ พรีซิชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Transformer",
+      "อื่นๆ"
+    ],
+    "totalSpend": 7056709.2,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-30",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000544",
+    "name": "บจก. ไทยรุ่งโรจน์ไพศาล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ DC"
+    ],
+    "totalSpend": 6840000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010234",
+    "name": "บจก. แอ็คเซสโซ่ ฟรานโก้",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network",
+      "ค่าแรง",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 6728256.3,
+    "numPOs": 8,
+    "lastPurchase": "2026-05-06",
+    "topPaymentTerms": "30D",
+    "topProject": "SP005",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003674",
+    "name": "SUNGROW POWER SUPPLY CO., LTD.",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "Inverter & Optimizer"
+    ],
+    "totalSpend": 6701574.4,
+    "numPOs": 1,
+    "lastPurchase": "2026-01-29",
+    "topPaymentTerms": "LC100C090",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000309",
+    "name": "บจก. เค.เอ็น.พี.ซัพพลาย",
+    "vendorGroup": "GROUP",
+    "categories": [
+      "Mounting Structure",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "สายไฟ AC",
+      "อื่นๆ",
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 6557211.2,
+    "numPOs": 28,
+    "lastPurchase": "2026-05-23",
+    "topPaymentTerms": "60D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011081",
+    "name": "บจก. กำเหนิดการโยธา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 6292760.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-10-16",
+    "topPaymentTerms": "30D",
+    "topProject": "SP026",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012216",
+    "name": "บจก. มูณโซล ไนท์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 6144000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-27",
+    "topPaymentTerms": "30D",
+    "topProject": "SR252",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011180",
+    "name": "บจก. นันทวัฒน์การโยธา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 6081607.01,
+    "numPOs": 2,
+    "lastPurchase": "2026-03-04",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001328",
+    "name": "บจก. พรีไซซ อีเลคตริค แมนูแฟคเจอริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Switchgear & MDB",
+      "Transformer",
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "สายไฟ AC",
+      "สายไฟ DC",
+      "อื่นๆ",
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 5630100.0,
+    "numPOs": 34,
+    "lastPurchase": "2026-06-09",
+    "topPaymentTerms": "30D",
+    "topProject": "SR248",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004347",
+    "name": "บจก. ออลล์ เอนเนอร์ยี่ พลัส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 5602461.03,
+    "numPOs": 12,
+    "lastPurchase": "2025-11-12",
+    "topPaymentTerms": "30D",
+    "topProject": "SR147",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012174",
+    "name": "บจก. ฟูฟอง แลบส์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "SCADA & Software"
+    ],
+    "totalSpend": 5600000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-14",
+    "topPaymentTerms": "45D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000008",
+    "name": "บมจ. กันกุล เอ็นจิเนียริ่ง",
+    "vendorGroup": "GROUP",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 5596888.83,
+    "numPOs": 5,
+    "lastPurchase": "2026-03-27",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010135",
+    "name": "บจก. ไทยโตชิบาไลท์ติ้ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ AC"
+    ],
+    "totalSpend": 5446013.19,
+    "numPOs": 12,
+    "lastPurchase": "2025-11-11",
+    "topPaymentTerms": "30D",
+    "topProject": "SP010",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004881",
+    "name": "RISEN ENERGY CO.,LTD.",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 5365265.87,
+    "numPOs": 3,
+    "lastPurchase": "2025-06-05",
+    "topPaymentTerms": "LC100C090",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002996",
+    "name": "บจก. เอส. เอ็ม. ที. เร้นท์ เอ คาร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 5267000.0,
+    "numPOs": 22,
+    "lastPurchase": "2026-05-20",
+    "topPaymentTerms": "30D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000755",
+    "name": "บจก. ฟอร์ทเทรสมารีน",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าธรรมเนียม & สาธารณูปโภค",
+      "ค่าเช่า",
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 5094000.0,
+    "numPOs": 20,
+    "lastPurchase": "2026-06-09",
+    "topPaymentTerms": "30D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011502",
+    "name": "บจก.กิจเจริญภัทร คอนสตรัคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 4891795.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-02-18",
+    "topPaymentTerms": "15D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012211",
+    "name": "บจก. บ้านโซลาร์ 2024",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "อื่นๆ"
+    ],
+    "totalSpend": 4845317.52,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-10",
+    "topPaymentTerms": "15D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004979",
+    "name": "บจก. จี เอ พี ซัพพลาย",
+    "vendorGroup": "GROUP",
+    "categories": [
+      "Mounting Structure",
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 4817400.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-10-06",
+    "topPaymentTerms": "60D",
+    "topProject": "SP025",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001076",
+    "name": "บจก. อีเอ็กซ์เอ็ม คอนซัลแตนท์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 4650000.0,
+    "numPOs": 3,
+    "lastPurchase": "2025-02-11",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011178",
+    "name": "บจก. อาคเนย์ คอนกรีต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 4508000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-10",
+    "topPaymentTerms": "15D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001100",
+    "name": "บจก. เอคคอส (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ขนส่ง & โลจิสติกส์",
+      "ค่าเช่า",
+      "ค่าแรง",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 4408600.0,
+    "numPOs": 23,
+    "lastPurchase": "2026-04-29",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004784",
+    "name": "บจก. กรีนไซน์ เอ็นไว",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 4350000.0,
+    "numPOs": 15,
+    "lastPurchase": "2026-06-08",
+    "topPaymentTerms": "30D",
+    "topProject": "SP026",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011583",
+    "name": "บจก. เอ็นทิค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "ค่าแรง",
+      "งานบริหารโครงการ",
+      "อื่นๆ"
+    ],
+    "totalSpend": 4336000.0,
+    "numPOs": 7,
+    "lastPurchase": "2026-02-01",
+    "topPaymentTerms": "30D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004133",
+    "name": "บจก. รักษาความปลอดภัยไจแอนท์ เนติธรรม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 4303099.66,
+    "numPOs": 8,
+    "lastPurchase": "2026-03-12",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010083",
+    "name": "บจก. เค.ซี.อีโคเอ็นเนอร์จี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 4244750.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-12-08",
+    "topPaymentTerms": "30D",
+    "topProject": "SR247",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010423",
+    "name": "บจก. พีเอสทีเค เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 4100000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-02-19",
+    "topPaymentTerms": "30D",
+    "topProject": "SR227",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003764",
+    "name": "บจก. ไทย-เอเซีย พี.อี.ไพ้พ์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ DC",
+      "อื่นๆ"
+    ],
+    "totalSpend": 3911776.0,
+    "numPOs": 8,
+    "lastPurchase": "2026-03-17",
+    "topPaymentTerms": "60D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010309",
+    "name": "บจก. ไทเพรสไพล์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 3729801.6,
+    "numPOs": 1,
+    "lastPurchase": "2025-02-18",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011403",
+    "name": "บจก. เอสเอ็นที คอนกรีต โซลูชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 3492072.0,
+    "numPOs": 8,
+    "lastPurchase": "2026-04-23",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001155",
+    "name": "บมจ. เอสซีไอ อีเลคตริค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Mounting Structure",
+      "อื่นๆ"
+    ],
+    "totalSpend": 3466374.46,
+    "numPOs": 3,
+    "lastPurchase": "2026-05-14",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000322",
+    "name": "บจก. แคมป์เบล ไซเอนทิฟิค เซาท์อีสท์ เอเชีย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Monitoring System"
+    ],
+    "totalSpend": 3430700.0,
+    "numPOs": 6,
+    "lastPurchase": "2026-05-14",
+    "topPaymentTerms": "30D",
+    "topProject": "SP009",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010204",
+    "name": "บจก. รีซิคา เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 3400000.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-05-21",
+    "topPaymentTerms": "30D",
+    "topProject": "SR233",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012152",
+    "name": "บจก. ฟอร์เวิร์ด ทีม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 3400000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-04-05",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010427",
+    "name": "หจก. โซเฟีย คอนสตรัคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 3350401.6,
+    "numPOs": 4,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "15D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002246",
+    "name": "หจก. ส.อุดมพันธ์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 3335557.4,
+    "numPOs": 58,
+    "lastPurchase": "2026-03-12",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004690",
+    "name": "บจก. อิเล็กโทร เทอร่า",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ AC",
+      "อื่นๆ",
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 3267240.0,
+    "numPOs": 6,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "15D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012017",
+    "name": "บจก. รักษาความปลอดภัย เซฟตี้ แคร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริหารโครงการ",
+      "อื่นๆ"
+    ],
+    "totalSpend": 3141856.3,
+    "numPOs": 8,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011707",
+    "name": "บมจ. ยงคอนกรีต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 3100500.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-12-03",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010238",
+    "name": "บจก. เอฟที เอนเนอร์จี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 3000000.0,
+    "numPOs": 1,
+    "lastPurchase": "2024-12-25",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011970",
+    "name": "บจก. บีเอที โซลูชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 2900000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-02-15",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010224",
+    "name": "บจก. เอ.อี.ซี.เทคโนโลยีกรุ๊ป",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 2831040.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-01-03",
+    "topPaymentTerms": "30D",
+    "topProject": "SR213",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011179",
+    "name": "บจก. ยูไนเต็ดคอนกรีต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 2760000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-03-27",
+    "topPaymentTerms": "15D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010205",
+    "name": "บจก. มิธเทค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 2753983.72,
+    "numPOs": 51,
+    "lastPurchase": "2026-02-20",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011733",
+    "name": "บจก. เพชรสยาม พีอี ไพ้พ์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ DC",
+      "อื่นๆ"
+    ],
+    "totalSpend": 2685004.1,
+    "numPOs": 11,
+    "lastPurchase": "2026-05-29",
+    "topPaymentTerms": "60D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000001",
+    "name": "บจก. 108 โอเอ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network",
+      "SCADA & Software",
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 2662460.0,
+    "numPOs": 69,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "45D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000084",
+    "name": "บจก. จี.เค. พาวเวอร์ โปรดักส์",
+    "vendorGroup": "GROUP",
+    "categories": [
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 2653200.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-28",
+    "topPaymentTerms": "60D",
+    "topProject": "SR260",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010195",
+    "name": "บจก. แอท เอนเนอร์ยี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 2564482.16,
+    "numPOs": 51,
+    "lastPurchase": "2026-05-22",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001080",
+    "name": "บจก. อีเอสไอ เทรดดิ้ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Monitoring System",
+      "อื่นๆ",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 2545790.0,
+    "numPOs": 7,
+    "lastPurchase": "2025-10-29",
+    "topPaymentTerms": "30D",
+    "topProject": "SP010",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012049",
+    "name": "หจก. เมทัลเวิร์ค แฟบริคเคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 2523500.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-03-27",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011821",
+    "name": "บจก. บางคล้า เอ็นจิเนียร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 2499080.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-01-12",
+    "topPaymentTerms": "30D",
+    "topProject": "SR252",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011958",
+    "name": "บจก. จัดหางานมิตร เอ็นจิเนีย คอนสตรัคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 2452500.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-04-20",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011687",
+    "name": "บจก. ไอ พาวเวอร์ เอ็นเตอร์ไพรส์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 2450045.82,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-13",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011572",
+    "name": "บจก. ราบรื่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "อื่นๆ"
+    ],
+    "totalSpend": 2400000.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-11-12",
+    "topPaymentTerms": "15D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012183",
+    "name": "บจก. เอเว่อร์ เอเชีย (ไทยแลนด์)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 2270000.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-05-15",
+    "topPaymentTerms": "30D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011331",
+    "name": "บจก.แอมมีส เทค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network",
+      "Monitoring System",
+      "SCADA & Software",
+      "Switchgear & MDB",
+      "ค่าแรง",
+      "งานบริหารโครงการ",
+      "สายไฟ AC",
+      "อื่นๆ",
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 2185048.2,
+    "numPOs": 6,
+    "lastPurchase": "2025-09-23",
+    "topPaymentTerms": "30D",
+    "topProject": "SP009",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012367",
+    "name": "หจก. เอสอี วิศวกรรม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 2171142.3,
+    "numPOs": 2,
+    "lastPurchase": "2026-06-05",
+    "topPaymentTerms": "15D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000045",
+    "name": "บจก. เซเว่น เอส โปร",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "ค่าแรง"
+    ],
+    "totalSpend": 2065357.0,
+    "numPOs": 8,
+    "lastPurchase": "2026-05-29",
+    "topPaymentTerms": "30D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011171",
+    "name": "หจก.ทรี ลิตเติล บี เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 2038018.4,
+    "numPOs": 39,
+    "lastPurchase": "2026-05-25",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009075",
+    "name": "บจก. ไวร์เออ แอนด์ ไวร์เลส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 2010750.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-10-28",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009876",
+    "name": "บจก. สายไฟฟ้าไทย - ยาซากิ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ AC"
+    ],
+    "totalSpend": 1988419.8,
+    "numPOs": 1,
+    "lastPurchase": "2026-02-27",
+    "topPaymentTerms": "30D",
+    "topProject": "SR252",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002941",
+    "name": "บจก. บริสโตล เฟอร์นิเจอร์ (ประเทศไทย) (สำนักงานใหญ่)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 1950000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-19",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012310",
+    "name": "บจก. เฮง คอนซัลติ้ง (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 1945020.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-12",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001098",
+    "name": "บมจ. เอกรัฐวิศวกรรม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Transformer"
+    ],
+    "totalSpend": 1934000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-02-25",
+    "topPaymentTerms": "60D",
+    "topProject": "SR253",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011022",
+    "name": "AIKO ENERGY SINGAPORE PTE LTD.",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 1909167.91,
+    "numPOs": 1,
+    "lastPurchase": "2025-12-23",
+    "topPaymentTerms": "LC100C060",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004731",
+    "name": "นาย บัญญัติ ไชยโย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 1877024.0,
+    "numPOs": 28,
+    "lastPurchase": "2026-02-20",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010106",
+    "name": "บจก. อิทธิฤทธิ์ เทคโนโลยี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 1870080.0,
+    "numPOs": 1,
+    "lastPurchase": "2024-12-25",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010950",
+    "name": "บจก. วอเตอร์ ด๊อกเตอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริหารโครงการ",
+      "อื่นๆ"
+    ],
+    "totalSpend": 1868210.0,
+    "numPOs": 8,
+    "lastPurchase": "2026-05-14",
+    "topPaymentTerms": "30D",
+    "topProject": "SP009",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012335",
+    "name": "บจก. ไบโอแก๊ส เพาเวอร์เอ็นเนอร์จี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ขนส่ง & โลจิสติกส์",
+      "ค่าเช่า",
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 1856394.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011323",
+    "name": "บจก. วีเออาร์เอส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 1731300.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-09-05",
+    "topPaymentTerms": "30D",
+    "topProject": "SP025",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V006813",
+    "name": "บจก. แสงอารี เอสเตท",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "อื่นๆ"
+    ],
+    "totalSpend": 1705500.0,
+    "numPOs": 18,
+    "lastPurchase": "2026-06-04",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000603",
+    "name": "บจก. บางกอก เวสเทิร์น คอมมิวนิเคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ DC",
+      "อื่นๆ"
+    ],
+    "totalSpend": 1685947.5,
+    "numPOs": 2,
+    "lastPurchase": "2026-03-13",
+    "topPaymentTerms": "60D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004865",
+    "name": "บจก. เกิดวิบูรณ์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network",
+      "อื่นๆ"
+    ],
+    "totalSpend": 1666014.18,
+    "numPOs": 10,
+    "lastPurchase": "2026-06-12",
+    "topPaymentTerms": "30D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V006487",
+    "name": "บจก. เคพีเอ็มจี ภูมิไชย สอบบัญชี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าธรรมเนียม & สาธารณูปโภค",
+      "อื่นๆ"
+    ],
+    "totalSpend": 1660000.0,
+    "numPOs": 3,
+    "lastPurchase": "2025-08-29",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003365",
+    "name": "บจก. เจริญชัยอินเตอร์เทรด",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Transformer"
+    ],
+    "totalSpend": 1590000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-02-18",
+    "topPaymentTerms": "60D",
+    "topProject": "SP009",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011943",
+    "name": "บจก. สตาร์ ไอโอที แอนด์ ออโตเมชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Battery & Energy Storage",
+      "IT & Network",
+      "งานบริหารโครงการ",
+      "อื่นๆ",
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 1574460.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-04-17",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR252",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012178",
+    "name": "นาย นิซอเฟียน ดาแม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "ค่าแรง"
+    ],
+    "totalSpend": 1553698.1,
+    "numPOs": 4,
+    "lastPurchase": "2026-05-11",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011474",
+    "name": "บจก.ไดร์ฟโปร",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ยานพาหนะ",
+      "อื่นๆ"
+    ],
+    "totalSpend": 1547663.56,
+    "numPOs": 1,
+    "lastPurchase": "2025-11-06",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004374",
+    "name": "หจก. เฮย์เดย์ เคมีคอลส์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 1493490.0,
+    "numPOs": 32,
+    "lastPurchase": "2026-06-09",
+    "topPaymentTerms": "30D",
+    "topProject": "SR230",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010355",
+    "name": "นางสาว เมธินี บุญชุบเลี้ยง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 1456400.0,
+    "numPOs": 6,
+    "lastPurchase": "2026-05-07",
+    "topPaymentTerms": "30D",
+    "topProject": "SR236",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008870",
+    "name": "บจก. แอลฟ่า จีโอเทค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 1448560.0,
+    "numPOs": 13,
+    "lastPurchase": "2026-05-28",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008467",
+    "name": "บจก. ฟิวเจอร์ อีเล็คทริคอล คอนโทรล",
+    "vendorGroup": "GROUP",
+    "categories": [
+      "ค่าแรง",
+      "งานบริหารโครงการ",
+      "ยานพาหนะ"
+    ],
+    "totalSpend": 1427294.39,
+    "numPOs": 6,
+    "lastPurchase": "2026-04-29",
+    "topPaymentTerms": "60D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012274",
+    "name": "น.ส. นิซุลฟา ดาแม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 1400400.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-05-13",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009335",
+    "name": "บจก. ซันเดย์ โซลาร์ ซัพพลาย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ DC"
+    ],
+    "totalSpend": 1367600.0,
+    "numPOs": 1,
+    "lastPurchase": "2024-12-25",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000675",
+    "name": "บจก. โปรเมช รีซอร์ส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 1332706.12,
+    "numPOs": 18,
+    "lastPurchase": "2026-06-12",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009101",
+    "name": "บจก. ซันน็อกซ์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 1314639.3,
+    "numPOs": 38,
+    "lastPurchase": "2026-05-18",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011783",
+    "name": "บจก. นีโอ คลีน เอนเนอร์ยี่",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ DC"
+    ],
+    "totalSpend": 1312500.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-12-25",
+    "topPaymentTerms": "15D",
+    "topProject": "SP025",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010425",
+    "name": "บจก. ทรีเจ(ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 1258366.8,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-29",
+    "topPaymentTerms": "30D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010225",
+    "name": "นางสาว นิชนันท์  พานิชนันทนกุล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 1250000.0,
+    "numPOs": 2,
+    "lastPurchase": "2024-12-28",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003438",
+    "name": "นาง หทัยกาญจน์ ประเสริฐโสภา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 1230792.32,
+    "numPOs": 4,
+    "lastPurchase": "2026-01-15",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010725",
+    "name": "บจก. เจเคเอส ดีเวล็อปเม้นท์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริหารโครงการ",
+      "ตรวจสอบ & Survey (วิศวกร)"
+    ],
+    "totalSpend": 1218081.0,
+    "numPOs": 6,
+    "lastPurchase": "2026-05-07",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000746",
+    "name": "บจก. อีดีเอ็มไอ (ไทยแลนด์)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 1179500.0,
+    "numPOs": 4,
+    "lastPurchase": "2025-10-03",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012227",
+    "name": "นาย นิซอฟรอน ดาแม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 1173600.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-05-18",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012296",
+    "name": "นาย พีระศิลป์ ขุนสังข์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ขนส่ง & โลจิสติกส์",
+      "ค่าเช่า"
+    ],
+    "totalSpend": 1165000.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-06-01",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012157",
+    "name": "บจก. ปิยวัฒน์ทรานสปอร์ต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ขนส่ง & โลจิสติกส์"
+    ],
+    "totalSpend": 1142500.0,
+    "numPOs": 9,
+    "lastPurchase": "2026-05-13",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004858",
+    "name": "บจก. อินฟราเทค เอ็นเนอร์ยี่",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "อื่นๆ"
+    ],
+    "totalSpend": 1138000.0,
+    "numPOs": 5,
+    "lastPurchase": "2026-05-20",
+    "topPaymentTerms": "30D",
+    "topProject": "SP010",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001547",
+    "name": "บจก. ไทยเทคนิค เพาเวอร์ แอนด์ เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Switchgear & MDB",
+      "ค่าแรง",
+      "อื่นๆ",
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 1135400.0,
+    "numPOs": 12,
+    "lastPurchase": "2025-11-27",
+    "topPaymentTerms": "30D",
+    "topProject": "SR239",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011215",
+    "name": "บจก. เอสเค เพาเวอร์ อีเล็คทริค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Switchgear & MDB",
+      "ค่าแรง",
+      "อื่นๆ",
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 1135000.0,
+    "numPOs": 5,
+    "lastPurchase": "2026-06-04",
+    "topPaymentTerms": "30D",
+    "topProject": "SR249",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012385",
+    "name": "บจก. อี เอ เอส อลาร์ม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "PPE & Safety",
+      "อื่นๆ"
+    ],
+    "totalSpend": 1038600.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010147",
+    "name": "บจก. เอ็นเอส สยาม เอ็นจิเนียริ่ง เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 989014.0,
+    "numPOs": 3,
+    "lastPurchase": "2025-01-03",
+    "topPaymentTerms": "30D",
+    "topProject": "SR132",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003198",
+    "name": "บจก. เพาเวอร์ เมจิค เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 988319.46,
+    "numPOs": 11,
+    "lastPurchase": "2025-07-03",
+    "topPaymentTerms": "30D",
+    "topProject": "SR181",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010406",
+    "name": "หจก. โซลาร์เซฟ เอ็นเนอร์ยี่",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 964209.6,
+    "numPOs": 13,
+    "lastPurchase": "2026-02-18",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011965",
+    "name": "หจก. อิงวิศวการ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 956000.0,
+    "numPOs": 7,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004793",
+    "name": "บจก. กันกุล โกดังไฟฟ้าแพลตฟอร์ม",
+    "vendorGroup": "GROUP",
+    "categories": [
+      "Mounting Structure",
+      "อื่นๆ",
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 944820.0,
+    "numPOs": 14,
+    "lastPurchase": "2026-05-07",
+    "topPaymentTerms": "60D",
+    "topProject": "SR220",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012319",
+    "name": "น.ส. เจะหาสือนิ เจะโซะ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 943241.04,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-15",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011624",
+    "name": "Powerway Renewable Energy Co.,Ltd.",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "Mounting Structure"
+    ],
+    "totalSpend": 941268.37,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-29",
+    "topPaymentTerms": "T030TT070BL",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012277",
+    "name": "หจก. สหโยธากิจ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าธรรมเนียม & สาธารณูปโภค",
+      "ค่าแรง",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 922360.0,
+    "numPOs": 9,
+    "lastPurchase": "2026-05-26",
+    "topPaymentTerms": "15D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010247",
+    "name": "บจก. เค แอนด์ เค ซีวิล ดีไซน์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 909000.0,
+    "numPOs": 25,
+    "lastPurchase": "2026-05-22",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR230",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009043",
+    "name": "บจก. เอส.เอ็ม.ที. เร้นท์ เอ คาร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 903000.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-06-09",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002874",
+    "name": "บจก. โปรเฟสชั่นแนล แคริเบรชั่น แอนด์ เซอร์วิสเซส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 876455.0,
+    "numPOs": 46,
+    "lastPurchase": "2026-05-31",
+    "topPaymentTerms": "30D",
+    "topProject": "SR129",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001040",
+    "name": "บมจ. อาซีฟา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Transformer",
+      "ค่าแรง",
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 870000.0,
+    "numPOs": 6,
+    "lastPurchase": "2026-04-08",
+    "topPaymentTerms": "60D",
+    "topProject": "SR243",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011901",
+    "name": "นางสาว วิภาดา วิบูญกูล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "อื่นๆ"
+    ],
+    "totalSpend": 864000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-01-27",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004492",
+    "name": "นาย เขมกร ทัศนาญชลี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 834000.0,
+    "numPOs": 55,
+    "lastPurchase": "2026-06-08",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR217",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011430",
+    "name": "บมจ. ศรีตรังโกลฟส์ (ประเทศไทย) สาขาที่ 00006",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 805000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-10-20",
+    "topPaymentTerms": "30D",
+    "topProject": "SP026",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008210",
+    "name": "บจก. เอสพีพี คอนกรีต ทรัพย์ทวี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 726200.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-05-19",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V005011",
+    "name": "บจก. มาสเตอร์เวิร์ค ดีเวลลอปเม้นท์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 719818.94,
+    "numPOs": 1,
+    "lastPurchase": "2025-03-17",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012132",
+    "name": "หจก.ศักดิ์เทรน",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ขนส่ง & โลจิสติกส์",
+      "ค่าเช่า",
+      "ค่าแรง"
+    ],
+    "totalSpend": 700000.0,
+    "numPOs": 6,
+    "lastPurchase": "2026-04-28",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012117",
+    "name": "บจก.  โอ เค เอ็นจิเนียริ่ง ไฮเท็ค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Mounting Structure",
+      "สายไฟ AC",
+      "สายไฟ DC",
+      "อื่นๆ"
+    ],
+    "totalSpend": 694246.6,
+    "numPOs": 6,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "60D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012276",
+    "name": "บจก. ยู.เอ็น. อีเล็คทริค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ DC"
+    ],
+    "totalSpend": 684075.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-05-08",
+    "topPaymentTerms": "60D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011697",
+    "name": "บจก. คงธาริน",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 681000.0,
+    "numPOs": 6,
+    "lastPurchase": "2026-04-25",
+    "topPaymentTerms": "15D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000543",
+    "name": "บจก. ไทยแมกซ์เวลอิเลคทริค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Transformer"
+    ],
+    "totalSpend": 625000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-02-23",
+    "topPaymentTerms": "60D",
+    "topProject": "SR248",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012323",
+    "name": "หจก. หนองคำก่อสร้าง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "อื่นๆ"
+    ],
+    "totalSpend": 616000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-19",
+    "topPaymentTerms": "15D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012014",
+    "name": "บจก. พี-เต็นท์ 2541",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 614500.0,
+    "numPOs": 7,
+    "lastPurchase": "2026-05-04",
+    "topPaymentTerms": "15D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011838",
+    "name": "บจก. ลีโอ เกรท เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 600000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-01-16",
+    "topPaymentTerms": "30D",
+    "topProject": "SR252",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010178",
+    "name": "บจก. พีเจ. เอ็นจิเนียริ่ง 2018",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 582427.34,
+    "numPOs": 2,
+    "lastPurchase": "2024-12-25",
+    "topPaymentTerms": "30D",
+    "topProject": "SR187",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010141",
+    "name": "คุณ พิรมพร ปัดถา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 578871.8,
+    "numPOs": 12,
+    "lastPurchase": "2025-03-31",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012043",
+    "name": "บจก.คอนคิวเรอร์ โซล่า",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 566996.0,
+    "numPOs": 10,
+    "lastPurchase": "2026-06-12",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012281",
+    "name": "บจก. ทศมิตร วิศวกรรม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 540000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-18",
+    "topPaymentTerms": "30D",
+    "topProject": "SR261",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010846",
+    "name": "บจก. ฮีลูเคเบิ้ล (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ DC"
+    ],
+    "totalSpend": 537500.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-04-30",
+    "topPaymentTerms": "30D",
+    "topProject": "SR238",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000750",
+    "name": "บมจ. ซีพีแอล กรุ๊ป",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "PPE & Safety",
+      "สวัสดิการ & บุคคล",
+      "อื่นๆ",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 535818.25,
+    "numPOs": 33,
+    "lastPurchase": "2026-06-05",
+    "topPaymentTerms": "30D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003874",
+    "name": "บจก. เค-ลิ้งค์ เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 532500.0,
+    "numPOs": 47,
+    "lastPurchase": "2026-06-04",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR230",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000803",
+    "name": "บจก. เมกา เคซีอาร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 522500.0,
+    "numPOs": 4,
+    "lastPurchase": "2025-12-12",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011842",
+    "name": "นางสาวจิดาภา อยู่ระหัส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 521600.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-01-15",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010502",
+    "name": "บมจ.โฮม โปรดักส์ เซ็นเตอร์  สาขาเพลินจิต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 500824.06,
+    "numPOs": 7,
+    "lastPurchase": "2026-03-23",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012068",
+    "name": "นางสาว นนทิยา คำวัฒนะ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 500000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-03-12",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR254",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012352",
+    "name": "บจก. เพื่อนกรรมกร เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 500000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-06-05",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012403",
+    "name": "บจก. เฮอริเครน แอนด์ ทรานสปอร์ต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 500000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-06-05",
+    "topPaymentTerms": "15D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003387",
+    "name": "บจก. ลีเวลด์ อินดัสตรี้",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 489163.76,
+    "numPOs": 3,
+    "lastPurchase": "2026-05-11",
+    "topPaymentTerms": "15D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012272",
+    "name": "นาย มะยูดี เจ๊ะเต๊ะ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 450000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-06",
+    "topPaymentTerms": "15D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012283",
+    "name": "หจก. บุญโชติโลจิสติกส์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ขนส่ง & โลจิสติกส์"
+    ],
+    "totalSpend": 450000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-05-07",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012093",
+    "name": "หจก. เคเค คอนสตรัคชั่น แอนด์ เครน",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ขนส่ง & โลจิสติกส์",
+      "ค่าเช่า"
+    ],
+    "totalSpend": 445000.0,
+    "numPOs": 7,
+    "lastPurchase": "2026-05-05",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011399",
+    "name": "PVcase US LLC",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "SCADA & Software"
+    ],
+    "totalSpend": 432541.11,
+    "numPOs": 1,
+    "lastPurchase": "2025-09-19",
+    "topPaymentTerms": "T100B000I",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012100",
+    "name": "บมจ.โฮม โปรดักส์ เซ็นเตอร์  สาขาหาดใหญ่ (กาญจนวนิช) สาขาที่ 00054",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 423783.95,
+    "numPOs": 4,
+    "lastPurchase": "2026-03-23",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010198",
+    "name": "นาย วชิรวิชญ์ วสุวัฒนกุล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 423000.0,
+    "numPOs": 39,
+    "lastPurchase": "2026-05-27",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP008",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002704",
+    "name": "บจก. โตโยต้าสงขลา ผู้จำหน่ายโตโยต้า (สาขาหาดใหญ่)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 421183.64,
+    "numPOs": 4,
+    "lastPurchase": "2026-04-28",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011521",
+    "name": "นาย นิคม มั่นคง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 418421.05,
+    "numPOs": 3,
+    "lastPurchase": "2026-04-21",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009798",
+    "name": "บจก. เนกซาสโตน",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network",
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 409000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012235",
+    "name": "นาย อับดุลเลาะ หะมะ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า"
+    ],
+    "totalSpend": 400000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-15",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000226",
+    "name": "UTECO ABEE",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "Monitoring System"
+    ],
+    "totalSpend": 395973.18,
+    "numPOs": 4,
+    "lastPurchase": "2026-06-05",
+    "topPaymentTerms": "T100B000I",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011903",
+    "name": "บจก. ใบข้าว คิวบ์แอนด์โค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 381600.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-03-06",
+    "topPaymentTerms": "15D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004535",
+    "name": "หจก. ซี แอนด์ พี ฮอทไลน์เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 376262.0,
+    "numPOs": 20,
+    "lastPurchase": "2026-06-09",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009337",
+    "name": "บจก. ดับเบิ้ลยู.อาร์.ซี.อิเล็คทริค แอนด์ คอนสตรัคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 372850.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-04-01",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003256",
+    "name": "นาย จารุกิตติ์ มยุรา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 372600.0,
+    "numPOs": 61,
+    "lastPurchase": "2026-06-12",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP008",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000829",
+    "name": "บจก. ยูนิเพาเวอร์ เอ็นยีเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 368000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-02-18",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004431",
+    "name": "บจก. แทนเจอรีน",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "SCADA & Software"
+    ],
+    "totalSpend": 363580.0,
+    "numPOs": 19,
+    "lastPurchase": "2026-01-28",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000498",
+    "name": "หจก. ที.ที สตีลแอนด์แฟบริคเคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ DC",
+      "อื่นๆ"
+    ],
+    "totalSpend": 362304.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-04-06",
+    "topPaymentTerms": "15D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010176",
+    "name": "บจก. ปลายฝัน วิศวกรรม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "อื่นๆ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 361000.0,
+    "numPOs": 16,
+    "lastPurchase": "2025-06-06",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002398",
+    "name": "บจก. ไทย โซเคน",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "ค่าแรง",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 344001.05,
+    "numPOs": 4,
+    "lastPurchase": "2026-01-29",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000258",
+    "name": "บจก. กันกุล พาวเวอร์ ดีเวลลอปเม้นท์",
+    "vendorGroup": "GROUP",
+    "categories": [
+      "Mounting Structure",
+      "อื่นๆ"
+    ],
+    "totalSpend": 341994.88,
+    "numPOs": 2,
+    "lastPurchase": "2025-11-11",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004859",
+    "name": "บจก. พีเอ็นที อินเตอร์เนชั่นแนล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สวัสดิการ & บุคคล",
+      "อื่นๆ"
+    ],
+    "totalSpend": 340825.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-03-10",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002459",
+    "name": "บจก. สปีด คอมเมอร์เชียล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network",
+      "SCADA & Software",
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 336779.91,
+    "numPOs": 27,
+    "lastPurchase": "2026-02-16",
+    "topPaymentTerms": "30D",
+    "topProject": "SP007",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001158",
+    "name": "บจก. เอส.ซี.เค. ผ้าใบ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "ค่าแรง"
+    ],
+    "totalSpend": 330000.0,
+    "numPOs": 4,
+    "lastPurchase": "2025-12-24",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003378",
+    "name": "บจก. เร้นท์ (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 324000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-04",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010249",
+    "name": "บจก. พีคโฟลว์ เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 312000.0,
+    "numPOs": 2,
+    "lastPurchase": "2024-12-25",
+    "topPaymentTerms": "30D",
+    "topProject": "SP005",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000779",
+    "name": "บจก. ภัทรอุตสาหกรรม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Switchgear & MDB",
+      "ค่าแรง",
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 304500.0,
+    "numPOs": 4,
+    "lastPurchase": "2025-06-12",
+    "topPaymentTerms": "60D",
+    "topProject": "SR228",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012008",
+    "name": "หจก. บัญญพนต์ ซัพพลาย แอนด์ เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Monitoring System",
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 304300.0,
+    "numPOs": 7,
+    "lastPurchase": "2026-06-02",
+    "topPaymentTerms": "15D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012414",
+    "name": "ย่านซื่อธุรกิจ โดย นาย ยาลาลุดดีน  สาดีน",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 303600.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "15D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011440",
+    "name": "นางสาว วีรวรรณ  เปาสอน",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 300000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-11-12",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011585",
+    "name": "นางสาว เชิญ มีแย้ม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 300000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-11-10",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011888",
+    "name": "นางสาว สุมิตรา ปันใย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 300000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-02-10",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR245",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012249",
+    "name": "นาย ซอบรี หาแว",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 300000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-05-05",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004228",
+    "name": "นาย สมพร คะเชนหาร",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 294400.0,
+    "numPOs": 8,
+    "lastPurchase": "2026-02-20",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003696",
+    "name": "บจก. เอเค เซนเตอร์ พาร์ท",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Battery & Energy Storage",
+      "PPE & Safety",
+      "ค่าธรรมเนียม & สาธารณูปโภค",
+      "อื่นๆ",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 289222.0,
+    "numPOs": 18,
+    "lastPurchase": "2026-04-22",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003591",
+    "name": "น.ส. อัญชนา เผ่าพันธ์แปลก",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 285000.0,
+    "numPOs": 2,
+    "lastPurchase": "2024-12-26",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012083",
+    "name": "บจก. ซิสทรอนิกส์ อินส์แล็บ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 283500.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-03-12",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004771",
+    "name": "บจก. เอ็นเทค เอสไอ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Monitoring System"
+    ],
+    "totalSpend": 281120.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-03-19",
+    "topPaymentTerms": "30D",
+    "topProject": "SP025",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011690",
+    "name": "นางสาวแพรวา ศรีชูทอง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 280500.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-12-06",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012250",
+    "name": "นาย โชติช่วง จีนธาดา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 280500.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-29",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011607",
+    "name": "นาง อรวิมล บัวเอี่ยม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Mounting Structure"
+    ],
+    "totalSpend": 278634.24,
+    "numPOs": 1,
+    "lastPurchase": "2025-11-11",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V006603",
+    "name": "บจก. ไอ.ที.โซลูชั่น คอมพิวเตอร์(ไทยแลนด์)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "SCADA & Software"
+    ],
+    "totalSpend": 277100.0,
+    "numPOs": 3,
+    "lastPurchase": "2025-09-11",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004746",
+    "name": "บจก. ไอบีคอน",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 274720.0,
+    "numPOs": 13,
+    "lastPurchase": "2026-02-24",
+    "topPaymentTerms": "30D",
+    "topProject": "SP025",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011983",
+    "name": "บจก. ปัณณวัฒน์เต็นท์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า"
+    ],
+    "totalSpend": 273000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-02-23",
+    "topPaymentTerms": "30D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012396",
+    "name": "นาย สุรศักดิ์ มาสมทบ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าธรรมเนียม & สาธารณูปโภค"
+    ],
+    "totalSpend": 270000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-06-03",
+    "topPaymentTerms": "7D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003763",
+    "name": "บจก. ออเรนจ์ กรีน อินสทรูเมนต์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 269400.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-06-12",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001131",
+    "name": "บจก. เอฟเวอร์เทค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 266400.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-12",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012412",
+    "name": "บจก. เทค พาร์ทเนอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 262800.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-06-12",
+    "topPaymentTerms": "7D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011086",
+    "name": "บจก.ไอ.จี.แมนเนจเม้นท์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าธรรมเนียม & สาธารณูปโภค",
+      "ค่าเช่า",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "สวัสดิการ & บุคคล"
+    ],
+    "totalSpend": 255549.3,
+    "numPOs": 13,
+    "lastPurchase": "2026-05-25",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010226",
+    "name": "นางสาว ตฤณ  ภูษิตมณฑล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 250000.0,
+    "numPOs": 1,
+    "lastPurchase": "2024-12-25",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011719",
+    "name": "บจก. โบรโรมา (ไทยแลนด์)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สายไฟ DC",
+      "อื่นๆ"
+    ],
+    "totalSpend": 247900.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-04-07",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011698",
+    "name": "หจก. สงขลา 115",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 244017.5,
+    "numPOs": 2,
+    "lastPurchase": "2026-02-11",
+    "topPaymentTerms": "15D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003388",
+    "name": "นาย สหรัฐ หกประเสริฐ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 243800.0,
+    "numPOs": 5,
+    "lastPurchase": "2026-03-06",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004417",
+    "name": "บจก. พีดีแอล เอ็นจิเนียริ่ง แอนด์ ซัพพลาย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "ติดตั้ง & Commissioning",
+      "อื่นๆ"
+    ],
+    "totalSpend": 242000.0,
+    "numPOs": 7,
+    "lastPurchase": "2025-11-18",
+    "topPaymentTerms": "30D",
+    "topProject": "SP005",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012353",
+    "name": "บจก. ลัยลาห์ นั่งร้าน (จะนะ)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 233200.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-05-26",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012266",
+    "name": "น.ส. สากีนะห์ อับพันดี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 230103.12,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-05",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010210",
+    "name": "บจก. เมกา คูล เอ็นจิเนียริ่ง แอนด์ ซัพพลาย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ",
+      "อื่นๆ"
+    ],
+    "totalSpend": 225000.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-03-26",
+    "topPaymentTerms": "30D",
+    "topProject": "SR168",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012320",
+    "name": "บจก. อันวา แอนด์ โค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 219000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-13",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012197",
+    "name": "หจก. พชิราแบบเหล็ก",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 216600.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-09",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004789",
+    "name": "บจก. แปซิฟิค แลบอราตอรี่",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 216000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-24",
+    "topPaymentTerms": "30D",
+    "topProject": "SR259",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011028",
+    "name": "Suzhou Blauberg Motor Technology Co.,Ltd.",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 215379.75,
+    "numPOs": 3,
+    "lastPurchase": "2026-04-23",
+    "topPaymentTerms": "T030TT070",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000335",
+    "name": "บจก. รักษาความปลอดภัย จี4เอส เซอร์วิสเซส (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 214800.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-07-22",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011057",
+    "name": "นายจิราเวช โกนจา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 212118.2,
+    "numPOs": 4,
+    "lastPurchase": "2025-07-30",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011640",
+    "name": "หจก. ชนก อิเล็คทริค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 210676.8,
+    "numPOs": 2,
+    "lastPurchase": "2025-12-01",
+    "topPaymentTerms": "15D",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011886",
+    "name": "บจก. ไมดาส อินฟอร์เมชั่น เทคโนโลยี คัมปะนี ลิมิเต็ด",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 199500.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-27",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001703",
+    "name": "บจก. สตอบลี (ไทยแลนด์)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 198280.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-03-19",
+    "topPaymentTerms": "30D",
+    "topProject": "SP010",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012243",
+    "name": "หจก. อ.ส่งเสริมเทรดดิ้ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 197274.4,
+    "numPOs": 3,
+    "lastPurchase": "2026-05-20",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011710",
+    "name": "บจก. 1963 ทรานสปอร์ต",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 192000.0,
+    "numPOs": 7,
+    "lastPurchase": "2026-03-13",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012291",
+    "name": "บจก. แมกซ์เวล 1991",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 181880.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-08",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR243",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011566",
+    "name": "นางสุนิสา สินไพบูลย์ผล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า"
+    ],
+    "totalSpend": 181578.95,
+    "numPOs": 1,
+    "lastPurchase": "2025-11-17",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004773",
+    "name": "บริษัท ไอ.เอ็น.พี. การ์เม้นท์ จำกัด",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สวัสดิการ & บุคคล"
+    ],
+    "totalSpend": 178710.0,
+    "numPOs": 3,
+    "lastPurchase": "2025-10-28",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010145",
+    "name": "คุณ อภัยศักดิ์ มาตราช",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 172584.0,
+    "numPOs": 3,
+    "lastPurchase": "2025-05-08",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011274",
+    "name": "บจก. วอลเพาเวอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 171000.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-09-02",
+    "topPaymentTerms": "7D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V006011",
+    "name": "บจก. ไฟร์โฟกัส เซลส์แอนด์เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "PPE & Safety",
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 170426.0,
+    "numPOs": 7,
+    "lastPurchase": "2026-02-20",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001165",
+    "name": "หจก. เอส.พี.เค.ฮาร์ดแวร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน",
+      "เครื่องมือ & อุปกรณ์ช่าง",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 169065.0,
+    "numPOs": 21,
+    "lastPurchase": "2026-06-11",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004420",
+    "name": "บจก. เพาเวอร์ ควอลิตี้ ทีม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 160000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-07-03",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR157",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012190",
+    "name": "นางสาว อัมรินทร์ เรพล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 153100.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-05-04",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000345",
+    "name": "บจก. เจ แอล พี เอ็นจิเนียริ่ง เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ",
+      "โยธา & งานฐานราก"
+    ],
+    "totalSpend": 152500.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-06-01",
+    "topPaymentTerms": "30D",
+    "topProject": "SP010",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012137",
+    "name": "นางสาว พินาภรณ์ บัวพึ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 150000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-03-26",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001009",
+    "name": "บจก. แสงชัยมิเตอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Monitoring System",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 148820.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-02-11",
+    "topPaymentTerms": "30D",
+    "topProject": "SP026",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000617",
+    "name": "บจก. บี.บี.เค.เอ็นเตอร์ไพรส์(1991)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 135487.5,
+    "numPOs": 2,
+    "lastPurchase": "2026-06-09",
+    "topPaymentTerms": "60D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008995",
+    "name": "บจก.  โฟคัสแล็บ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 134400.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-02-20",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V005075",
+    "name": "บจก. โตชิบา เทค (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 131950.0,
+    "numPOs": 10,
+    "lastPurchase": "2025-12-23",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012200",
+    "name": "บจก. ผล เอ็นเทค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 131400.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-04-21",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010148",
+    "name": "บจก. สามารถ ดิจิตอล (มหาชน)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 128927.5,
+    "numPOs": 3,
+    "lastPurchase": "2025-01-03",
+    "topPaymentTerms": "30D",
+    "topProject": "SR173",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012301",
+    "name": "นาย ธัญญะวัจน์ ตั้งเปี่ยมวรกุล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ขนส่ง & โลจิสติกส์"
+    ],
+    "totalSpend": 127500.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-12",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011017",
+    "name": "บจก.วินอัลลายด์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 126754.49,
+    "numPOs": 3,
+    "lastPurchase": "2025-10-27",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011093",
+    "name": "บจก. เอกธนาวัฒน์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 120000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-07-04",
+    "topPaymentTerms": "30D",
+    "topProject": "SR238",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011643",
+    "name": "นายจรัสพร อุยสุย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 120000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-11-20",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010624",
+    "name": "บจก. ดิคเซลล์ (เอเซีย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 112000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-03-11",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR223",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011525",
+    "name": "หจก. โอเค ไซน์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 111600.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-01-14",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011382",
+    "name": "หจก. สุขพาวเวอร์ เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 110000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-10-14",
+    "topPaymentTerms": "15D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004432",
+    "name": "นาย สุรวินท์ พิทักษ์เลิศสกุล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 108000.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-06-18",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003279",
+    "name": "บจก. กันกุล โซลาร์ คอมมูนิตี้",
+    "vendorGroup": "GROUP",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 104766.35,
+    "numPOs": 1,
+    "lastPurchase": "2025-09-27",
+    "topPaymentTerms": "60D",
+    "topProject": "SR223",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010235",
+    "name": "บจก. สยาม เซฟตี้ พลัส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 104000.0,
+    "numPOs": 1,
+    "lastPurchase": "2024-12-26",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012060",
+    "name": "นาง แยนะ ตูแวลอ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า"
+    ],
+    "totalSpend": 101052.64,
+    "numPOs": 1,
+    "lastPurchase": "2026-03-24",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012202",
+    "name": "บจก. เมกะ คอนซัลแตนท์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 100000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-21",
+    "topPaymentTerms": "15D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012218",
+    "name": "นาย พิศ ลักษณะประดิษฐ์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 100000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-21",
+    "topPaymentTerms": "",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012233",
+    "name": "นาย อัมรัน โตะฮิง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 100000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-23",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012061",
+    "name": "นางสาว แวอัสมาอ์ ลาเตะ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 98969.04,
+    "numPOs": 1,
+    "lastPurchase": "2026-03-24",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012271",
+    "name": "นาย นิแอ สะมะแอ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 98000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-06",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010207",
+    "name": "บจก. เจ แอล พี เซอร์เวย์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 95000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-05-28",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008735",
+    "name": "หจก. เอส.ซี.ไอซี ซัพพลาย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 92400.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-06-15",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008691",
+    "name": "Solargis  APAC Pte Ltd.",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 91670.55,
+    "numPOs": 1,
+    "lastPurchase": "2025-09-19",
+    "topPaymentTerms": "T100B000I",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010409",
+    "name": "บจก. คิวบิค เซฟ เทคโนโลยี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Battery & Energy Storage",
+      "Switchgear & MDB",
+      "อื่นๆ"
+    ],
+    "totalSpend": 90215.0,
+    "numPOs": 6,
+    "lastPurchase": "2025-04-01",
+    "topPaymentTerms": "15D",
+    "topProject": "SR168",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012308",
+    "name": "นาย มะดารี วาแมะ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า"
+    ],
+    "totalSpend": 90000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-11",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002845",
+    "name": "บจก. หาดใหญ่ คอนเทนเนอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 89000.0,
+    "numPOs": 3,
+    "lastPurchase": "2026-06-05",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012225",
+    "name": "นาง กูฮะละมัล หนิโวะ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า"
+    ],
+    "totalSpend": 88421.06,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-23",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000167",
+    "name": "PVsyst SA",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "SCADA & Software"
+    ],
+    "totalSpend": 88153.16,
+    "numPOs": 3,
+    "lastPurchase": "2025-11-14",
+    "topPaymentTerms": "T100B000I",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001141",
+    "name": "บจก. เอ็ม.ไอ.อินเตอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Monitoring System"
+    ],
+    "totalSpend": 88100.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-09-26",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012039",
+    "name": "Aurora Solar, Inc",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "SCADA & Software"
+    ],
+    "totalSpend": 87845.94,
+    "numPOs": 1,
+    "lastPurchase": "2026-03-05",
+    "topPaymentTerms": "T100B000I",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001307",
+    "name": "บจก. แปซิฟิค อินโนเวชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Monitoring System"
+    ],
+    "totalSpend": 86300.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-05-21",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004966",
+    "name": "บจก. โคเวย์ (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 86047.5,
+    "numPOs": 1,
+    "lastPurchase": "2025-01-28",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009487",
+    "name": "บจก.เอสสามสิบหก ดีไซน์แอนด์คอนสตรัคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 85000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-17",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004709",
+    "name": "บจก. ทีเอชซีจี กรุ๊ป",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 84589.74,
+    "numPOs": 5,
+    "lastPurchase": "2026-01-08",
+    "topPaymentTerms": "30D",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012425",
+    "name": "บจก. แอลยูไอ สตูดิโอ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ตรวจสอบ & Survey (วิศวกร)"
+    ],
+    "totalSpend": 80000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-06-11",
+    "topPaymentTerms": "30D",
+    "topProject": "SR253",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003179",
+    "name": "นาย รณยุทธิ์ สินทนะโยธิน",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 79500.0,
+    "numPOs": 5,
+    "lastPurchase": "2024-12-29",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010242",
+    "name": "บจก. 96 เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 78048.0,
+    "numPOs": 2,
+    "lastPurchase": "2024-12-26",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010946",
+    "name": "บจก. สยามคลาสสิค บิซ เซิร์ฟ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 77631.58,
+    "numPOs": 2,
+    "lastPurchase": "2025-06-12",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR230",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012415",
+    "name": "บจก. ซีวิล แอนด์ สตรัคเจอรัล เอ็นยิเนียร์ส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 75000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-06-04",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011693",
+    "name": "บจก.เอ็ม.พี.เดคคอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 73598.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-12-10",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010578",
+    "name": "นางสาวรัตติยา ปิยะศุภฤกษ์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 72950.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-06-16",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010426",
+    "name": "หจก. จีทีคอนสตรัคชั่น 2024",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 72000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-08",
+    "topPaymentTerms": "7D",
+    "topProject": "SP030",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008642",
+    "name": "บจก.ดั๊บเบิ้ล เอ ดิจิตอล ซินเนอร์จี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 71670.0,
+    "numPOs": 29,
+    "lastPurchase": "2026-05-05",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011284",
+    "name": "คุณสุรีรัตน์ เลาหะนาคีวงศ์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 68000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-26",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012378",
+    "name": "บจก. เอ็นพี.อิเล็กทริก เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 68000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-26",
+    "topPaymentTerms": "30D",
+    "topProject": "SR251",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011832",
+    "name": "บจก.ทัช-อียูพี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 67200.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-01-19",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010229",
+    "name": "บจก. แอลเอ็นเค ซิสเต็ม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 67000.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-10-28",
+    "topPaymentTerms": "45D",
+    "topProject": "SP009",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003885",
+    "name": "นาย นราธิป มานะกุล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 66000.0,
+    "numPOs": 6,
+    "lastPurchase": "2025-11-28",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR154",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010038",
+    "name": "บจก. อีอีเอส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 66000.0,
+    "numPOs": 3,
+    "lastPurchase": "2024-12-29",
+    "topPaymentTerms": "30D",
+    "topProject": "SP003",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V005759",
+    "name": "บจก. เอกราช คอมพิวเตอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network",
+      "SCADA & Software"
+    ],
+    "totalSpend": 63810.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-05-04",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002093",
+    "name": "นาย พงศพัศ เกตุดี",
+    "vendorGroup": "EMP",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 60000.0,
+    "numPOs": 6,
+    "lastPurchase": "2026-02-11",
+    "topPaymentTerms": "15D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010569",
+    "name": "บจก. อินฟรา กรุ๊ป",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 60000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-02-26",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR223",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011437",
+    "name": "นาย ธนาวุฒิ แดงแตง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 60000.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-10-08",
+    "topPaymentTerms": "15D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010480",
+    "name": "นางสาว นิ่ม โมลา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 55500.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-02-13",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010073",
+    "name": "บจก. ไทยพัฒนสิน (จิ้นเส็ง 2000)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 54612.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-09-22",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012045",
+    "name": "นาย นวพล แย้มคลี่",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 53360.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-03-13",
+    "topPaymentTerms": "15D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011966",
+    "name": "บจก. ดีเจนเอนจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า",
+      "ค่าแรง"
+    ],
+    "totalSpend": 53000.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-02-10",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004692",
+    "name": "บจก. อินโนวา ซอฟต์แวร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 52272.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-05-07",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001747",
+    "name": "บจก. ออนไลน์แอสเซ็ท",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 50000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-12-09",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012437",
+    "name": "หจก. พีซีพีวิศวกรรมและบริการ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าธรรมเนียม & สาธารณูปโภค",
+      "ค่าเช่า",
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 49500.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-06-10",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP028",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004298",
+    "name": "บจก. นานาเซฟตี้",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 49140.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-06-27",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012273",
+    "name": "นาย เกรียงไกร ศรีไพร",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 48000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-06",
+    "topPaymentTerms": "7D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V005747",
+    "name": "นางยุพา มาดี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 46600.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-03-11",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008446",
+    "name": "น.ส. เสาวลักษณ์ ฉิมสุวรรณ์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 45500.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-02-25",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001025",
+    "name": "บจก. อวาตา อิเล็คทริค",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง",
+      "อื่นๆ"
+    ],
+    "totalSpend": 45200.0,
+    "numPOs": 3,
+    "lastPurchase": "2025-06-19",
+    "topPaymentTerms": "60D",
+    "topProject": "SP006",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004669",
+    "name": "บจก. พี.พี. บางแก้วธุรกิจ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 45136.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-07-21",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002980",
+    "name": "นาย สมพงษ์ บุบผา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 45000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-04-18",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010130",
+    "name": "คุณ สมพงษ์ บุบผา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 45000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-01-29",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010625",
+    "name": "บจก. พาวเวอร์โฟลว ซิสเต็ม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 45000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-03-10",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR168",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011967",
+    "name": "นาย สมัย โคชา",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า"
+    ],
+    "totalSpend": 45000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-02-24",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001046",
+    "name": "บจก. อาร์เอส คอมโพเน็นส์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 44000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-06-16",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003026",
+    "name": "หจก. พรชนัน อินเตอร์ อิงค์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 43500.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-04-19",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000596",
+    "name": "หจก. บรรณสารสเตชั่นเนอรี่",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 42184.4,
+    "numPOs": 21,
+    "lastPurchase": "2026-04-23",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011741",
+    "name": "บจก. เคเอ็นพี พาร์ท แอนด์ เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 42000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-12-17",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR245",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010203",
+    "name": "นาย อรรถพล พรมประไพ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 40000.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-05-30",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011581",
+    "name": "บจก. แล็บไทย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 40000.0,
+    "numPOs": 4,
+    "lastPurchase": "2025-11-07",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001053",
+    "name": "บจก. อินโดไชน่า เอ็นจิเนียริ่ง ซิสเท็ม คีไล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 39440.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-11-12",
+    "topPaymentTerms": "30D",
+    "topProject": "SP009",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011601",
+    "name": "บมจ. โฮม โปรดักส์ เซ็นเตอร์ (สาขาสุพรรณบุรี สาขาที่ 00048)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 36397.42,
+    "numPOs": 4,
+    "lastPurchase": "2025-12-23",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010792",
+    "name": "นายนาวิน รอดเมือง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 36000.0,
+    "numPOs": 4,
+    "lastPurchase": "2025-04-10",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010230",
+    "name": "นาย โอฬาร  สลางสิงห์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 35000.0,
+    "numPOs": 1,
+    "lastPurchase": "2024-12-25",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010472",
+    "name": "International Electrotechnical Commission",
+    "vendorGroup": "OVERSEA",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 33619.93,
+    "numPOs": 1,
+    "lastPurchase": "2025-02-05",
+    "topPaymentTerms": "T100B000I",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003737",
+    "name": "บมจ. แอพพลิแคด",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "SCADA & Software"
+    ],
+    "totalSpend": 32700.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-04",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012379",
+    "name": "น.ส. ลีเมาะ มะมิง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า"
+    ],
+    "totalSpend": 31578.96,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-27",
+    "topPaymentTerms": "15D",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003877",
+    "name": "บจก. ทีไอพี อินดัสทรี เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 31500.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-09-19",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010697",
+    "name": "บจก. โปร เซอร์วิส แอนด์ รีเลย์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 31250.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-03-18",
+    "topPaymentTerms": "30D",
+    "topProject": "SP007",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008226",
+    "name": "บจก. ฟ๊อกซ์ เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 31200.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-06-05",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012230",
+    "name": "น.ส. นิซามีมี แว",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 31168.22,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-15",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011006",
+    "name": "บจก.กระเป๋าตังค์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 31124.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-06-12",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001803",
+    "name": "บจก. เอ็มทีเอส คอนเนคชั่นส์ กรุ๊ป",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 30000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-07-21",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010143",
+    "name": "พงศ์ศิญา ชังพูลสวัสดิ์(ยกเลิก)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 30000.0,
+    "numPOs": 2,
+    "lastPurchase": "2024-12-24",
+    "topPaymentTerms": "15D",
+    "topProject": "SR139",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010160",
+    "name": "นาย นเรศ พันกำ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 30000.0,
+    "numPOs": 2,
+    "lastPurchase": "2024-12-26",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010350",
+    "name": "นาย อูไมร์ มุซอ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 30000.0,
+    "numPOs": 3,
+    "lastPurchase": "2025-01-15",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011152",
+    "name": "นาย ธนโชติ วรราช",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 30000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-07-17",
+    "topPaymentTerms": "30D",
+    "topProject": "SP010",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001073",
+    "name": "บจก. อีเลคทรอนิคส์ ซอร์ซ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 29670.0,
+    "numPOs": 3,
+    "lastPurchase": "2025-08-06",
+    "topPaymentTerms": "30D",
+    "topProject": "SR181",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012016",
+    "name": "นางสาว นุชนารถ โพธิ์สุวรรณ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าเช่า"
+    ],
+    "totalSpend": 28000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-02-25",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP029",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002600",
+    "name": "บจก. พีพี ออนไทม์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 27677.0,
+    "numPOs": 5,
+    "lastPurchase": "2026-04-21",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011883",
+    "name": "ร้านโซลาร์ครีนเนอร์ไทย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 27194.4,
+    "numPOs": 1,
+    "lastPurchase": "2026-01-22",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010864",
+    "name": "บจก. เอ็นเอช เอ็นจิเนียริ่งแอนด์เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 26772.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-04-29",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012131",
+    "name": "รัชสื่อสาร",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 26168.22,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-07",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010144",
+    "name": "บจก. พรทรัพย์ทวีชัยคอนสตรัคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 24500.0,
+    "numPOs": 3,
+    "lastPurchase": "2025-03-12",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010164",
+    "name": "โกสินทร์ สัมฤทธิ์วงศ์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 24000.0,
+    "numPOs": 8,
+    "lastPurchase": "2025-08-28",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP009",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010587",
+    "name": "บจก. ปฐพีธาร เอ็นเนอร์ยี 8",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 24000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-06-11",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011315",
+    "name": "บจก. ดีดี.เดย์ เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ติดตั้ง & Commissioning"
+    ],
+    "totalSpend": 22000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-09-03",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR211",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011834",
+    "name": "บมจ. โฮม โปรดักส์ เซ็นเตอร์ (สาขาฉะเชิงเทรา) สาขาที่ 00046",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 20413.03,
+    "numPOs": 2,
+    "lastPurchase": "2026-01-15",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012391",
+    "name": "บมจ. สยามโกลบอลเฮ้าส์ สาขาสตูล  สาขาที่ 00064",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 19271.03,
+    "numPOs": 2,
+    "lastPurchase": "2026-06-05",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V005595",
+    "name": "บจก. พรีซิซัน คอนโทรล (ไทยแลนด์ )",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Monitoring System"
+    ],
+    "totalSpend": 18414.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-02-19",
+    "topPaymentTerms": "30D",
+    "topProject": "SP010",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003269",
+    "name": "บจก. อีไลฟ์ ซิสเต็มส์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network"
+    ],
+    "totalSpend": 18400.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-06-12",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011441",
+    "name": "นาย วันชัย วงษ์จันทร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 18236.84,
+    "numPOs": 2,
+    "lastPurchase": "2025-10-14",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003872",
+    "name": "นาย สรัล สุทธิสุนทรินทร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 18000.0,
+    "numPOs": 1,
+    "lastPurchase": "2024-12-26",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003644",
+    "name": "บจก. ทีเอพี พาร์ท เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 17400.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-09-26",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012356",
+    "name": "บจก. เนาวราช เจนเนอรัล ซิสเทิม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ค่าแรง"
+    ],
+    "totalSpend": 17090.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-06-01",
+    "topPaymentTerms": "30D",
+    "topProject": "SP032",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009061",
+    "name": "บจก. โซเนพาร์ (ประเทศไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 16380.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-07-30",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002120",
+    "name": "นาย เกียรติศักดิ์ จิรรัตนโชติ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ตรวจสอบ & Survey (วิศวกร)",
+      "อื่นๆ"
+    ],
+    "totalSpend": 16300.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-03-03",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR161",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011154",
+    "name": "ร้านสุรีย์ การยาง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 15400.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-18",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000469",
+    "name": "บมจ. ถิรไทย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 15000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-23",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011202",
+    "name": "นาย ณรงค์ คำรัตน์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริหารโครงการ"
+    ],
+    "totalSpend": 15000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-08-05",
+    "topPaymentTerms": "CASH",
+    "topProject": "SR223",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012307",
+    "name": "บจก. เอ็นวายเค อิเล็คทริค ซิสเต็ม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 15000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-11",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010576",
+    "name": "บจก.มั่นคงแก็ดเจ็ท",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 14859.81,
+    "numPOs": 1,
+    "lastPurchase": "2025-02-27",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010223",
+    "name": "นางสาว น้ำฝน จันทน์ขาว",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 14800.0,
+    "numPOs": 1,
+    "lastPurchase": "2024-12-26",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011433",
+    "name": "หจก. มายเทราส เวลเนส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 14340.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-10-06",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012340",
+    "name": "บจก.พร้อมลุย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 13000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-25",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011597",
+    "name": "ร้านน้อยพลาสติก",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 12900.0,
+    "numPOs": 3,
+    "lastPurchase": "2025-12-10",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001669",
+    "name": "บจก. ไทยเอ็นจิเนียริ่ง แอนด์ บิสซิเนส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 12192.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-09-10",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011731",
+    "name": "นาย ธิษณ์ธนัทชัย เลขภัสร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "ตรวจสอบ & Survey (วิศวกร)"
+    ],
+    "totalSpend": 12000.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-02-10",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP025",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012337",
+    "name": "บมจ. สยามโกลบอลเฮ้าส์ สาขาปัตตานี สาขาที่ 00088",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 10908.97,
+    "numPOs": 3,
+    "lastPurchase": "2026-05-25",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009122",
+    "name": "บจก. ทรู อินเทอร์เน็ต ดาต้าเซ็นเตอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "SCADA & Software"
+    ],
+    "totalSpend": 10495.0,
+    "numPOs": 4,
+    "lastPurchase": "2026-01-28",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012189",
+    "name": "บจก. ดีดี กู๊ดเฮลท์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 10420.56,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-22",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009254",
+    "name": "บจก.ยูนิตี้ ไอที ซิสเต็ม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network"
+    ],
+    "totalSpend": 10224.3,
+    "numPOs": 1,
+    "lastPurchase": "2025-12-23",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010000",
+    "name": "นาย วสันต์ ดวงประทุม",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 10000.0,
+    "numPOs": 1,
+    "lastPurchase": "2024-12-29",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010132",
+    "name": "บจก. บี.บี แอนด์ เซอร์วิสปทุมธานี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 9600.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-11-18",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V010161",
+    "name": "บจก. พีแอนด์เอ็ม 99 เซอร์วิส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 8352.0,
+    "numPOs": 1,
+    "lastPurchase": "2024-12-26",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003548",
+    "name": "บจก. เอซี ดีซี อินสทรูเม้นท์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 8000.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-01-15",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012255",
+    "name": "บจก. ยูนิแคร์ ซัพพลาย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 7943.93,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-06",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008267",
+    "name": "บจก. อินโนโว เทรดดิ้ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 7910.0,
+    "numPOs": 2,
+    "lastPurchase": "2026-01-28",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012048",
+    "name": "บจก. โปรซีเคียว แอนด์ โอ.เอ. คอมมูนิเคชั่น",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 7600.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-03-09",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011949",
+    "name": "บจก. ซีอาร์ซี ไทวัสดุ (สาขาสุพรรณบุรี) สาขาที่ 00040",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 7325.23,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-27",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004510",
+    "name": "บจก. ซัคเซส เซอร์วิส พลัส",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 7180.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-12-18",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003221",
+    "name": "นาย เกรียงไกร ลิมปไพศาลสุข",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 6600.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-01-03",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011785",
+    "name": "บมจ. ซีพี แอ็กซ์ตร้า สาขาที่ : 00183",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อุปกรณ์/งานสำนักงาน"
+    ],
+    "totalSpend": 6532.72,
+    "numPOs": 1,
+    "lastPurchase": "2025-12-25",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V012331",
+    "name": "บจก. คลังจราจร นนทบุรี",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 6176.64,
+    "numPOs": 1,
+    "lastPurchase": "2026-05-21",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009817",
+    "name": "บจก. วินเทค ซิสเต็ม แอนด์ เอ็นจิเนียริ่ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 6000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-07-01",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000362",
+    "name": "หจก. ช.นคร แพ็คกิ้ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 5700.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-01-28",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V009046",
+    "name": "บจก. เอสอาร์พีแบตเตอรี่",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "Battery & Energy Storage"
+    ],
+    "totalSpend": 5700.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-10-20",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008184",
+    "name": "บมจ. ไอที ซิตี้",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network"
+    ],
+    "totalSpend": 5588.78,
+    "numPOs": 1,
+    "lastPurchase": "2026-01-20",
+    "topPaymentTerms": "CASH",
+    "topProject": "SP031",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V001223",
+    "name": "บจก. ไอเดีย ฟิลด์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 5000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-07-07",
+    "topPaymentTerms": "45D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V003728",
+    "name": "บจก. ทีเอ็นซี แพ็คกิ้ง",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 5000.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-06-12",
+    "topPaymentTerms": "15D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004722",
+    "name": "บจก. เอ็น.ที. เวิลด์ คอมพิวเตอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "IT & Network"
+    ],
+    "totalSpend": 4980.0,
+    "numPOs": 2,
+    "lastPurchase": "2025-11-20",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004389",
+    "name": "บจก. ออฟฟิศเมท (ไทย)",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "สวัสดิการ & บุคคล",
+      "อื่นๆ"
+    ],
+    "totalSpend": 4822.44,
+    "numPOs": 2,
+    "lastPurchase": "2025-01-31",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V000780",
+    "name": "บจก. ภัทรเมธากิจ",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 3687.6,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-20",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011458",
+    "name": "บจก. ไทย อิเล็คทริคซิตี้ อินเตอร์เนชั่นแนล",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 3485.98,
+    "numPOs": 1,
+    "lastPurchase": "2025-10-09",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008785",
+    "name": "บจก. เมลอน ไทย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ"
+    ],
+    "totalSpend": 3362.62,
+    "numPOs": 1,
+    "lastPurchase": "2026-01-11",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004953",
+    "name": "บจก. สมาร์ทเซฟตี้เซ็นเตอร์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 2373.84,
+    "numPOs": 1,
+    "lastPurchase": "2025-10-14",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V008699",
+    "name": "บจก. เอ็นไซ กรุ๊ป",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อุปกรณ์ป้องกัน (Surge, Breaker, Fuse)"
+    ],
+    "totalSpend": 1612.0,
+    "numPOs": 1,
+    "lastPurchase": "2026-04-20",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011456",
+    "name": "บจก.วีชิลมาร์ท",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 1493.46,
+    "numPOs": 1,
+    "lastPurchase": "2025-10-10",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V011455",
+    "name": "บจก. เอช.เค.สลักภัณฑ์",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "อื่นๆ",
+      "เครื่องมือ & อุปกรณ์ช่าง"
+    ],
+    "totalSpend": 1400.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-10-09",
+    "topPaymentTerms": "CASH",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V002855",
+    "name": "บจก. แอ๊ดวานซ์ กรุ๊ป เอเซีย",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "งานบริการ & บำรุงรักษา (O&M)"
+    ],
+    "totalSpend": 550.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-02-20",
+    "topPaymentTerms": "30D",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  },
+  {
+    "vendorCode": "V004302",
+    "name": "LONGI SOLAR TECHNOLOGY CO.,LTD.",
+    "vendorGroup": "LOCAL",
+    "categories": [
+      "แผงโซลาร์ (Solar Panel)"
+    ],
+    "totalSpend": 259.0,
+    "numPOs": 1,
+    "lastPurchase": "2025-04-28",
+    "topPaymentTerms": "",
+    "topProject": "",
+    "status": "active",
+    "note": "",
+    "source": "PO"
+  }
+]
