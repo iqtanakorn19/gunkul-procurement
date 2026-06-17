@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import {
-  collection, onSnapshot, updateDoc, deleteDoc, doc, getDocs, writeBatch,
+  collection, onSnapshot, updateDoc, deleteDoc, doc,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import {
@@ -81,7 +81,6 @@ interface Vendor {
   source: string;
 }
 
-// ───────── helpers ─────────
 function bahtFull(n: number) {
   return "฿" + (n || 0).toLocaleString("th-TH", { maximumFractionDigits: 0 });
 }
@@ -146,7 +145,6 @@ function ChartCard({ title, hint, children }: { title: string; hint?: string; ch
   );
 }
 
-// ───────── Detail + edit modal ─────────
 function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCategories, onSaveNote }: {
   vendor: Vendor; onClose: () => void; onDelete: () => void; onToggleStatus: () => void;
   onSaveCategories: (cats: string[]) => void; onSaveNote: (note: string) => void;
@@ -176,6 +174,231 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
               <p style={{ margin: "0 0 4px", color: "rgba(226,201,126,0.9)", fontSize: "12px", fontWeight: "700" }}>{vendor.vendorCode} · {GROUP_LABEL[vendor.vendorGroup] || vendor.vendorGroup}</p>
               <h2 style={{ margin: 0, color: "white", fontSize: "20px", fontWeight: "700", lineHeight: "1.3" }}>{vendor.name}</h2>
             </div>
+            <button onClick={onClose} style={{ background: "rgba(255,255,255,0.15)", border: "none", borderRadius: "50%", width: "36px", height: "36px", cursor: "pointer", color: "white", fontSize: "18px", flexShrink: 0 }}>✕</button>
+          </div>
+          <div style={{ marginTop: "16px" }}>
+            <button onClick={onToggleStatus} style={{
+              padding: "6px 18px", borderRadius: "999px", border: "2px solid",
+              borderColor: vendor.status === "active" ? "rgba(226,201,126,0.6)" : "rgba(255,255,255,0.3)",
+              background: vendor.status === "active" ? "rgba(226,201,126,0.2)" : "rgba(255,255,255,0.1)",
+              color: vendor.status === "active" ? "#e2c97e" : "rgba(255,255,255,0.7)", cursor: "pointer", fontWeight: "700", fontSize: "13px",
+            }}>{vendor.status === "active" ? "✅ Active — คลิกเพื่อเปลี่ยน" : "❌ Inactive — คลิกเพื่อเปลี่ยน"}</button>
+          </div>
+        </div>
+
+        <div style={{ padding: "26px 32px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "22px" }}>
+            {[
+              { label: "ยอดซื้อสะสม", value: bahtFull(vendor.totalSpend) },
+              { label: "จำนวน PO", value: vendor.numPOs?.toLocaleString() },
+              { label: "ซื้อล่าสุด", value: vendor.lastPurchase },
+            ].map(s => (
+              <div key={s.label} style={{ background: "linear-gradient(135deg, #f8faff, #eef2ff)", borderRadius: "12px", padding: "14px", textAlign: "center", border: "1px solid #e0e7ff" }}>
+                <p style={{ margin: "0 0 4px", fontSize: "10px", color: "#94a3b8", fontWeight: "700" }}>{s.label}</p>
+                <p style={{ margin: 0, fontSize: "15px", color: "#1a3c6e", fontWeight: "800" }}>{s.value}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ display: "flex", gap: "20px", marginBottom: "22px", fontSize: "13px", color: "#475569" }}>
+            <div><span style={{ color: "#94a3b8" }}>เงื่อนไขชำระ: </span><strong>{vendor.topPaymentTerms || "-"}</strong></div>
+            <div><span style={{ color: "#94a3b8" }}>โปรเจกต์หลัก: </span><strong>{vendor.topProject || "-"}</strong></div>
+          </div>
+
+          {catData.length > 0 && (
+            <div style={{ display: "grid", gridTemplateColumns: monthData.length > 1 ? "1fr 1fr" : "1fr", gap: "16px", marginBottom: "22px" }}>
+              <div style={{ background: "#f8faff", borderRadius: "14px", padding: "16px" }}>
+                <p style={{ margin: "0 0 10px", fontSize: "12px", fontWeight: "800", color: "#1a3c6e" }}>ยอดซื้อแยกหมวด</p>
+                <ResponsiveContainer width="100%" height={150}>
+                  <PieChart>
+                    <Pie data={catData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={32} outerRadius={60} paddingAngle={2}>
+                      {catData.map((d, i) => <Cell key={i} fill={catColor(d.name).color} />)}
+                    </Pie>
+                    <Tooltip formatter={(v: any) => bahtFull(v)} />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginTop: "6px" }}>
+                  {catData.slice(0, 4).map(d => (
+                    <div key={d.name} style={{ display: "flex", justifyContent: "space-between", fontSize: "11px" }}>
+                      <span style={{ display: "flex", alignItems: "center", gap: "6px", color: "#475569" }}>
+                        <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: catColor(d.name).color }} />{d.name}
+                      </span>
+                      <strong style={{ color: "#1a3c6e" }}>{bahtShort(d.value)}</strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {monthData.length > 1 && (
+                <div style={{ background: "#f8faff", borderRadius: "14px", padding: "16px" }}>
+                  <p style={{ margin: "0 0 10px", fontSize: "12px", fontWeight: "800", color: "#1a3c6e" }}>ยอดซื้อรายเดือน</p>
+                  <ResponsiveContainer width="100%" height={170}>
+                    <AreaChart data={monthData} margin={{ top: 4, right: 6, bottom: 0, left: -18 }}>
+                      <defs>
+                        <linearGradient id="vg" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#1a3c6e" stopOpacity={0.5} />
+                          <stop offset="100%" stopColor="#1a3c6e" stopOpacity={0.04} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#eef2f7" />
+                      <XAxis dataKey="m" tick={{ fontSize: 10, fill: "#94a3b8" }} />
+                      <YAxis tickFormatter={(v: any) => bahtShort(v)} tick={{ fontSize: 10, fill: "#94a3b8" }} width={48} />
+                      <Tooltip formatter={(v: any) => bahtFull(v)} />
+                      <Area type="monotone" dataKey="v" stroke="#1a3c6e" strokeWidth={2} fill="url(#vg)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div style={{ marginBottom: "20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+              <p style={{ margin: 0, fontSize: "11px", color: "#94a3b8", fontWeight: "700" }}>หมวดหมู่ ({cats.length})</p>
+              {!editingCats
+                ? <button onClick={() => setEditingCats(true)} style={{ background: "none", border: "1px solid #bfdbfe", color: "#1a3c6e", borderRadius: "8px", padding: "4px 12px", cursor: "pointer", fontSize: "12px", fontWeight: "700" }}>✏️ แก้หมวด</button>
+                : <button onClick={() => { onSaveCategories(cats); setEditingCats(false); }} style={{ background: "linear-gradient(135deg, #1a3c6e, #2d5a9e)", border: "none", color: "white", borderRadius: "8px", padding: "4px 14px", cursor: "pointer", fontSize: "12px", fontWeight: "700" }}>💾 บันทึก</button>}
+            </div>
+            {!editingCats ? (
+              cats.length ? <CategoryChips cats={cats} /> : <p style={{ margin: 0, color: "#cbd5e1", fontSize: "13px" }}>ยังไม่มีหมวด</p>
+            ) : (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", maxHeight: "200px", overflowY: "auto", padding: "4px" }}>
+                {CATEGORIES.map(c => {
+                  const on = cats.includes(c); const cc = catColor(c);
+                  return <button key={c} onClick={() => toggleCat(c)} style={{
+                    padding: "5px 12px", borderRadius: "999px", fontSize: "12px", fontWeight: "700", cursor: "pointer",
+                    border: on ? `2px solid ${cc.color}` : "1.5px solid #e2e8f0",
+                    background: on ? cc.bg : "white", color: on ? cc.color : "#94a3b8",
+                  }}>{on ? "✓ " : ""}{c}</button>;
+                })}
+              </div>
+            )}
+          </div>
+
+          <div style={{ marginBottom: "22px" }}>
+            <p style={{ margin: "0 0 8px", fontSize: "11px", color: "#94a3b8", fontWeight: "700" }}>💬 หมายเหตุ</p>
+            <textarea value={note} onChange={e => setNote(e.target.value)} onBlur={() => onSaveNote(note)} rows={2}
+              placeholder="พิมพ์หมายเหตุ แล้วคลิกที่อื่นเพื่อบันทึก..."
+              style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: "1.5px solid #e2e8f0", boxSizing: "border-box", resize: "vertical", fontSize: "14px" }} />
+          </div>
+
+          <button onClick={onDelete} style={{ width: "100%", padding: "13px", background: "linear-gradient(135deg, #fff5f5, #fee2e2)", border: "1px solid #fecaca", borderRadius: "12px", cursor: "pointer", fontWeight: "700", color: "#dc2626", fontSize: "14px" }}>🗑️ ลบ Vendor นี้</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function VendorPage() {
+  const [vendors, setVendors] = useState<Vendor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [filterCategory, setFilterCategory] = useState("ทั้งหมด");
+  const [filterStatus, setFilterStatus] = useState("ทั้งหมด");
+  const [filterGroup, setFilterGroup] = useState("ทั้งหมด");
+  const [viewMode, setViewMode] = useState<ViewMode>("card");
+  const [sortKey, setSortKey] = useState<SortKey>("spend");
+  const [detailVendor, setDetailVendor] = useState<Vendor | undefined>();
+  const [showCharts, setShowCharts] = useState(true);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "vendors"), (snap) => {
+      setVendors(snap.docs.map(d => {
+        const r = d.data() as any;
+        return {
+          id: d.id, vendorCode: r.vendorCode || d.id, name: r.name || "",
+          vendorGroup: r.vendorGroup || "", categories: r.categories || [],
+          totalSpend: r.totalSpend || 0, numPOs: r.numPOs || 0,
+          lastPurchase: r.lastPurchase || "", topPaymentTerms: r.topPaymentTerms || "",
+          topProject: r.topProject || "", categorySpend: r.categorySpend || {},
+          monthlySpend: r.monthlySpend || {}, status: r.status || "active",
+          note: r.note || "", source: r.source || "",
+        } as Vendor;
+      }));
+      setLoading(false);
+    });
+    return () => unsub();
+  }, []);
+
+  const overview = useMemo(() => {
+    const cat: Record<string, number> = {};
+    const mon: Record<string, number> = {};
+    for (const v of vendors) {
+      for (const [k, val] of Object.entries(v.categorySpend || {})) cat[k] = (cat[k] || 0) + val;
+      for (const [k, val] of Object.entries(v.monthlySpend || {})) mon[k] = (mon[k] || 0) + val;
+    }
+    const catData = Object.entries(cat).map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value).slice(0, 10);
+    const monData = Object.entries(mon).sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([ym, v]) => ({ m: monthLabel(ym), v }));
+    const topVendors = [...vendors].sort((a, b) => b.totalSpend - a.totalSpend).slice(0, 10)
+      .map(v => ({ name: v.name.replace(/^บจก\.|^บมจ\.|^หจก\./, "").trim().slice(0, 18), value: v.totalSpend }));
+    return { catData, monData, topVendors };
+  }, [vendors]);
+
+  const filtered = vendors.filter(v => {
+    const s = search.toLowerCase();
+    const matchSearch = s === "" || v.name.toLowerCase().includes(s) ||
+      v.vendorCode.toLowerCase().includes(s) ||
+      v.categories.some(c => c.toLowerCase().includes(s)) ||
+      v.note.toLowerCase().includes(s);
+    const matchCat = filterCategory === "ทั้งหมด" || v.categories.includes(filterCategory);
+    const matchStatus = filterStatus === "ทั้งหมด" || v.status === filterStatus;
+    const matchGroup = filterGroup === "ทั้งหมด" || v.vendorGroup === filterGroup;
+    return matchSearch && matchCat && matchStatus && matchGroup;
+  }).sort((a, b) => {
+    if (sortKey === "name") return a.name.localeCompare(b.name, "th");
+    if (sortKey === "lastPurchase") return (b.lastPurchase || "").localeCompare(a.lastPurchase || "");
+    return b.totalSpend - a.totalSpend;
+  });
+
+  const totalSpendAll = vendors.reduce((s, v) => s + v.totalSpend, 0);
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm("ต้องการลบ Vendor นี้มั้ย?")) {
+      await deleteDoc(doc(db, "vendors", id));
+      setDetailVendor(undefined);
+    }
+  };
+  const handleToggleStatus = async (v: Vendor) => {
+    const ns: VendorStatus = v.status === "active" ? "inactive" : "active";
+    await updateDoc(doc(db, "vendors", v.id), { status: ns });
+    if (detailVendor?.id === v.id) setDetailVendor({ ...detailVendor, status: ns });
+  };
+  const handleSaveCategories = async (v: Vendor, cats: string[]) => {
+    await updateDoc(doc(db, "vendors", v.id), { categories: cats });
+    if (detailVendor?.id === v.id) setDetailVendor({ ...detailVendor, categories: cats });
+  };
+  const handleSaveNote = async (v: Vendor, note: string) => {
+    await updateDoc(doc(db, "vendors", v.id), { note });
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg, #f0f4ff 0%, #e8edf8 50%, #f5f0e8 100%)", fontFamily: "sans-serif" }}>
+      <style>{`
+        @keyframes shimmer { 0% { background-position: -200% 0 } 100% { background-position: 200% 0 } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } }
+        .vendor-card { transition: transform 0.28s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s cubic-bezier(0.22,1,0.36,1); cursor: pointer; animation: fadeInUp 0.4s ease both; }
+        .vendor-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(26,60,110,0.16) !important; }
+      `}</style>
+
+      {detailVendor && (
+        <VendorDetailModal vendor={detailVendor}
+          onClose={() => setDetailVendor(undefined)}
+          onDelete={() => handleDelete(detailVendor.id)}
+          onToggleStatus={() => handleToggleStatus(detailVendor)}
+          onSaveCategories={(c) => handleSaveCategories(detailVendor, c)}
+          onSaveNote={(n) => handleSaveNote(detailVendor, n)} />
+      )}
+
+      {/* HERO */}
+      <div style={{ background: "linear-gradient(135deg, #0f2244 0%, #1a3c6e 45%, #2d5a9e 100%)", padding: "44px 40px 36px", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: "-60px", right: "-60px", width: "240px", height: "240px", borderRadius: "50%", background: "rgba(226,201,126,0.08)" }} />
+        <div style={{ maxWidth: "1200px", margin: "0 auto", position: "relative" }}>
+          <div>
+            <span style={{ background: "rgba(226,201,126,0.2)", border: "1px solid rgba(226,201,126,0.4)", color: "#e2c97e", padding: "4px 14px", borderRadius: "999px", fontSize: "12px", fontWeight: "700", letterSpacing: "0.08em" }}>PROCUREMENT</span>
+            <h1 style={{ margin: "10px 0 8px", color: "white", fontSize: "clamp(24px, 4vw, 36px)", fontWeight: "800" }}>🏢 Vendor Directory</h1>
+            <p style={{ margin: 0, color: "rgba(255,255,255,0.55)", fontSize: "15px" }}>ฐานข้อมูล Vendor จากประวัติการสั่งซื้อจริง</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginTop: "28px", maxWidth: "760px" }}>
             {[
@@ -206,11 +429,16 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
                 <ChartCard title="ยอดซื้อรายเดือน" hint="มูลค่าการสั่งซื้อรวมทุก vendor แยกตามเดือน">
                   <ResponsiveContainer width="100%" height={220}>
                     <AreaChart data={overview.monData} margin={{ top: 6, right: 12, bottom: 0, left: 4 }}>
-                      <defs><linearGradient id="og" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#e2c97e" stopOpacity={0.6} /><stop offset="100%" stopColor="#e2c97e" stopOpacity={0.05} /></linearGradient></defs>
+                      <defs>
+                        <linearGradient id="og" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#e2c97e" stopOpacity={0.6} />
+                          <stop offset="100%" stopColor="#e2c97e" stopOpacity={0.05} />
+                        </linearGradient>
+                      </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#eef2f7" />
                       <XAxis dataKey="m" tick={{ fontSize: 11, fill: "#94a3b8" }} />
-                      <YAxis tickFormatter={(v: any) => bahtShort(Number(v))} tick={{ fontSize: 11, fill: "#94a3b8" }} width={56} />
-                      <Tooltip formatter={(v: any) => bahtFull(Number(v))} />
+                      <YAxis tickFormatter={(v: any) => bahtShort(v)} tick={{ fontSize: 11, fill: "#94a3b8" }} width={56} />
+                      <Tooltip formatter={(v: any) => bahtFull(v)} />
                       <Area type="monotone" dataKey="v" stroke="#c9a84c" strokeWidth={2.5} fill="url(#og)" />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -219,9 +447,9 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
                   <ChartCard title="ยอดซื้อแยกหมวด (Top 10)" hint="หมวดที่ใช้งบมากสุด">
                     <ResponsiveContainer width="100%" height={300}>
                       <BarChart data={overview.catData} layout="vertical" margin={{ top: 0, right: 16, bottom: 0, left: 8 }}>
-                        <XAxis type="number" tickFormatter={(v: any) => bahtShort(Number(v))} tick={{ fontSize: 10, fill: "#94a3b8" }} />
+                        <XAxis type="number" tickFormatter={(v: any) => bahtShort(v)} tick={{ fontSize: 10, fill: "#94a3b8" }} />
                         <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: "#475569" }} width={130} />
-                        <Tooltip formatter={(v: any) => bahtFull(Number(v))} />
+                        <Tooltip formatter={(v: any) => bahtFull(v)} />
                         <Bar dataKey="value" radius={[0, 6, 6, 0]}>
                           {overview.catData.map((d, i) => <Cell key={i} fill={catColor(d.name).color} />)}
                         </Bar>
@@ -231,9 +459,9 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
                   <ChartCard title="Top 10 Vendor" hint="vendor ที่มียอดซื้อสะสมสูงสุด">
                     <ResponsiveContainer width="100%" height={300}>
                       <BarChart data={overview.topVendors} layout="vertical" margin={{ top: 0, right: 16, bottom: 0, left: 8 }}>
-                        <XAxis type="number" tickFormatter={(v: any) => bahtShort(Number(v))} tick={{ fontSize: 10, fill: "#94a3b8" }} />
+                        <XAxis type="number" tickFormatter={(v: any) => bahtShort(v)} tick={{ fontSize: 10, fill: "#94a3b8" }} />
                         <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: "#475569" }} width={120} />
-                        <Tooltip formatter={(v: any) => bahtFull(Number(v))} />
+                        <Tooltip formatter={(v: any) => bahtFull(v)} />
                         <Bar dataKey="value" radius={[0, 6, 6, 0]} fill="#1a3c6e" />
                       </BarChart>
                     </ResponsiveContainer>
@@ -251,7 +479,8 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
               <label style={{ display: "block", marginBottom: "7px", fontSize: "11px", fontWeight: "700", color: "#94a3b8" }}>🔍 ค้นหา</label>
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder="ชื่อบริษัท, รหัส, หมวดหมู่..."
                 style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: "2px solid #e2c97e", boxSizing: "border-box", fontSize: "14px", outline: "none", background: "#fffdf5" }}
-                onFocus={e => { e.target.style.borderColor = "#1a3c6e"; }} onBlur={e => { e.target.style.borderColor = "#e2c97e"; }} />
+                onFocus={e => { e.target.style.borderColor = "#1a3c6e"; }}
+                onBlur={e => { e.target.style.borderColor = "#e2c97e"; }} />
             </div>
             {[
               { label: "หมวดหมู่", value: filterCategory, setter: setFilterCategory, options: ["ทั้งหมด", ...CATEGORIES] },
@@ -275,22 +504,38 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
             </div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px", paddingTop: "16px", borderTop: "1px solid #f1f5f9" }}>
-            <p style={{ margin: 0, fontSize: "13px", color: "#94a3b8" }}>แสดง <strong style={{ color: "#1a3c6e" }}>{filtered.length}</strong> จาก <strong style={{ color: "#1a3c6e" }}>{vendors.length}</strong> Vendor</p>
+            <p style={{ margin: 0, fontSize: "13px", color: "#94a3b8" }}>
+              แสดง <strong style={{ color: "#1a3c6e" }}>{filtered.length}</strong> จาก <strong style={{ color: "#1a3c6e" }}>{vendors.length}</strong> Vendor
+            </p>
             <div style={{ display: "flex", gap: "8px" }}>
               {(["card", "table"] as ViewMode[]).map(m => (
-                <button key={m} onClick={() => setViewMode(m)} style={{ padding: "7px 16px", borderRadius: "8px", border: "1.5px solid", borderColor: viewMode === m ? "#1a3c6e" : "#e2e8f0", background: viewMode === m ? "#1a3c6e" : "white", color: viewMode === m ? "white" : "#94a3b8", cursor: "pointer", fontWeight: "700", fontSize: "13px" }}>{m === "card" ? "⊞ Card" : "☰ Table"}</button>
+                <button key={m} onClick={() => setViewMode(m)} style={{
+                  padding: "7px 16px", borderRadius: "8px", border: "1.5px solid",
+                  borderColor: viewMode === m ? "#1a3c6e" : "#e2e8f0",
+                  background: viewMode === m ? "#1a3c6e" : "white",
+                  color: viewMode === m ? "white" : "#94a3b8",
+                  cursor: "pointer", fontWeight: "700", fontSize: "13px",
+                }}>{m === "card" ? "⊞ Card" : "☰ Table"}</button>
               ))}
             </div>
           </div>
         </div>
 
-        {loading && <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "16px" }}>{[1, 2, 3, 4, 5, 6].map(i => <SkeletonCard key={i} />)}</div>}
+        {loading && (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "16px" }}>
+            {[1, 2, 3, 4, 5, 6].map(i => <SkeletonCard key={i} />)}
+          </div>
+        )}
 
         {!loading && filtered.length === 0 && (
           <div style={{ textAlign: "center", padding: "80px 40px", background: "white", borderRadius: "20px", boxShadow: "0 4px 24px rgba(26,60,110,0.08)" }}>
             <div style={{ fontSize: "64px", marginBottom: "16px" }}>🏢</div>
-            <h3 style={{ margin: "0 0 8px", color: "#1a3c6e", fontSize: "20px", fontWeight: "700" }}>{vendors.length === 0 ? "ยังไม่มี Vendor" : "ไม่พบ Vendor"}</h3>
-            <p style={{ margin: 0, color: "#94a3b8", fontSize: "15px" }}>{vendors.length === 0 ? "ยังไม่มีข้อมูล Vendor" : "ลองเปลี่ยน keyword หรือ filter"}</p>
+            <h3 style={{ margin: "0 0 8px", color: "#1a3c6e", fontSize: "20px", fontWeight: "700" }}>
+              {vendors.length === 0 ? "ยังไม่มีข้อมูล Vendor" : "ไม่พบ Vendor"}
+            </h3>
+            <p style={{ margin: 0, color: "#94a3b8", fontSize: "15px" }}>
+              {vendors.length === 0 ? "ยังไม่มีข้อมูลในระบบ" : "ลองเปลี่ยน keyword หรือ filter"}
+            </p>
           </div>
         )}
 
@@ -298,13 +543,20 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
         {!loading && filtered.length > 0 && viewMode === "card" && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(330px, 1fr))", gap: "18px" }}>
             {filtered.map((v, idx) => (
-              <div key={v.id} className="vendor-card" onClick={() => setDetailVendor(v)} style={{ animationDelay: `${Math.min(idx, 12) * 0.04}s`, background: "white", borderRadius: "18px", padding: "22px", boxShadow: "0 4px 16px rgba(26,60,110,0.08)", borderTop: `3px solid ${v.status === "active" ? "#e2c97e" : "#e2e8f0"}` }}>
+              <div key={v.id} className="vendor-card" onClick={() => setDetailVendor(v)}
+                style={{ animationDelay: `${Math.min(idx, 12) * 0.04}s`, background: "white", borderRadius: "18px", padding: "22px", boxShadow: "0 4px 16px rgba(26,60,110,0.08)", borderTop: `3px solid ${v.status === "active" ? "#e2c97e" : "#e2e8f0"}` }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
                   <div style={{ flex: 1, marginRight: "10px" }}>
                     <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#94a3b8", fontWeight: "700" }}>{v.vendorCode} · {GROUP_LABEL[v.vendorGroup] || v.vendorGroup}</p>
                     <h3 style={{ margin: 0, color: "#1a3c6e", fontSize: "15px", fontWeight: "700", lineHeight: "1.35" }}>{highlight(v.name, search)}</h3>
                   </div>
-                  <button onClick={e => { e.stopPropagation(); handleToggleStatus(v); }} style={{ background: v.status === "active" ? "linear-gradient(135deg, #fefce8, #fef9c3)" : "#f1f5f9", color: v.status === "active" ? "#92400e" : "#94a3b8", padding: "4px 12px", borderRadius: "999px", fontSize: "11px", fontWeight: "700", border: v.status === "active" ? "1px solid #e2c97e" : "1px solid #e2e8f0", cursor: "pointer", whiteSpace: "nowrap" }}>{v.status === "active" ? "✅ Active" : "⏸ Inactive"}</button>
+                  <button onClick={e => { e.stopPropagation(); handleToggleStatus(v); }} style={{
+                    background: v.status === "active" ? "linear-gradient(135deg, #fefce8, #fef9c3)" : "#f1f5f9",
+                    color: v.status === "active" ? "#92400e" : "#94a3b8",
+                    padding: "4px 12px", borderRadius: "999px", fontSize: "11px", fontWeight: "700",
+                    border: v.status === "active" ? "1px solid #e2c97e" : "1px solid #e2e8f0",
+                    cursor: "pointer", whiteSpace: "nowrap",
+                  }}>{v.status === "active" ? "✅ Active" : "⏸ Inactive"}</button>
                 </div>
                 <div style={{ height: "1px", background: "linear-gradient(90deg, #e2c97e33, transparent)", margin: "12px 0" }} />
                 <div style={{ marginBottom: "14px" }}><CategoryChips cats={v.categories} max={3} search={search} /></div>
@@ -320,7 +572,9 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
                     </div>
                   ))}
                 </div>
-                <div style={{ marginTop: "14px", paddingTop: "12px", borderTop: "1px solid #f1f5f9", display: "flex", justifyContent: "flex-end" }}><span style={{ fontSize: "12px", color: "#cbd5e1" }}>คลิกดูกราฟ / แก้หมวด →</span></div>
+                <div style={{ marginTop: "14px", paddingTop: "12px", borderTop: "1px solid #f1f5f9", display: "flex", justifyContent: "flex-end" }}>
+                  <span style={{ fontSize: "12px", color: "#cbd5e1" }}>คลิกดูกราฟ / แก้หมวด →</span>
+                </div>
               </div>
             ))}
           </div>
@@ -339,14 +593,23 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
               </thead>
               <tbody>
                 {filtered.map((v, i) => (
-                  <tr key={v.id} onClick={() => setDetailVendor(v)} onMouseEnter={() => setHoveredId(v.id)} onMouseLeave={() => setHoveredId(null)} style={{ borderBottom: "1px solid #f1f5f9", cursor: "pointer", background: hoveredId === v.id ? "#f8faff" : i % 2 === 0 ? "white" : "#fafbff" }}>
+                  <tr key={v.id} onClick={() => setDetailVendor(v)}
+                    onMouseEnter={() => setHoveredId(v.id)} onMouseLeave={() => setHoveredId(null)}
+                    style={{ borderBottom: "1px solid #f1f5f9", cursor: "pointer", background: hoveredId === v.id ? "#f8faff" : i % 2 === 0 ? "white" : "#fafbff" }}>
                     <td style={{ padding: "14px 16px", color: "#94a3b8", fontWeight: "700", fontSize: "12px" }}>{v.vendorCode}</td>
                     <td style={{ padding: "14px 16px", fontWeight: "700", color: "#1a3c6e" }}>{highlight(v.name, search)}</td>
                     <td style={{ padding: "14px 16px" }}><CategoryChips cats={v.categories} max={2} /></td>
                     <td style={{ padding: "14px 16px", textAlign: "right", fontWeight: "700", color: "#1a3c6e" }}>{bahtShort(v.totalSpend)}</td>
                     <td style={{ padding: "14px 16px", textAlign: "right", color: "#475569" }}>{v.numPOs}</td>
                     <td style={{ padding: "14px 16px", color: "#475569" }}>{v.lastPurchase}</td>
-                    <td style={{ padding: "14px 16px" }}><button onClick={e => { e.stopPropagation(); handleToggleStatus(v); }} style={{ background: v.status === "active" ? "linear-gradient(135deg, #fefce8, #fef9c3)" : "#f1f5f9", color: v.status === "active" ? "#92400e" : "#94a3b8", padding: "4px 12px", borderRadius: "999px", fontSize: "11px", fontWeight: "700", border: v.status === "active" ? "1px solid #e2c97e" : "1px solid #e2e8f0", cursor: "pointer" }}>{v.status === "active" ? "✅" : "⏸"}</button></td>
+                    <td style={{ padding: "14px 16px" }}>
+                      <button onClick={e => { e.stopPropagation(); handleToggleStatus(v); }} style={{
+                        background: v.status === "active" ? "linear-gradient(135deg, #fefce8, #fef9c3)" : "#f1f5f9",
+                        color: v.status === "active" ? "#92400e" : "#94a3b8",
+                        padding: "4px 12px", borderRadius: "999px", fontSize: "11px", fontWeight: "700",
+                        border: v.status === "active" ? "1px solid #e2c97e" : "1px solid #e2e8f0", cursor: "pointer",
+                      }}>{v.status === "active" ? "✅" : "⏸"}</button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
