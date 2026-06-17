@@ -215,7 +215,7 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
                     <Pie data={catData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={32} outerRadius={60} paddingAngle={2}>
                       {catData.map((d, i) => <Cell key={i} fill={catColor(d.name).color} />)}
                     </Pie>
-                    <Tooltip formatter={(v: number) => bahtFull(v)} />
+                    <Tooltip formatter={(v: any) => bahtFull(Number(v))} />
                   </PieChart>
                 </ResponsiveContainer>
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginTop: "6px" }}>
@@ -237,8 +237,8 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
                       <defs><linearGradient id="vg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a3c6e" stopOpacity={0.5} /><stop offset="100%" stopColor="#1a3c6e" stopOpacity={0.04} /></linearGradient></defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#eef2f7" />
                       <XAxis dataKey="m" tick={{ fontSize: 10, fill: "#94a3b8" }} />
-                      <YAxis tickFormatter={(v) => bahtShort(v)} tick={{ fontSize: 10, fill: "#94a3b8" }} width={48} />
-                      <Tooltip formatter={(v: number) => bahtFull(v)} />
+                      <YAxis tickFormatter={(v: any) => bahtShort(Number(v))} tick={{ fontSize: 10, fill: "#94a3b8" }} width={48} />
+                      <Tooltip formatter={(v: any) => bahtFull(Number(v))} />
                       <Area type="monotone" dataKey="v" stroke="#1a3c6e" strokeWidth={2} fill="url(#vg)" />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -445,8 +445,8 @@ export default function VendorPage() {
                       <defs><linearGradient id="og" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#e2c97e" stopOpacity={0.6} /><stop offset="100%" stopColor="#e2c97e" stopOpacity={0.05} /></linearGradient></defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#eef2f7" />
                       <XAxis dataKey="m" tick={{ fontSize: 11, fill: "#94a3b8" }} />
-                      <YAxis tickFormatter={(v) => bahtShort(v)} tick={{ fontSize: 11, fill: "#94a3b8" }} width={56} />
-                      <Tooltip formatter={(v: number) => bahtFull(v)} />
+                      <YAxis tickFormatter={(v: any) => bahtShort(Number(v))} tick={{ fontSize: 11, fill: "#94a3b8" }} width={56} />
+                      <Tooltip formatter={(v: any) => bahtFull(Number(v))} />
                       <Area type="monotone" dataKey="v" stroke="#c9a84c" strokeWidth={2.5} fill="url(#og)" />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -455,9 +455,9 @@ export default function VendorPage() {
                   <ChartCard title="ยอดซื้อแยกหมวด (Top 10)" hint="หมวดที่ใช้งบมากสุด">
                     <ResponsiveContainer width="100%" height={300}>
                       <BarChart data={overview.catData} layout="vertical" margin={{ top: 0, right: 16, bottom: 0, left: 8 }}>
-                        <XAxis type="number" tickFormatter={(v) => bahtShort(v)} tick={{ fontSize: 10, fill: "#94a3b8" }} />
+                        <XAxis type="number" tickFormatter={(v: any) => bahtShort(Number(v))} tick={{ fontSize: 10, fill: "#94a3b8" }} />
                         <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: "#475569" }} width={130} />
-                        <Tooltip formatter={(v: number) => bahtFull(v)} />
+                        <Tooltip formatter={(v: any) => bahtFull(Number(v))} />
                         <Bar dataKey="value" radius={[0, 6, 6, 0]}>
                           {overview.catData.map((d, i) => <Cell key={i} fill={catColor(d.name).color} />)}
                         </Bar>
@@ -467,9 +467,9 @@ export default function VendorPage() {
                   <ChartCard title="Top 10 Vendor" hint="vendor ที่มียอดซื้อสะสมสูงสุด">
                     <ResponsiveContainer width="100%" height={300}>
                       <BarChart data={overview.topVendors} layout="vertical" margin={{ top: 0, right: 16, bottom: 0, left: 8 }}>
-                        <XAxis type="number" tickFormatter={(v) => bahtShort(v)} tick={{ fontSize: 10, fill: "#94a3b8" }} />
+                        <XAxis type="number" tickFormatter={(v: any) => bahtShort(Number(v))} tick={{ fontSize: 10, fill: "#94a3b8" }} />
                         <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: "#475569" }} width={120} />
-                        <Tooltip formatter={(v: number) => bahtFull(v)} />
+                        <Tooltip formatter={(v: any) => bahtFull(Number(v))} />
                         <Bar dataKey="value" radius={[0, 6, 6, 0]} fill="#1a3c6e" />
                       </BarChart>
                     </ResponsiveContainer>
