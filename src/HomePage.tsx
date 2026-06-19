@@ -529,6 +529,19 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
         <div className="hero-aurora" aria-hidden />
         <div style={{ position: "relative", maxWidth: "1100px", margin: "0 auto", zIndex: 1 }}>
           <Reveal>
+            <img
+              src="/logo-default.svg"
+              alt="Gunkul"
+              style={{
+                height: 36,
+                width: "auto",
+                display: "block",
+                marginBottom: "var(--sp-5)",
+                filter: "brightness(0) invert(1)",
+              }}
+            />
+          </Reveal>
+          <Reveal>
             <p
               style={{
                 fontSize: "var(--fs-h3)",
