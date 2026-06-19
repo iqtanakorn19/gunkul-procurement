@@ -325,54 +325,6 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
             ตั้งแต่รับคำขอจนถึงสั่งซื้อและรับของ
           </p>
 
-          {/* quick stats */}
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "var(--sp-3)",
-              marginTop: "var(--sp-6)",
-            }}
-          >
-            {[
-              { k: "6", v: "โครงการที่ดำเนินอยู่" },
-              { k: "31", v: "หมวดสินค้า & บริการ" },
-              { k: "4", v: "ระบบหลักที่ใช้งาน" },
-              { k: "2", v: "โมเดลธุรกิจ EPC / PPA" },
-            ].map((s) => (
-              <div
-                key={s.v}
-                style={{
-                  background: "rgba(255,255,255,0.10)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  borderRadius: "var(--radius)",
-                  padding: "var(--sp-3) var(--sp-4)",
-                  minWidth: "130px",
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: "var(--font-serif)",
-                    fontSize: "1.9rem",
-                    fontWeight: 700,
-                    lineHeight: 1,
-                  }}
-                >
-                  {s.k}
-                </div>
-                <div
-                  style={{
-                    fontSize: "var(--fs-xs)",
-                    opacity: 0.85,
-                    marginTop: "var(--sp-1)",
-                  }}
-                >
-                  {s.v}
-                </div>
-              </div>
-            ))}
-          </div>
-
           {/* CTAs */}
           <div
             style={{
@@ -490,35 +442,62 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
           title="Gunkul ทำธุรกิจพลังงานแสงอาทิตย์อย่างไร"
           intro="ต้องเข้าใจธุรกิจก่อน เพราะมันกำหนดว่าเราซื้ออะไรและซื้อในบริบทไหน — แบ่งเป็น 2 โมเดลหลัก"
         >
-          <div style={grid(300)}>
+          <div
+            style={{
+              position: "relative",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 0,
+              borderRadius: "var(--radius-lg)",
+              overflow: "hidden",
+              border: "1px solid var(--border)",
+              boxShadow: "var(--shadow-sm)",
+              minHeight: 220,
+            }}
+          >
             {MODELS.map((m) => (
-              <HoverCard key={m.tag}>
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-3)", marginBottom: "var(--sp-3)" }}>
-                  <IconBadge icon={m.icon} color={m.color} />
-                  <div>
-                    <span
-                      style={{
-                        display: "inline-block",
-                        fontSize: "var(--fs-xs)",
-                        fontWeight: 800,
-                        letterSpacing: "0.08em",
-                        color: m.color,
-                        background: tint(m.color),
-                        padding: "2px 10px",
-                        borderRadius: "var(--radius-full)",
-                      }}
-                    >
-                      {m.tag}
-                    </span>
-                    <div style={{ fontWeight: 600, color: "var(--text-strong)", marginTop: "var(--sp-1)" }}>
-                      {m.title}
-                    </div>
-                  </div>
+              <div
+                key={m.tag}
+                style={{
+                  background:
+                    m.tag === "EPC"
+                      ? "color-mix(in srgb, var(--primary) 10%, var(--surface))"
+                      : "color-mix(in srgb, var(--accent) 12%, var(--surface))",
+                  padding: "var(--sp-6) var(--sp-5)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: m.tag === "EPC" ? "flex-end" : "flex-start",
+                  textAlign: m.tag === "EPC" ? "right" : "left",
+                }}
+              >
+                <IconBadge icon={m.icon} color={m.color} size={48} />
+                <div
+                  style={{
+                    fontFamily: "var(--font-serif)",
+                    fontSize: "2.4rem",
+                    fontWeight: 800,
+                    color: m.color,
+                    marginTop: "var(--sp-3)",
+                    lineHeight: 1,
+                  }}
+                >
+                  {m.tag}
                 </div>
-                <p style={{ color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.6, margin: "0 0 var(--sp-3)" }}>
+                <div style={{ fontWeight: 600, color: "var(--text-strong)", marginTop: "var(--sp-1)" }}>
+                  {m.title}
+                </div>
+                <p
+                  style={{
+                    color: "var(--text-muted)",
+                    fontSize: "var(--fs-sm)",
+                    lineHeight: 1.6,
+                    margin: "var(--sp-3) 0",
+                    maxWidth: "32ch",
+                  }}
+                >
                   {m.desc}
                 </p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--sp-2)" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--sp-2)", justifyContent: m.tag === "EPC" ? "flex-end" : "flex-start" }}>
                   {m.facts.map((f) => (
                     <span
                       key={f}
@@ -535,8 +514,31 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
                     </span>
                   ))}
                 </div>
-              </HoverCard>
+              </div>
             ))}
+            <span
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 52,
+                height: 52,
+                borderRadius: "50%",
+                background: "var(--bg-elevated)",
+                border: "2px solid var(--border-strong)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: "var(--font-serif)",
+                fontWeight: 800,
+                fontSize: "var(--fs-xs)",
+                color: "var(--text-faint)",
+                zIndex: 2,
+              }}
+            >
+              VS
+            </span>
           </div>
 
           <h3 style={{ margin: "var(--sp-6) 0 var(--sp-4)", color: "var(--text-strong)" }}>
@@ -726,36 +728,47 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
           title="ประเภทสินค้าและบริการ"
           intro="สินค้าและบริการที่ฝ่ายจัดซื้อรับผิดชอบ แบ่งเป็น 31 หมวดหลัก ตัวอย่างเช่น"
         >
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "var(--sp-4)" }}>
+          <HoverCard interactive={false}>
             {[
               { icon: IconCategory2, color: "var(--primary)", label: "สินค้า (Products)", items: PRODUCTS },
               { icon: IconUserCog, color: "var(--accent)", label: "บริการ (Services)", items: SERVICES },
-            ].map((g) => (
-              <HoverCard key={g.label} interactive={false}>
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)", marginBottom: "var(--sp-3)" }}>
-                  <g.icon size={20} stroke={1.75} style={{ color: g.color }} />
-                  <span style={{ fontWeight: 700, color: "var(--text-strong)" }}>{g.label}</span>
-                </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--sp-2)" }}>
-                  {g.items.map((it) => (
-                    <span
-                      key={it}
-                      style={{
-                        fontSize: "var(--fs-sm)",
-                        color: "var(--text)",
-                        background: "var(--surface-2)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "var(--radius-full)",
-                        padding: "5px 14px",
-                      }}
-                    >
-                      {it}
+            ].map((g, i) => {
+              const pct = Math.round((g.items.length / (PRODUCTS.length + SERVICES.length)) * 100);
+              return (
+                <div key={g.label} style={{ marginBottom: i === 0 ? "var(--sp-5)" : 0 }}>
+                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "var(--sp-2)" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)" }}>
+                      <g.icon size={18} stroke={1.75} style={{ color: g.color }} />
+                      <span style={{ fontWeight: 700, color: "var(--text-strong)" }}>{g.label}</span>
+                    </div>
+                    <span style={{ fontFamily: "var(--font-serif)", fontWeight: 800, fontSize: "var(--fs-h3)", color: g.color }}>
+                      {pct}%
                     </span>
-                  ))}
+                  </div>
+                  <div style={{ background: "var(--surface-2)", borderRadius: "var(--radius-full)", height: 10, overflow: "hidden" }}>
+                    <div style={{ width: `${pct}%`, height: "100%", background: g.color, borderRadius: "var(--radius-full)" }} />
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--sp-2)", marginTop: "var(--sp-3)" }}>
+                    {g.items.map((it) => (
+                      <span
+                        key={it}
+                        style={{
+                          fontSize: "var(--fs-xs)",
+                          color: "var(--text-muted)",
+                          background: "var(--surface-2)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "var(--radius-full)",
+                          padding: "4px 12px",
+                        }}
+                      >
+                        {it}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </HoverCard>
-            ))}
-          </div>
+              );
+            })}
+          </HoverCard>
         </Section>
 
         {/* 9. Timeline & risk */}
