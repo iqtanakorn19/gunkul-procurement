@@ -162,10 +162,10 @@ export default function DashboardPage({ role }: { role: Role }) {
         }}
       >
         <div>
-          <h1 style={{ margin: 0, color: '#1a3c6e', fontSize: '26px' }}>
+          <h1 style={{ margin: 0, color: 'var(--text-strong)', fontSize: '26px' }}>
             📊 Dashboard & KPI
           </h1>
-          <p style={{ margin: '4px 0 0', color: '#888', fontSize: '14px' }}>
+          <p style={{ margin: '4px 0 0', color: 'var(--text-muted)', fontSize: '14px' }}>
             ภาพรวมผลการดำเนินงานฝ่ายจัดซื้อ
           </p>
         </div>

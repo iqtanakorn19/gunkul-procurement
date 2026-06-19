@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTheme } from "./ThemeContext";
 import {
   IconHome2,
   IconLayoutDashboard,
@@ -46,6 +47,7 @@ export default function Sidebar({
   userLabel,
   onLogout,
 }: SidebarProps) {
+  const { theme } = useTheme();
   const [collapsed, setCollapsed] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
     return window.localStorage.getItem(STORAGE_KEY) === "1";
@@ -98,7 +100,12 @@ export default function Sidebar({
         <img
           src={collapsed ? "/favicon.svg" : "/logo-default.svg"}
           alt="Gunkul"
-          style={{ height: 24, width: "auto", flexShrink: 0 }}
+          style={{
+            height: 24,
+            width: "auto",
+            flexShrink: 0,
+            filter: !collapsed && theme === "dark" ? "brightness(0) invert(1)" : undefined,
+          }}
         />
         {!collapsed && (
           <span
