@@ -99,22 +99,22 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #3d5174;          /* light-medium navy ground */
-  --bg-elevated: #475c83;
-  --surface: #51678f;
-  --surface-2: #5c739c;
+  --bg: #2f5d99;          /* saturated sky-blue ground */
+  --bg-elevated: #3868a8;
+  --surface: #4170b2;
+  --surface-2: #4d7dbe;
 
   --text: #f5f6f9;        /* warm off-white, high contrast on bg */
   --text-strong: #ffffff; /* white headings */
-  --text-muted: #d6dceb;  /* AA on surfaces */
-  --text-faint: #b6c0d6;
+  --text-muted: #dbe6f5;  /* AA on surfaces */
+  --text-faint: #b9cdec;
 
-  --border: #5c739c;
-  --border-strong: #7689ad;
+  --border: #5c86b8;
+  --border-strong: #769dca;
 
-  --primary: #8eb6e8;     /* light blue for AA on dark */
-  --primary-hover: #a7c8f0;
-  --primary-contrast: #16223a;
+  --primary: #8fc1f5;     /* light sky blue for AA on dark */
+  --primary-hover: #aad2f8;
+  --primary-contrast: #102a44;
 
   --accent: #e2c97e;      /* full sand pops on dark, AA as text */
   --accent-soft: #c9a84c;
@@ -136,19 +136,19 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]):not([data-theme="dark"]) {
     color-scheme: dark;
-    --bg: #3d5174;
-    --bg-elevated: #475c83;
-    --surface: #51678f;
-    --surface-2: #5c739c;
+    --bg: #2f5d99;
+    --bg-elevated: #3868a8;
+    --surface: #4170b2;
+    --surface-2: #4d7dbe;
     --text: #f5f6f9;
     --text-strong: #ffffff;
-    --text-muted: #d6dceb;
-    --text-faint: #b6c0d6;
-    --border: #5c739c;
-    --border-strong: #7689ad;
-    --primary: #8eb6e8;
-    --primary-hover: #a7c8f0;
-    --primary-contrast: #16223a;
+    --text-muted: #dbe6f5;
+    --text-faint: #b9cdec;
+    --border: #5c86b8;
+    --border-strong: #769dca;
+    --primary: #8fc1f5;
+    --primary-hover: #aad2f8;
+    --primary-contrast: #102a44;
     --accent: #e2c97e;
     --accent-soft: #c9a84c;
     --accent-bg: rgba(226, 201, 126, 0.16);
