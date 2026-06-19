@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import {
   IconBuildingFactory2,
@@ -36,6 +36,67 @@ import type { Page } from "./Sidebar";
 
 // Soft, theme-adaptive tint for an icon badge from a semantic color.
 const tint = (c: string) => `color-mix(in srgb, ${c} 14%, transparent)`;
+
+function prefersReducedMotion() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+// Reveal-on-scroll wrapper. Fades + slides its content up the first time it
+// enters the viewport. Honors prefers-reduced-motion (renders instantly).
+function Reveal({
+  children,
+  delay = 0,
+  y = 24,
+  style,
+}: {
+  children: ReactNode;
+  delay?: number;
+  y?: number;
+  style?: CSSProperties;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    if (prefersReducedMotion()) {
+      setShown(true);
+      return;
+    }
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setShown(true);
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        opacity: shown ? 1 : 0,
+        transform: shown ? "translateY(0)" : `translateY(${y}px)`,
+        transition: `opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms`,
+        willChange: "opacity, transform",
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
 
 function IconBadge({
   icon: Icon,
@@ -78,36 +139,38 @@ function Section({
 }) {
   return (
     <section style={{ marginBottom: "var(--sp-8)" }}>
-      <div style={{ marginBottom: "var(--sp-5)" }}>
-        <div
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: "var(--fs-xs)",
-            fontWeight: 700,
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            color: "var(--accent)",
-            marginBottom: "var(--sp-2)",
-          }}
-        >
-          {eyebrow}
-        </div>
-        <h2 style={{ margin: 0 }}>{title}</h2>
-        {intro && (
-          <p
+      <Reveal>
+        <div style={{ marginBottom: "var(--sp-5)" }}>
+          <div
             style={{
-              margin: "var(--sp-3) 0 0",
-              maxWidth: "70ch",
-              color: "var(--text-muted)",
-              fontSize: "var(--fs-body)",
-              lineHeight: "var(--lh-base)",
+              fontFamily: "var(--font-sans)",
+              fontSize: "var(--fs-xs)",
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--accent)",
+              marginBottom: "var(--sp-2)",
             }}
           >
-            {intro}
-          </p>
-        )}
-      </div>
-      {children}
+            {eyebrow}
+          </div>
+          <h2 style={{ margin: 0 }}>{title}</h2>
+          {intro && (
+            <p
+              style={{
+                margin: "var(--sp-3) 0 0",
+                maxWidth: "70ch",
+                color: "var(--text-muted)",
+                fontSize: "var(--fs-body)",
+                lineHeight: "var(--lh-base)",
+              }}
+            >
+              {intro}
+            </p>
+          )}
+        </div>
+      </Reveal>
+      <Reveal delay={120}>{children}</Reveal>
     </section>
   );
 }
@@ -280,22 +343,24 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
         }}
       >
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <p
-            style={{
-              fontSize: "var(--fs-h3)",
-              fontWeight: 400,
-              opacity: 0.92,
-              maxWidth: "60ch",
-              lineHeight: 1.5,
-              fontFamily: "var(--font-sans)",
-            }}
-          >
-            ทำความเข้าใจบทบาท ธุรกิจ และกระบวนการทำงานของฝ่ายจัดซื้อส่วนกลาง
-            ตั้งแต่รับคำขอจนถึงสั่งซื้อและรับของ
-          </p>
+          <Reveal>
+            <p
+              style={{
+                fontSize: "var(--fs-h3)",
+                fontWeight: 400,
+                opacity: 0.92,
+                maxWidth: "60ch",
+                lineHeight: 1.5,
+                fontFamily: "var(--font-sans)",
+              }}
+            >
+              ทำความเข้าใจบทบาท ธุรกิจ และกระบวนการทำงานของฝ่ายจัดซื้อส่วนกลาง
+              ตั้งแต่รับคำขอจนถึงสั่งซื้อและรับของ
+            </p>
+          </Reveal>
 
           {/* CTA */}
-          <div style={{ marginTop: "var(--sp-5)" }}>
+          <Reveal delay={120} style={{ marginTop: "var(--sp-5)" }}>
             <button
               type="button"
               onClick={() => setPage("knowledge")}
@@ -317,7 +382,7 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
               อ่านคู่มือการทำงาน
               <IconArrowRight size={18} stroke={2} />
             </button>
-          </div>
+          </Reveal>
         </div>
       </header>
 
