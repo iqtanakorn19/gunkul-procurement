@@ -96,7 +96,7 @@ export default function Sidebar({
         }}
       >
         <img
-          src="/logo-default.svg"
+          src={collapsed ? "/favicon.svg" : "/logo-default.svg"}
           alt="Gunkul"
           style={{ height: 24, width: "auto", flexShrink: 0 }}
         />
@@ -221,10 +221,7 @@ export default function Sidebar({
           {collapsed ? (
             <IconChevronRight size={16} stroke={1.75} />
           ) : (
-            <>
-              <IconChevronLeft size={16} stroke={1.75} />
-              <span style={{ fontSize: "var(--fs-xs)" }}>Collapse</span>
-            </>
+            <IconChevronLeft size={16} stroke={1.75} />
           )}
         </button>
       </div>
