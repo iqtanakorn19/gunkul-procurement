@@ -25,7 +25,6 @@ import {
   IconFileCheck,
   IconCoin,
   IconBuildingBank,
-  IconCpu,
   IconFolders,
   IconChartBar,
 } from "@tabler/icons-react";
@@ -281,36 +280,6 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
         }}
       >
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <div
-            style={{
-              fontFamily: "var(--font-serif)",
-              fontSize: "var(--fs-display)",
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              lineHeight: 1.05,
-            }}
-          >
-            GUNKUL
-          </div>
-          <div
-            style={{
-              fontStyle: "italic",
-              opacity: 0.85,
-              marginTop: "var(--sp-1)",
-            }}
-          >
-            not only the energy, we care
-          </div>
-
-          <h1
-            style={{
-              color: "#fffdf8",
-              margin: "var(--sp-5) 0 var(--sp-3)",
-              maxWidth: "20ch",
-            }}
-          >
-            คู่มือพนักงานใหม่ ฝ่ายจัดซื้อ
-          </h1>
           <p
             style={{
               fontSize: "var(--fs-h3)",
@@ -325,15 +294,8 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
             ตั้งแต่รับคำขอจนถึงสั่งซื้อและรับของ
           </p>
 
-          {/* CTAs */}
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "var(--sp-3)",
-              marginTop: "var(--sp-6)",
-            }}
-          >
+          {/* CTA */}
+          <div style={{ marginTop: "var(--sp-5)" }}>
             <button
               type="button"
               onClick={() => setPage("knowledge")}
@@ -354,26 +316,6 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
             >
               อ่านคู่มือการทำงาน
               <IconArrowRight size={18} stroke={2} />
-            </button>
-            <button
-              type="button"
-              onClick={() => setPage("dashboard")}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "var(--sp-2)",
-                background: "transparent",
-                color: "#fffdf8",
-                border: "1px solid rgba(255,255,255,0.45)",
-                borderRadius: "var(--radius-full)",
-                padding: "var(--sp-3) var(--sp-5)",
-                fontWeight: 600,
-                fontSize: "var(--fs-sm)",
-                cursor: "pointer",
-                fontFamily: "var(--font-sans)",
-              }}
-            >
-              ไปที่ Dashboard
             </button>
           </div>
         </div>
@@ -867,26 +809,6 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
           </div>
         </Section>
 
-        {/* closing one-liner */}
-        <div
-          style={{
-            display: "flex",
-            gap: "var(--sp-3)",
-            alignItems: "center",
-            padding: "var(--sp-5)",
-            borderRadius: "var(--radius-lg)",
-            background: "linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 100%)",
-            color: "#fffdf8",
-          }}
-        >
-          <IconCpu size={28} stroke={1.6} style={{ flexShrink: 0, opacity: 0.9 }} />
-          <p style={{ margin: 0, fontSize: "var(--fs-body)", lineHeight: 1.65, fontFamily: "var(--font-sans)" }}>
-            โดยสรุป ฝ่ายจัดซื้อคือกลไกกลางที่แปลงความต้องการจากหน้างานให้เป็นสัญญาและคำสั่งซื้อ
-            ผ่านระบบ D365 โดยสร้างสมดุลระหว่าง <strong>ความเร็ว</strong>,{" "}
-            <strong>ความถูกต้องของเอกสาร</strong> และ{" "}
-            <strong>การเลือก Vendor คุณภาพในราคาที่เหมาะกับงบประมาณ</strong>
-          </p>
-        </div>
       </div>
     </div>
   );
