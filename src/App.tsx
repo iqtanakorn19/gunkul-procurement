@@ -18,7 +18,7 @@ function HomePage({ setPage }: { setPage: (p: Page) => void }) {
     <div>
       <div style={{
         background: "linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 100%)",
-        color: "var(--primary-contrast)", padding: "var(--sp-8) var(--sp-6)", textAlign: "center"
+        color: "#fffdf8", padding: "var(--sp-8) var(--sp-6)", textAlign: "center"
       }}>
         <div style={{ fontFamily: "var(--font-serif)", fontSize: "var(--fs-display)", fontWeight: "bold", letterSpacing: "4px", marginBottom: "var(--sp-2)" }}>GUNKUL</div>
         <div style={{ fontSize: "var(--fs-body)", fontStyle: "italic", opacity: 0.85, marginBottom: "var(--sp-5)" }}>not only the energy, we care</div>
