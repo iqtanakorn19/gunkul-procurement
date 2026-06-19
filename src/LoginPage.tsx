@@ -240,7 +240,7 @@ export default function LoginPage({ onLogin }: { onLogin: (role: Role) => void }
 
           {!showForgot ? (
             <>
-              <h2 style={{ margin: "0 0 24px", color: "var(--navy)", fontSize: "18px", textAlign: "center", fontWeight: 700, fontFamily: "var(--font-sans)" }}>
+              <h2 style={{ margin: "0 0 24px", color: "var(--text-strong)", fontSize: "18px", textAlign: "center", fontWeight: 700, fontFamily: "var(--font-sans)" }}>
                 {showSignUp ? t.signup : t.signin}
               </h2>
 
@@ -330,7 +330,7 @@ export default function LoginPage({ onLogin }: { onLogin: (role: Role) => void }
             </>
           ) : (
             <>
-              <h2 style={{ margin: "0 0 8px", color: "var(--navy)", fontSize: "18px", textAlign: "center", fontWeight: 700, fontFamily: "var(--font-sans)" }}>{t.forgotTitle}</h2>
+              <h2 style={{ margin: "0 0 8px", color: "var(--text-strong)", fontSize: "18px", textAlign: "center", fontWeight: 700, fontFamily: "var(--font-sans)" }}>{t.forgotTitle}</h2>
               <p style={{ margin: "0 0 24px", color: "var(--text-muted)", fontSize: "13px", textAlign: "center", lineHeight: 1.6 }}>{t.forgotDesc}</p>
               {!forgotSent ? (
                 <>

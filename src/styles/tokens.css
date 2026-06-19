@@ -99,21 +99,21 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #0d1525;          /* deep navy-black ground */
-  --bg-elevated: #131e33;
-  --surface: #16213a;
-  --surface-2: #1d2b48;
+  --bg: #1e2c44;          /* softer mid navy ground, not near-black */
+  --bg-elevated: #243352;
+  --surface: #28395c;
+  --surface-2: #304369;
 
-  --text: #e8eaf0;        /* warm off-white, ~13:1 on bg */
+  --text: #e8eaf0;        /* warm off-white, ~10:1 on bg */
   --text-strong: #f5f3ec; /* near-white headings */
-  --text-muted: #aab4c6;  /* AA on surfaces (~6:1) */
-  --text-faint: #7e8aa0;
+  --text-muted: #b3bdce;  /* AA on surfaces (~5.5:1) */
+  --text-faint: #8b96ac;
 
-  --border: #283651;
-  --border-strong: #3a4a6b;
+  --border: #3a4a6b;
+  --border-strong: #4c5d82;
 
-  --primary: #4b7fc4;     /* lightened navy for AA on dark */
-  --primary-hover: #6699d6;
+  --primary: #5d8bcc;     /* lightened navy for AA on dark */
+  --primary-hover: #79a3da;
   --primary-contrast: #0d1525;
 
   --accent: #e2c97e;      /* full sand pops on dark, AA as text */
@@ -136,18 +136,18 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]):not([data-theme="dark"]) {
     color-scheme: dark;
-    --bg: #0d1525;
-    --bg-elevated: #131e33;
-    --surface: #16213a;
-    --surface-2: #1d2b48;
+    --bg: #1e2c44;
+    --bg-elevated: #243352;
+    --surface: #28395c;
+    --surface-2: #304369;
     --text: #e8eaf0;
     --text-strong: #f5f3ec;
-    --text-muted: #aab4c6;
-    --text-faint: #7e8aa0;
-    --border: #283651;
-    --border-strong: #3a4a6b;
-    --primary: #4b7fc4;
-    --primary-hover: #6699d6;
+    --text-muted: #b3bdce;
+    --text-faint: #8b96ac;
+    --border: #3a4a6b;
+    --border-strong: #4c5d82;
+    --primary: #5d8bcc;
+    --primary-hover: #79a3da;
     --primary-contrast: #0d1525;
     --accent: #e2c97e;
     --accent-soft: #c9a84c;
