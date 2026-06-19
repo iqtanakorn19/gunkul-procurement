@@ -1,0 +1,164 @@
+/* =============================================================
+   Gunkul Procurement — Design Tokens
+   Editorial + Modern Admin. Navy & Sand. Light/Dark (WCAG AA).
+   ============================================================= */
+
+:root {
+  /* ---- Brand palette (raw) ---- */
+  --navy-deep: #0f2244;
+  --navy: #1a3c6e;
+  --navy-mid: #2d5a9e;
+  --sand: #e2c97e;
+  --sand-dark: #c9a84c;
+
+  /* ---- Typography ---- */
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Sarabun", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* Fluid type scale */
+  --fs-display: clamp(2.5rem, 1.8rem + 3vw, 4rem);
+  --fs-h1: clamp(1.9rem, 1.5rem + 1.8vw, 2.75rem);
+  --fs-h2: clamp(1.45rem, 1.2rem + 1.1vw, 2rem);
+  --fs-h3: clamp(1.2rem, 1.05rem + 0.6vw, 1.45rem);
+  --fs-body: 1rem;
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.75rem;
+
+  --lh-tight: 1.15;
+  --lh-base: 1.6;
+
+  /* ---- Spacing scale (4px base) ---- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+
+  /* ---- Radius ---- */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-full: 999px;
+
+  /* ---- Layout ---- */
+  --sidebar-w: 248px;
+  --sidebar-w-collapsed: 72px;
+  --header-h: 64px;
+  --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =============================================================
+   LIGHT THEME (default) — warm editorial paper, deep navy ink
+   ============================================================= */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f7f4ec;          /* warm sand-tinted paper, not flat white */
+  --bg-elevated: #fffdf8;
+  --surface: #ffffff;
+  --surface-2: #f2eee3;
+
+  --text: #1c2533;        /* near-ink, AA on bg/surface */
+  --text-strong: #0f2244; /* navy-deep headings */
+  --text-muted: #5a6577;  /* AA on bg (4.6:1) */
+  --text-faint: #8a93a3;
+
+  --border: #e3ddcd;
+  --border-strong: #d2c9b2;
+
+  --primary: #1a3c6e;
+  --primary-hover: #2d5a9e;
+  --primary-contrast: #ffffff;
+
+  --accent: #b8932f;      /* darkened sand for AA text on light */
+  --accent-soft: #e2c97e;
+  --accent-bg: rgba(201, 168, 76, 0.14);
+
+  --success: #1f7a4d;
+  --warning: #b5781a;
+  --danger: #c0392b;
+  --info: #2d5a9e;
+
+  --shadow-sm: 0 1px 2px rgba(15, 34, 68, 0.06), 0 1px 3px rgba(15, 34, 68, 0.08);
+  --shadow: 0 4px 12px rgba(15, 34, 68, 0.08), 0 2px 4px rgba(15, 34, 68, 0.06);
+  --shadow-lg: 0 18px 40px rgba(15, 34, 68, 0.14);
+
+  --grain-opacity: 0.035;
+}
+
+/* =============================================================
+   DARK THEME — deep navy ground, warm off-white ink (high contrast)
+   Fixes prior bug: text is ALWAYS light on dark, never collapses.
+   ============================================================= */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #0d1525;          /* deep navy-black ground */
+  --bg-elevated: #131e33;
+  --surface: #16213a;
+  --surface-2: #1d2b48;
+
+  --text: #e8eaf0;        /* warm off-white, ~13:1 on bg */
+  --text-strong: #f5f3ec; /* near-white headings */
+  --text-muted: #aab4c6;  /* AA on surfaces (~6:1) */
+  --text-faint: #7e8aa0;
+
+  --border: #283651;
+  --border-strong: #3a4a6b;
+
+  --primary: #4b7fc4;     /* lightened navy for AA on dark */
+  --primary-hover: #6699d6;
+  --primary-contrast: #0d1525;
+
+  --accent: #e2c97e;      /* full sand pops on dark, AA as text */
+  --accent-soft: #c9a84c;
+  --accent-bg: rgba(226, 201, 126, 0.16);
+
+  --success: #4cc38a;
+  --warning: #e0a64b;
+  --danger: #e8705f;
+  --info: #6699d6;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.6);
+
+  --grain-opacity: 0.05;
+}
+
+/* Respect OS preference when no explicit choice is stored */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    color-scheme: dark;
+    --bg: #0d1525;
+    --bg-elevated: #131e33;
+    --surface: #16213a;
+    --surface-2: #1d2b48;
+    --text: #e8eaf0;
+    --text-strong: #f5f3ec;
+    --text-muted: #aab4c6;
+    --text-faint: #7e8aa0;
+    --border: #283651;
+    --border-strong: #3a4a6b;
+    --primary: #4b7fc4;
+    --primary-hover: #6699d6;
+    --primary-contrast: #0d1525;
+    --accent: #e2c97e;
+    --accent-soft: #c9a84c;
+    --accent-bg: rgba(226, 201, 126, 0.16);
+    --success: #4cc38a;
+    --warning: #e0a64b;
+    --danger: #e8705f;
+    --info: #6699d6;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.6);
+    --grain-opacity: 0.05;
+  }
+}

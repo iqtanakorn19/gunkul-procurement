@@ -7,6 +7,7 @@ import DashboardPage from "./Dashboard";
 import UpdatePage from "./UpdatePage";
 import TaskPage from "./TaskPage";
 import KnowledgePage from "./KnowledgePage";
+import ThemeToggle from "./ThemeToggle";
 
 type Page = "home" | "dashboard" | "update" | "tasks" | "vendor" | "team" | "knowledge";
 type Role = "manager" | "employee";
@@ -402,6 +403,7 @@ export default function App() {
         <span style={{ marginLeft: "auto", color: "white", fontSize: "13px" }}>
         👤 {currentUser?.email?.split("@")[0]} ({role === "manager" ? "หัวหน้า" : "พนักงาน"})
         </span>
+        <ThemeToggle />
         <button onClick={() => setLoggedIn(false)} style={{
           background: "transparent", color: "white", border: "1px solid white",
           borderRadius: "4px", padding: "6px 12px", cursor: "pointer", fontSize: "13px"
