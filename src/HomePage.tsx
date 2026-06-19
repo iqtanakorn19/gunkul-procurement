@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, MouseEvent as ReactMouseEvent, ReactNode } from "react";
 import {
   IconBuildingFactory2,
   IconBolt,
@@ -175,7 +175,9 @@ function Section({
   );
 }
 
-// Card that lifts subtly on hover (transform/​shadow only — no layout shift).
+// Card with pointer-tracking 3D tilt + a glare highlight that follows the
+// cursor. Falls back to a plain lift when interactive is false or motion is
+// reduced.
 function HoverCard({
   children,
   style,
@@ -185,24 +187,73 @@ function HoverCard({
   style?: CSSProperties;
   interactive?: boolean;
 }) {
+  const ref = useRef<HTMLDivElement | null>(null);
   const [hover, setHover] = useState(false);
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0, gx: 50, gy: 0 });
+  const reduce = prefersReducedMotion();
+  const tiltOn = interactive && !reduce;
+
+  const onMove = (e: ReactMouseEvent<HTMLDivElement>) => {
+    if (!tiltOn) return;
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    setTilt({
+      ry: (px - 0.5) * 7, // rotateY: left/right
+      rx: (0.5 - py) * 7, // rotateX: up/down
+      gx: px * 100,
+      gy: py * 100,
+    });
+  };
+
+  const reset = () => {
+    setHover(false);
+    setTilt({ rx: 0, ry: 0, gx: 50, gy: 0 });
+  };
+
   return (
     <div
+      ref={ref}
       onMouseEnter={() => interactive && setHover(true)}
-      onMouseLeave={() => interactive && setHover(false)}
+      onMouseMove={onMove}
+      onMouseLeave={reset}
       style={{
+        position: "relative",
         background: "var(--surface)",
         border: "1px solid var(--border)",
+        borderColor: hover ? "var(--border-strong)" : "var(--border)",
         borderRadius: "var(--radius-lg)",
         padding: "var(--sp-5)",
-        boxShadow: hover ? "var(--shadow)" : "var(--shadow-sm)",
-        transform: hover ? "translateY(-2px)" : "translateY(0)",
+        boxShadow: hover ? "var(--shadow-lg)" : "var(--shadow-sm)",
+        transform: tiltOn
+          ? `perspective(900px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg) translateY(${hover ? -4 : 0}px)`
+          : hover
+            ? "translateY(-2px)"
+            : "translateY(0)",
+        transformStyle: "preserve-3d",
         transition:
-          "transform var(--transition), box-shadow var(--transition), border-color var(--transition)",
+          "transform 0.18s ease-out, box-shadow var(--transition), border-color var(--transition)",
+        overflow: "hidden",
         ...style,
       }}
     >
-      {children}
+      {tiltOn && hover && (
+        <span
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: "inherit",
+            pointerEvents: "none",
+            background: `radial-gradient(220px circle at ${tilt.gx}% ${tilt.gy}%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%)`,
+            transition: "opacity var(--transition)",
+            zIndex: 0,
+          }}
+        />
+      )}
+      <div style={{ position: "relative", zIndex: 1 }}>{children}</div>
     </div>
   );
 }
@@ -212,6 +263,137 @@ const grid = (min: number): CSSProperties => ({
   gridTemplateColumns: `repeat(auto-fit, minmax(${min}px, 1fr))`,
   gap: "var(--sp-4)",
 });
+
+// Vertical timeline whose connecting rail fills as you scroll through it, and
+// whose step badges light up once the fill line passes them.
+function WorkflowTimeline({
+  steps,
+}: {
+  steps: { icon: typeof IconBolt; title: string; detail: string }[];
+}) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [progress, setProgress] = useState(0); // 0..1
+
+  useEffect(() => {
+    if (prefersReducedMotion()) {
+      setProgress(1);
+      return;
+    }
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const el = containerRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const anchor = window.innerHeight * 0.55; // line that "reads" the steps
+      const p = (anchor - r.top) / r.height;
+      setProgress(Math.max(0, Math.min(1, p)));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  return (
+    <div ref={containerRef} style={{ display: "flex", flexDirection: "column" }}>
+      {steps.map((step, i) => {
+        const last = i === steps.length - 1;
+        // each step "activates" once progress passes its position in the list
+        const reached = progress >= (i + 0.5) / steps.length;
+        return (
+          <div key={step.title} style={{ display: "flex", gap: "var(--sp-4)" }}>
+            {/* rail */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 44,
+                  height: 44,
+                  borderRadius: "var(--radius-full)",
+                  background: reached ? "var(--primary)" : "var(--surface-2)",
+                  color: reached ? "var(--primary-contrast)" : "var(--text-faint)",
+                  border: reached
+                    ? "2px solid var(--primary)"
+                    : "2px solid var(--border-strong)",
+                  fontWeight: 800,
+                  fontFamily: "var(--font-sans)",
+                  flexShrink: 0,
+                  zIndex: 1,
+                  boxShadow: reached
+                    ? "0 0 0 6px color-mix(in srgb, var(--primary) 18%, transparent)"
+                    : "none",
+                  transform: reached ? "scale(1.06)" : "scale(1)",
+                  transition: "all 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
+              >
+                {i + 1}
+              </span>
+              {!last && (
+                <span
+                  style={{
+                    flex: 1,
+                    width: 3,
+                    minHeight: 24,
+                    background: "var(--border-strong)",
+                    position: "relative",
+                    overflow: "hidden",
+                    borderRadius: "var(--radius-full)",
+                  }}
+                >
+                  <span
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      transformOrigin: "top",
+                      transform: `scaleY(${reached ? 1 : 0})`,
+                      background:
+                        "linear-gradient(var(--primary), var(--accent))",
+                      transition: "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
+                    }}
+                  />
+                </span>
+              )}
+            </div>
+            {/* content */}
+            <div
+              style={{
+                paddingBottom: last ? 0 : "var(--sp-5)",
+                flex: 1,
+                opacity: reached ? 1 : 0.5,
+                transform: reached ? "translateX(0)" : "translateX(6px)",
+                transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)" }}>
+                <step.icon
+                  size={20}
+                  stroke={1.75}
+                  style={{ color: reached ? "var(--accent)" : "var(--text-muted)" }}
+                />
+                <h3 style={{ margin: 0, fontSize: "var(--fs-h3)", color: "var(--text-strong)" }}>
+                  {step.title}
+                </h3>
+              </div>
+              <p style={{ margin: "var(--sp-2) 0 0", color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.65 }}>
+                {step.detail}
+              </p>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 /* ============================================================
    Data
@@ -336,13 +518,16 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
       {/* ---------- Hero ---------- */}
       <header
         style={{
+          position: "relative",
           background:
             "linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 100%)",
           color: "#fffdf8",
           padding: "var(--sp-8) var(--sp-6)",
+          overflow: "hidden",
         }}
       >
-        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+        <div className="hero-aurora" aria-hidden />
+        <div style={{ position: "relative", maxWidth: "1100px", margin: "0 auto", zIndex: 1 }}>
           <Reveal>
             <p
               style={{
@@ -634,47 +819,7 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
           title="กระบวนการจัดซื้อ ตั้งแต่ต้นจนจบ"
           intro="ฝ่ายจัดซื้อทำหน้าที่แปลงความต้องการจากหน้างาน ให้กลายเป็นสัญญาและคำสั่งซื้อ ผ่าน 6 ขั้นตอนหลัก"
         >
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {WORKFLOW.map((step, i) => {
-              const last = i === WORKFLOW.length - 1;
-              return (
-                <div key={step.title} style={{ display: "flex", gap: "var(--sp-4)" }}>
-                  {/* rail */}
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <span
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        width: 44,
-                        height: 44,
-                        borderRadius: "var(--radius-full)",
-                        background: "var(--primary)",
-                        color: "var(--primary-contrast)",
-                        fontWeight: 800,
-                        fontFamily: "var(--font-sans)",
-                        flexShrink: 0,
-                        zIndex: 1,
-                      }}
-                    >
-                      {i + 1}
-                    </span>
-                    {!last && <span style={{ flex: 1, width: 2, background: "var(--border-strong)", minHeight: 24 }} />}
-                  </div>
-                  {/* content */}
-                  <div style={{ paddingBottom: last ? 0 : "var(--sp-5)", flex: 1 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)" }}>
-                      <step.icon size={20} stroke={1.75} style={{ color: "var(--primary)" }} />
-                      <h3 style={{ margin: 0, fontSize: "var(--fs-h3)", color: "var(--text-strong)" }}>{step.title}</h3>
-                    </div>
-                    <p style={{ margin: "var(--sp-2) 0 0", color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.65 }}>
-                      {step.detail}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <WorkflowTimeline steps={WORKFLOW} />
         </Section>
 
         {/* 6. Price Approval tiers */}

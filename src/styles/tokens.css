@@ -162,3 +162,49 @@
     --grain-opacity: 0.05;
   }
 }
+
+/* ============================================================
+   HomePage hero — animated aurora + shimmer
+   ============================================================ */
+@keyframes aurora-drift {
+  0%   { transform: translate3d(-6%, -4%, 0) scale(1.05); }
+  50%  { transform: translate3d(6%, 4%, 0) scale(1.15); }
+  100% { transform: translate3d(-6%, -4%, 0) scale(1.05); }
+}
+
+@keyframes aurora-drift-2 {
+  0%   { transform: translate3d(5%, 3%, 0) scale(1.1); }
+  50%  { transform: translate3d(-5%, -3%, 0) scale(1.0); }
+  100% { transform: translate3d(5%, 3%, 0) scale(1.1); }
+}
+
+.hero-aurora { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.hero-aurora::before,
+.hero-aurora::after {
+  content: "";
+  position: absolute;
+  width: 60%;
+  height: 140%;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  will-change: transform;
+}
+.hero-aurora::before {
+  top: -40%;
+  left: -10%;
+  background: radial-gradient(circle, var(--primary), transparent 70%);
+  animation: aurora-drift 16s ease-in-out infinite;
+}
+.hero-aurora::after {
+  bottom: -50%;
+  right: -10%;
+  background: radial-gradient(circle, var(--accent), transparent 70%);
+  opacity: 0.4;
+  animation: aurora-drift-2 20s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-aurora::before,
+  .hero-aurora::after { animation: none; }
+}
