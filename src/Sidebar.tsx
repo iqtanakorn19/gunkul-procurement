@@ -7,7 +7,7 @@ import {
   IconTimeline,
   IconBuildingWarehouse,
   IconBook2,
-  IconUsers,
+  IconSitemap,
   IconChevronLeft,
   IconChevronRight,
   IconLogout,
@@ -29,7 +29,7 @@ const NAV_ITEMS: { page: Page; label: string; icon: typeof IconHome2 }[] = [
   { page: "update", label: "Update", icon: IconTimeline },
   { page: "vendor", label: "Vendor Directory", icon: IconBuildingWarehouse },
   { page: "knowledge", label: "Knowledge Base", icon: IconBook2 },
-  { page: "team", label: "Team & Profile", icon: IconUsers },
+  { page: "team", label: "Organization Chart", icon: IconSitemap },
 ];
 
 const STORAGE_KEY = "gunkul-sidebar-collapsed";

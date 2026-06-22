@@ -1,0 +1,83 @@
+/* ============================================================
+   Pure-CSS organization chart connector lines (table-based tree).
+   Adapted from the classic ul/li tree technique, themed with tokens.
+   ============================================================ */
+
+.org-tree,
+.org-tree ul,
+.org-tree li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.org-tree {
+  display: table;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.org-tree ul {
+  display: table;
+  width: 100%;
+}
+
+.org-tree li {
+  display: table-cell;
+  padding: var(--sp-6) var(--sp-2) 0;
+  vertical-align: top;
+}
+
+/* horizontal line joining siblings */
+.org-tree li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-top: 2.5px solid var(--primary);
+  opacity: 0.55;
+}
+
+.org-tree li:first-child::before {
+  left: 50%;
+}
+
+.org-tree li:last-child::before {
+  right: 50%;
+}
+
+.org-tree li:only-child::before {
+  display: none;
+}
+
+/* vertical line from the horizontal joint down to the card */
+.org-card {
+  display: inline-block;
+  position: relative;
+  margin: 0 var(--sp-2) var(--sp-5);
+}
+
+.org-card::before {
+  content: "";
+  position: absolute;
+  top: calc(-1 * var(--sp-6));
+  left: 50%;
+  width: 0;
+  height: var(--sp-6);
+  border-left: 2.5px solid var(--primary);
+  opacity: 0.55;
+}
+
+.org-tree > li {
+  padding-top: 0;
+}
+
+.org-tree > li::before {
+  display: none;
+}
+
+.org-tree > li > .org-card::before {
+  display: none;
+}
