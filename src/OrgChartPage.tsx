@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   IconPlus,
   IconX,
@@ -9,6 +9,9 @@ import {
   IconPencil,
   IconDeviceFloppy,
   IconRotateClockwise2,
+  IconZoomIn,
+  IconZoomOut,
+  IconFocus2,
 } from "@tabler/icons-react";
 import "./styles/orgchart.css";
 
@@ -634,8 +637,152 @@ function Branch({
 }
 
 /* ============================================================
-   Page
+   Pan & zoom viewport — click-drag to pan, scroll wheel to zoom,
+   so the chart no longer relies on the page scrollbar to navigate.
    ============================================================ */
+
+const ZOOM_MIN = 0.35;
+const ZOOM_MAX = 1.6;
+const ZOOM_STEP = 0.1;
+
+function PanZoomCanvas({ children }: { children: React.ReactNode }) {
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragState = useRef<{ startX: number; startY: number; panX: number; panY: number } | null>(null);
+  const moved = useRef(false);
+
+  useEffect(() => {
+    const el = viewportRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const dz = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP;
+      setZoom((z) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(z + dz).toFixed(2))));
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
+  useEffect(() => {
+    if (!isDragging) return;
+    const onMove = (e: MouseEvent) => {
+      const drag = dragState.current;
+      if (!drag) return;
+      const dx = e.clientX - drag.startX;
+      const dy = e.clientY - drag.startY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved.current = true;
+      setPan({ x: drag.panX + dx, y: drag.panY + dy });
+    };
+    const onUp = () => {
+      if (moved.current) {
+        const suppressClick = (e: MouseEvent) => {
+          e.stopPropagation();
+          e.preventDefault();
+        };
+        document.addEventListener("click", suppressClick, { capture: true, once: true });
+      }
+      dragState.current = null;
+      setIsDragging(false);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, [isDragging]);
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("button, input")) return;
+    moved.current = false;
+    dragState.current = { startX: e.clientX, startY: e.clientY, panX: pan.x, panY: pan.y };
+    setIsDragging(true);
+  };
+
+  const zoomBy = (delta: number) =>
+    setZoom((z) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(z + delta).toFixed(2))));
+
+  const resetView = () => {
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+  };
+
+  return (
+    <div
+      ref={viewportRef}
+      onMouseDown={onMouseDown}
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        border: "1px solid var(--border)",
+        borderRadius: "var(--radius-lg)",
+        background: "var(--bg-elevated)",
+        height: "min(70vh, 760px)",
+        minHeight: 420,
+        cursor: isDragging ? "grabbing" : "grab",
+        userSelect: isDragging ? "none" : undefined,
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: "50%",
+          transform: `translate(-50%, 0) translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          transformOrigin: "top center",
+          padding: "var(--sp-6)",
+          transition: isDragging ? "none" : "transform 0.05s linear",
+        }}
+      >
+        {children}
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: "var(--sp-3)",
+          right: "var(--sp-3)",
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+          background: "var(--surface)",
+          border: "1px solid var(--border-strong)",
+          borderRadius: "var(--radius-full)",
+          padding: 4,
+          boxShadow: "var(--shadow-sm)",
+        }}
+      >
+        <button type="button" onClick={() => zoomBy(-ZOOM_STEP)} title="ซูมออก" style={zoomBtnStyle}>
+          <IconZoomOut size={16} stroke={1.75} />
+        </button>
+        <span style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)", minWidth: 38, textAlign: "center" }}>
+          {Math.round(zoom * 100)}%
+        </span>
+        <button type="button" onClick={() => zoomBy(ZOOM_STEP)} title="ซูมเข้า" style={zoomBtnStyle}>
+          <IconZoomIn size={16} stroke={1.75} />
+        </button>
+        <button type="button" onClick={resetView} title="รีเซ็ตมุมมอง" style={zoomBtnStyle}>
+          <IconFocus2 size={16} stroke={1.75} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const zoomBtnStyle: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: 28,
+  height: 28,
+  border: "none",
+  background: "transparent",
+  color: "var(--text-muted)",
+  borderRadius: "var(--radius-full)",
+  cursor: "pointer",
+};
 
 export default function OrgChartPage() {
   const [root, setRoot] = useState<OrgNode>(loadOrgChart);
@@ -738,11 +885,11 @@ export default function OrgChartPage() {
         ทุกช่องแก้ไขได้: คลิกชื่อ/ตำแหน่ง, กดปุ่มเล็กบนการ์ดเพื่อเพิ่มคน ตำแหน่งว่าง หรือเพิ่มตำแหน่งการดูแล
       </div>
 
-      <div style={{ overflowX: "auto", paddingBottom: "var(--sp-5)" }}>
+      <PanZoomCanvas>
         <ul className="org-tree">
           <Branch node={root} isRoot onUpdate={updateById} onRemoveChild={removeById} />
         </ul>
-      </div>
+      </PanZoomCanvas>
     </div>
   );
 }
