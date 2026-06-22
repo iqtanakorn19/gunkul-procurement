@@ -690,13 +690,20 @@ const PanZoomCanvas = forwardRef<PanZoomCanvasHandle, { children: React.ReactNod
 
   useEffect(() => {
     if (!isDragging) return;
-    const onMove = (e: MouseEvent) => {
+    const onMove = (clientX: number, clientY: number) => {
       const drag = dragState.current;
       if (!drag) return;
-      const dx = e.clientX - drag.startX;
-      const dy = e.clientY - drag.startY;
+      const dx = clientX - drag.startX;
+      const dy = clientY - drag.startY;
       if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved.current = true;
       setPan({ x: drag.panX + dx, y: drag.panY + dy });
+    };
+    const onMouseMove = (e: MouseEvent) => onMove(e.clientX, e.clientY);
+    const onTouchMove = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      if (moved.current) e.preventDefault();
+      onMove(t.clientX, t.clientY);
     };
     const onUp = () => {
       if (moved.current) {
@@ -709,11 +716,17 @@ const PanZoomCanvas = forwardRef<PanZoomCanvasHandle, { children: React.ReactNod
       dragState.current = null;
       setIsDragging(false);
     };
-    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onUp);
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onUp);
+    window.addEventListener("touchcancel", onUp);
     return () => {
-      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onUp);
+      window.removeEventListener("touchcancel", onUp);
     };
   }, [isDragging]);
 
@@ -721,6 +734,15 @@ const PanZoomCanvas = forwardRef<PanZoomCanvasHandle, { children: React.ReactNod
     if ((e.target as HTMLElement).closest("button, input")) return;
     moved.current = false;
     dragState.current = { startX: e.clientX, startY: e.clientY, panX: pan.x, panY: pan.y };
+    setIsDragging(true);
+  };
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    if ((e.target as HTMLElement).closest("button, input")) return;
+    const t = e.touches[0];
+    if (!t) return;
+    moved.current = false;
+    dragState.current = { startX: t.clientX, startY: t.clientY, panX: pan.x, panY: pan.y };
     setIsDragging(true);
   };
 
@@ -748,6 +770,7 @@ const PanZoomCanvas = forwardRef<PanZoomCanvasHandle, { children: React.ReactNod
     <div
       ref={viewportRef}
       onMouseDown={onMouseDown}
+      onTouchStart={onTouchStart}
       style={{
         position: "relative",
         overflow: "hidden",
@@ -758,6 +781,7 @@ const PanZoomCanvas = forwardRef<PanZoomCanvasHandle, { children: React.ReactNod
         minHeight: 420,
         cursor: isDragging ? "grabbing" : "grab",
         userSelect: isDragging ? "none" : undefined,
+        touchAction: "none",
       }}
     >
       <div
