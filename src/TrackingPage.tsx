@@ -475,10 +475,14 @@ export default function TrackingPage() {
       for (const [header, value] of Object.entries(line)) {
         const key = HEADER_ALIASES[normalizeHeader(header)];
         if (!key || value === undefined || value === "" || value === "-") continue;
-        if (key.toLowerCase().includes("date")) out[key] = excelDateToISO(value);
-        else if (["qty", "unitPrice", "discount", "budget", "saveCost", "no"].includes(key)) out[key] = typeof value === "number" ? value : Number(value) || undefined;
-        else if (key === "status") out[key] = normalizeStatus(String(value));
-        else out[key] = String(value).trim();
+        let parsed: unknown;
+        if (key.toLowerCase().includes("date")) parsed = excelDateToISO(value);
+        else if (["qty", "unitPrice", "discount", "budget", "saveCost", "no"].includes(key)) {
+          parsed = typeof value === "number" ? value : Number(value);
+          if (typeof parsed === "number" && Number.isNaN(parsed)) parsed = undefined;
+        } else if (key === "status") parsed = normalizeStatus(String(value));
+        else parsed = String(value).trim();
+        if (parsed !== undefined) out[key] = parsed;
       }
       if (out.no === undefined) out.no = (rows.length || 0) + i + 1;
       return out as Omit<TrackingRow, "id">;
