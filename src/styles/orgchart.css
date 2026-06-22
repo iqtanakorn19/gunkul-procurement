@@ -36,7 +36,8 @@
   top: 0;
   left: 0;
   right: 0;
-  border-top: 2px solid var(--border-strong);
+  border-top: 2.5px solid var(--primary);
+  opacity: 0.55;
 }
 
 .org-tree li:first-child::before {
@@ -65,7 +66,8 @@
   left: 50%;
   width: 0;
   height: var(--sp-6);
-  border-left: 2px solid var(--border-strong);
+  border-left: 2.5px solid var(--primary);
+  opacity: 0.55;
 }
 
 .org-tree > li {

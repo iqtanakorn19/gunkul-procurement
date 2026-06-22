@@ -290,12 +290,13 @@ function NodeCard({
       className="org-card"
       style={{
         background: "var(--surface)",
-        border: `1px solid ${isRoot ? "var(--primary)" : "var(--border)"}`,
+        border: `1.5px solid ${isRoot ? "var(--primary)" : "var(--border-strong)"}`,
+        borderTop: `4px solid ${isRoot ? "var(--primary)" : "var(--accent)"}`,
         borderRadius: "var(--radius-lg)",
-        boxShadow: "var(--shadow-sm)",
+        boxShadow: "var(--shadow)",
         padding: "var(--sp-4)",
-        minWidth: 220,
-        maxWidth: 260,
+        minWidth: 240,
+        maxWidth: 270,
         textAlign: "left",
       }}
     >
@@ -305,14 +306,14 @@ function NodeCard({
             value={node.title}
             placeholder="ชื่อตำแหน่ง"
             onChange={(v) => onUpdate((n) => ({ ...n, title: v }))}
-            style={{ fontWeight: 700, color: "var(--text-strong)", fontSize: "var(--fs-sm)" }}
+            style={{ fontWeight: 800, color: "var(--text-strong)", fontSize: "var(--fs-body)", lineHeight: 1.3 }}
           />
-          <div style={{ marginTop: 2 }}>
+          <div style={{ marginTop: 3 }}>
             <EditableText
               value={node.scope ?? ""}
               placeholder="ขอบเขตงาน (ถ้ามี)"
               onChange={(v) => onUpdate((n) => ({ ...n, scope: v || undefined }))}
-              style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)", fontStyle: "italic" }}
+              style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)", fontWeight: 500 }}
             />
           </div>
         </div>
@@ -335,35 +336,56 @@ function NodeCard({
         )}
       </div>
 
+      <div
+        style={{
+          height: 1,
+          background: "var(--border)",
+          margin: "var(--sp-3) 0",
+        }}
+      />
+
       {/* people chips */}
       {node.people.length > 0 && (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--sp-1)", marginTop: "var(--sp-3)" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-2)", marginTop: "var(--sp-3)" }}>
           {filled.map((p) => (
             <span
               key={p.id}
               style={{
-                display: "inline-flex",
+                display: "flex",
                 alignItems: "center",
-                gap: 4,
-                background: "var(--surface-2)",
-                border: "1px solid var(--border)",
-                borderRadius: "var(--radius-full)",
-                padding: "2px 8px",
-                fontSize: "var(--fs-xs)",
-                color: "var(--primary)",
-                fontWeight: 600,
+                gap: 8,
+                background: "var(--primary)",
+                borderRadius: "var(--radius)",
+                padding: "5px 8px 5px 6px",
               }}
             >
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  width: 22,
+                  height: 22,
+                  borderRadius: "50%",
+                  background: "var(--primary-contrast)",
+                  color: "var(--primary)",
+                  fontSize: 11,
+                  fontWeight: 800,
+                }}
+              >
+                {(p.name.trim()[0] ?? "?").toUpperCase()}
+              </span>
               <EditableText
                 value={p.name}
                 placeholder="ชื่อ"
                 onChange={(v) => updatePerson(p.id, (pp) => ({ ...pp, name: v }))}
-                style={{ fontSize: "var(--fs-xs)", color: "var(--primary)", fontWeight: 600 }}
+                style={{ flex: 1, fontSize: "var(--fs-sm)", color: "var(--primary-contrast)", fontWeight: 700 }}
               />
               <IconX
-                size={11}
+                size={13}
                 stroke={2}
-                style={{ cursor: "pointer", color: "var(--text-faint)" }}
+                style={{ cursor: "pointer", color: "var(--primary-contrast)", opacity: 0.7, flexShrink: 0 }}
                 onClick={() => removePerson(p.id)}
               />
             </span>
@@ -372,24 +394,23 @@ function NodeCard({
             <span
               key={p.id}
               style={{
-                display: "inline-flex",
+                display: "flex",
                 alignItems: "center",
-                gap: 4,
-                background: "color-mix(in srgb, var(--danger) 12%, transparent)",
-                border: "1px dashed color-mix(in srgb, var(--danger) 55%, transparent)",
-                borderRadius: "var(--radius-full)",
-                padding: "2px 8px",
-                fontSize: "var(--fs-xs)",
-                color: "var(--danger)",
-                fontWeight: 600,
+                gap: 8,
+                background: "color-mix(in srgb, var(--danger) 14%, transparent)",
+                border: "1.5px dashed color-mix(in srgb, var(--danger) 60%, transparent)",
+                borderRadius: "var(--radius)",
+                padding: "5px 8px",
               }}
             >
-              <IconUserExclamation size={12} stroke={1.75} />
-              ตำแหน่งว่าง
+              <IconUserExclamation size={16} stroke={1.75} style={{ color: "var(--danger)", flexShrink: 0 }} />
+              <span style={{ flex: 1, fontSize: "var(--fs-sm)", color: "var(--danger)", fontWeight: 700 }}>
+                ตำแหน่งว่าง
+              </span>
               <IconX
-                size={11}
+                size={13}
                 stroke={2}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", color: "var(--danger)", flexShrink: 0 }}
                 onClick={() => removePerson(p.id)}
               />
             </span>
