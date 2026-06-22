@@ -1032,6 +1032,17 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
           </div>
         </Section>
 
+        {/* 11. Team */}
+        <Section eyebrow="ทีมของเรา" title="ฝ่ายจัดซื้อส่วนกลาง">
+          <HoverCard interactive={false} style={{ padding: 0, overflow: "hidden" }}>
+            <img
+              src="/team-photo.jpeg"
+              alt="ทีมฝ่ายจัดซื้อ"
+              style={{ width: "100%", height: "auto", display: "block" }}
+            />
+          </HoverCard>
+        </Section>
+
       </div>
     </div>
   );
