@@ -69,7 +69,7 @@ const STATUS_ALIASES: Record<string, Status> = {
   "รออนุมัติ po": "Pending PO Approval", "pending po approval": "Pending PO Approval", "pending po": "Pending PO Approval",
   "in progress": "In Progress", "กำลังดำเนินการ": "In Progress", "ดำเนินการ": "In Progress",
   "ok": "Completed", "completed": "Completed", "done": "Completed", "เสร็จ": "Completed", "เสร็จแล้ว": "Completed", "เรียบร้อย": "Completed",
-  "cancelled": "Cancelled", "canceled": "Cancelled", "ยกเลิก": "Cancelled",
+  "cancelled": "Cancelled", "canceled": "Cancelled", "cancel": "Cancelled", "ยกเลิก": "Cancelled",
   "on hold": "On Hold", "hold": "On Hold", "พัก": "On Hold", "ระงับ": "On Hold",
 };
 
