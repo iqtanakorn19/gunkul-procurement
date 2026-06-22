@@ -27,7 +27,9 @@ import {
   IconChevronUp,
   IconChevronDown,
   IconSelector,
+  IconChartBar,
 } from "@tabler/icons-react";
+import TrackingOverview from "./TrackingOverview";
 
 /* ============================================================
    Unified PR/PA/PO tracking schema — union of every column found
@@ -49,7 +51,7 @@ export const STATUS_OPTIONS = [
 ] as const;
 type Status = (typeof STATUS_OPTIONS)[number];
 
-const STATUS_COLOR: Record<string, { bg: string; fg: string }> = {
+export const STATUS_COLOR: Record<string, { bg: string; fg: string }> = {
   Draft: { bg: "var(--surface-2)", fg: "var(--text-muted)" },
   "Pending PA Approval": { bg: "color-mix(in srgb, var(--warning) 16%, transparent)", fg: "var(--warning)" },
   "Pending PO Approval": { bg: "color-mix(in srgb, var(--warning) 16%, transparent)", fg: "var(--warning)" },
@@ -71,7 +73,7 @@ const STATUS_ALIASES: Record<string, Status> = {
   "on hold": "On Hold", "hold": "On Hold", "พัก": "On Hold", "ระงับ": "On Hold",
 };
 
-function normalizeStatus(raw: string | undefined): string | undefined {
+export function normalizeStatus(raw: string | undefined): string | undefined {
   if (!raw) return raw;
   const trimmed = raw.trim();
   return STATUS_ALIASES[trimmed.toLowerCase()] ?? trimmed;
@@ -109,7 +111,7 @@ export interface TrackingRow {
   remark?: string;
 }
 
-interface Tab {
+export interface Tab {
   id: string;
   name: string;
   order: number;
@@ -165,7 +167,7 @@ const uid = () =>
 /* ============================================================
    Money / vat helpers — qty, unitPrice, discount drive the rest
    ============================================================ */
-function computeMoney(row: TrackingRow) {
+export function computeMoney(row: TrackingRow) {
   const qty = row.qty ?? 0;
   const unitPrice = row.unitPrice ?? 0;
   const discount = row.discount ?? 0;
@@ -174,7 +176,7 @@ function computeMoney(row: TrackingRow) {
   const total = subtotal + vat;
   return { subtotal, vat, total };
 }
-function baht(n: number) {
+export function baht(n: number) {
   return (n || 0).toLocaleString("th-TH", { maximumFractionDigits: 2 });
 }
 
@@ -376,6 +378,7 @@ export default function TrackingPage() {
   const [renamingTab, setRenamingTab] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("no");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [view, setView] = useState<"data" | "overview">("data");
 
   const toggleSort = (key: SortKey) => {
     if (key === sortKey) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
@@ -555,8 +558,24 @@ export default function TrackingPage() {
 
       {/* Tabs bar */}
       <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)", flexWrap: "wrap", borderBottom: "1px solid var(--border)", marginBottom: "var(--sp-4)", paddingBottom: "var(--sp-2)" }}>
+        <button
+          type="button"
+          onClick={() => setView("overview")}
+          style={{
+            display: "flex", alignItems: "center", gap: 6,
+            background: view === "overview" ? "var(--accent-bg)" : "transparent",
+            border: `1px solid ${view === "overview" ? "var(--accent)" : "var(--border)"}`,
+            borderRadius: "var(--radius-full)", padding: "5px 12px",
+            cursor: "pointer", fontSize: "var(--fs-sm)",
+            color: view === "overview" ? "var(--text-strong)" : "var(--text-muted)",
+            fontWeight: view === "overview" ? 700 : 500,
+          }}
+        >
+          <IconChartBar size={14} stroke={2} /> Overview
+        </button>
+        <div style={{ width: 1, alignSelf: "stretch", background: "var(--border)" }} />
         {tabs.map((tab) => {
-          const active = tab.id === activeTab;
+          const active = view === "data" && tab.id === activeTab;
           return (
             <div
               key={tab.id}
@@ -569,7 +588,7 @@ export default function TrackingPage() {
                 color: active ? "var(--text-strong)" : "var(--text-muted)",
                 fontWeight: active ? 700 : 500,
               }}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => { setActiveTab(tab.id); setView("data"); }}
             >
               {renamingTab === tab.id ? (
                 <input
@@ -599,7 +618,13 @@ export default function TrackingPage() {
         </button>
       </div>
 
-      {!activeTab ? (
+      {view === "overview" ? (
+        tabs.length === 0 ? (
+          <div style={{ color: "var(--text-muted)", fontSize: "var(--fs-sm)" }}>ยังไม่มีแท็ป — กด "เพิ่มแท็ป" เพื่อเริ่มต้น</div>
+        ) : (
+          <TrackingOverview tabs={tabs} />
+        )
+      ) : !activeTab ? (
         <div style={{ color: "var(--text-muted)", fontSize: "var(--fs-sm)" }}>ยังไม่มีแท็ป — กด "เพิ่มแท็ป" เพื่อเริ่มต้น</div>
       ) : (
         <>
