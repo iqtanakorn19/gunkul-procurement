@@ -829,6 +829,7 @@ function collectPeople(node: OrgNode, acc: { person: Person; title: string }[]) 
 
 export default function OrgChartPage() {
   const [root, setRoot] = useState<OrgNode | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [query, setQuery] = useState("");
   const canvasRef = useRef<PanZoomCanvasHandle>(null);
@@ -837,17 +838,24 @@ export default function OrgChartPage() {
 
   // Live-synced from Firestore so every device sees the same chart.
   useEffect(() => {
-    const unsub = onSnapshot(ORG_CHART_DOC, (snap) => {
-      if (snap.exists()) {
-        skipNextSave.current = true;
-        setRoot(snap.data().tree as OrgNode);
-      } else {
-        const initial = defaultOrgChart();
-        setDoc(ORG_CHART_DOC, { tree: initial });
-        skipNextSave.current = true;
-        setRoot(initial);
+    const unsub = onSnapshot(
+      ORG_CHART_DOC,
+      (snap) => {
+        setLoadError(null);
+        if (snap.exists()) {
+          skipNextSave.current = true;
+          setRoot(snap.data().tree as OrgNode);
+        } else {
+          const initial = defaultOrgChart();
+          setDoc(ORG_CHART_DOC, { tree: initial });
+          skipNextSave.current = true;
+          setRoot(initial);
+        }
+      },
+      (err) => {
+        setLoadError(err.message);
       }
-    });
+    );
     return unsub;
   }, []);
 
@@ -899,6 +907,27 @@ export default function OrgChartPage() {
     const el = personRefs.current.get(personId);
     if (el) canvasRef.current?.focusOn(el);
   };
+
+  if (loadError) {
+    return (
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "var(--sp-7) var(--sp-5)" }}>
+        <div
+          style={{
+            color: "var(--danger)",
+            background: "color-mix(in srgb, var(--danger) 10%, transparent)",
+            border: "1px solid color-mix(in srgb, var(--danger) 30%, transparent)",
+            borderRadius: "var(--radius)",
+            padding: "var(--sp-4)",
+            fontSize: "var(--fs-sm)",
+          }}
+        >
+          โหลดผังองค์กรไม่สำเร็จ: {loadError}
+          <br />
+          (ส่วนใหญ่เกิดจาก Firestore security rules ยังไม่อนุญาตให้อ่าน/เขียน collection "orgChart" — ต้องไปเพิ่ม rule ใน Firebase Console)
+        </div>
+      </div>
+    );
+  }
 
   if (!root) {
     return (
