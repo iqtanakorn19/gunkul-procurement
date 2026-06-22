@@ -24,6 +24,9 @@ import {
   IconFlagFilled,
   IconSearch,
   IconClipboardList,
+  IconChevronUp,
+  IconChevronDown,
+  IconSelector,
 } from "@tabler/icons-react";
 
 /* ============================================================
@@ -156,6 +159,36 @@ function computeMoney(row: TrackingRow) {
 function baht(n: number) {
   return (n || 0).toLocaleString("th-TH", { maximumFractionDigits: 2 });
 }
+
+type SortKey = keyof TrackingRow | "subtotal" | "vat" | "total";
+
+function sortValue(row: TrackingRow, key: SortKey): string | number {
+  if (key === "subtotal" || key === "vat" || key === "total") return computeMoney(row)[key];
+  const v = row[key];
+  if (typeof v === "number") return v;
+  if (typeof v === "string") return v.toLowerCase();
+  return "";
+}
+
+const COLUMNS: { label: string; key?: SortKey }[] = [
+  { label: "" },
+  { label: "No.", key: "no" },
+  { label: "PR No.", key: "prNo" },
+  { label: "Date PR", key: "prDate" },
+  { label: "PA No.", key: "paNo" },
+  { label: "PO No.", key: "poNo" },
+  { label: "Project", key: "project" },
+  { label: "Description", key: "description" },
+  { label: "Vendor", key: "vendor" },
+  { label: "Qty", key: "qty" },
+  { label: "ก่อน VAT", key: "subtotal" },
+  { label: "VAT 7%", key: "vat" },
+  { label: "สุทธิ", key: "total" },
+  { label: "Status", key: "status" },
+  { label: "ทำรับ", key: "deliveredDate" },
+  { label: "Remark", key: "remark" },
+  { label: "" },
+];
 
 /* ============================================================
    Row edit modal
@@ -322,6 +355,13 @@ export default function TrackingPage() {
   const [statusFilter, setStatusFilter] = useState("");
   const [urgentOnly, setUrgentOnly] = useState(false);
   const [renamingTab, setRenamingTab] = useState<string | null>(null);
+  const [sortKey, setSortKey] = useState<SortKey>("no");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+
+  const toggleSort = (key: SortKey) => {
+    if (key === sortKey) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else { setSortKey(key); setSortDir("desc"); }
+  };
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -431,14 +471,22 @@ export default function TrackingPage() {
 
   const filteredRows = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return rows.filter((r) => {
+    const filtered = rows.filter((r) => {
       if (statusFilter && r.status !== statusFilter) return false;
       if (urgentOnly && !r.urgent) return false;
       if (!q) return true;
       return [r.prNo, r.paNo, r.poNo, r.project, r.description, r.vendor, r.remark]
         .some((v) => v?.toLowerCase().includes(q));
     });
-  }, [rows, search, statusFilter, urgentOnly]);
+    const dir = sortDir === "asc" ? 1 : -1;
+    return [...filtered].sort((a, b) => {
+      const va = sortValue(a, sortKey);
+      const vb = sortValue(b, sortKey);
+      if (va < vb) return -1 * dir;
+      if (va > vb) return 1 * dir;
+      return 0;
+    });
+  }, [rows, search, statusFilter, urgentOnly, sortKey, sortDir]);
 
   if (loadError) {
     return (
@@ -551,9 +599,32 @@ export default function TrackingPage() {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--fs-xs)", whiteSpace: "nowrap" }}>
               <thead>
                 <tr style={{ background: "var(--bg-elevated)", textAlign: "left", color: "var(--text-muted)" }}>
-                  {["", "No.", "PR No.", "Date PR", "PA No.", "PO No.", "Project", "Description", "Vendor", "Qty", "ก่อน VAT", "VAT 7%", "สุทธิ", "Status", "ทำรับ", "Remark", ""].map((h) => (
-                    <th key={h} style={{ position: "sticky", top: 0, zIndex: 1, padding: "10px 12px", borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)" }}>{h}</th>
-                  ))}
+                  {COLUMNS.map(({ label, key }, i) => {
+                    const active = key && key === sortKey;
+                    return (
+                      <th
+                        key={label || i}
+                        onClick={key ? () => toggleSort(key) : undefined}
+                        style={{
+                          position: "sticky", top: 0, zIndex: 1, padding: "10px 12px",
+                          borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)",
+                          cursor: key ? "pointer" : "default", userSelect: "none",
+                          color: active ? "var(--text-strong)" : "var(--text-muted)",
+                        }}
+                      >
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+                          {label}
+                          {key && (
+                            active ? (
+                              sortDir === "asc" ? <IconChevronUp size={12} stroke={2} /> : <IconChevronDown size={12} stroke={2} />
+                            ) : (
+                              <IconSelector size={12} stroke={1.75} style={{ color: "var(--text-faint)" }} />
+                            )
+                          )}
+                        </span>
+                      </th>
+                    );
+                  })}
                 </tr>
               </thead>
               <tbody>
