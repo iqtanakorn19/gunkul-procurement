@@ -547,12 +547,12 @@ export default function TrackingPage() {
           </div>
 
           {/* Table */}
-          <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)" }}>
+          <div style={{ overflow: "auto", maxHeight: "min(70vh, 760px)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--fs-xs)", whiteSpace: "nowrap" }}>
               <thead>
                 <tr style={{ background: "var(--bg-elevated)", textAlign: "left", color: "var(--text-muted)" }}>
                   {["", "No.", "PR No.", "Date PR", "PA No.", "PO No.", "Project", "Description", "Vendor", "Qty", "ก่อน VAT", "VAT 7%", "สุทธิ", "Status", "ทำรับ", "Remark", ""].map((h) => (
-                    <th key={h} style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)" }}>{h}</th>
+                    <th key={h} style={{ position: "sticky", top: 0, zIndex: 1, padding: "10px 12px", borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)" }}>{h}</th>
                   ))}
                 </tr>
               </thead>
