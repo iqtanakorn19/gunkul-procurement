@@ -6,6 +6,7 @@ import {
   IconChecklist,
   IconTimeline,
   IconBuildingWarehouse,
+  IconClipboardList,
   IconBook2,
   IconSitemap,
   IconChevronLeft,
@@ -19,6 +20,7 @@ export type Page =
   | "update"
   | "tasks"
   | "vendor"
+  | "tracking"
   | "team"
   | "knowledge";
 
@@ -28,6 +30,7 @@ const NAV_ITEMS: { page: Page; label: string; icon: typeof IconHome2 }[] = [
   { page: "tasks", label: "Task List", icon: IconChecklist },
   { page: "update", label: "Update", icon: IconTimeline },
   { page: "vendor", label: "Vendor Directory", icon: IconBuildingWarehouse },
+  { page: "tracking", label: "PR/PO Tracking", icon: IconClipboardList },
   { page: "knowledge", label: "Knowledge Base", icon: IconBook2 },
   { page: "team", label: "Organization Chart", icon: IconSitemap },
 ];

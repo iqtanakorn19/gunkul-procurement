@@ -1,4 +1,5 @@
 import VendorPage from "./VendorPage";
+import TrackingPage from "./TrackingPage";
 import { useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import type { User } from "firebase/auth";
@@ -48,6 +49,7 @@ export default function App() {
         {currentPage === "update" && <UpdatePage />}
         {currentPage === "tasks" && <TaskPage />}
         {currentPage === "vendor" && <VendorPage />}
+        {currentPage === "tracking" && <TrackingPage />}
         {currentPage === "team" && <OrgChartPage />}
         {currentPage === "knowledge" && <KnowledgePage />}
       </main>
