@@ -59,6 +59,24 @@ const STATUS_COLOR: Record<string, { bg: string; fg: string }> = {
   "On Hold": { bg: "color-mix(in srgb, var(--accent) 16%, transparent)", fg: "var(--accent)" },
 };
 
+/* Legacy/Thai status text -> canonical STATUS_OPTIONS value, so old imported
+   data (e.g. "รออนุมัติ PA", "OK") reads and filters the same as new rows. */
+const STATUS_ALIASES: Record<string, Status> = {
+  "draft": "Draft", "ร่าง": "Draft",
+  "รออนุมัติ pa": "Pending PA Approval", "pending pa approval": "Pending PA Approval", "pending pa": "Pending PA Approval",
+  "รออนุมัติ po": "Pending PO Approval", "pending po approval": "Pending PO Approval", "pending po": "Pending PO Approval",
+  "in progress": "In Progress", "กำลังดำเนินการ": "In Progress", "ดำเนินการ": "In Progress",
+  "ok": "Completed", "completed": "Completed", "done": "Completed", "เสร็จ": "Completed", "เสร็จแล้ว": "Completed", "เรียบร้อย": "Completed",
+  "cancelled": "Cancelled", "canceled": "Cancelled", "ยกเลิก": "Cancelled",
+  "on hold": "On Hold", "hold": "On Hold", "พัก": "On Hold", "ระงับ": "On Hold",
+};
+
+function normalizeStatus(raw: string | undefined): string | undefined {
+  if (!raw) return raw;
+  const trimmed = raw.trim();
+  return STATUS_ALIASES[trimmed.toLowerCase()] ?? trimmed;
+}
+
 export interface TrackingRow {
   id: string;
   no?: number;
@@ -173,6 +191,7 @@ function sortValue(row: TrackingRow, key: SortKey): string | number {
 const COLUMNS: { label: string; key?: SortKey }[] = [
   { label: "" },
   { label: "No.", key: "no" },
+  { label: "Company", key: "company" },
   { label: "PR No.", key: "prNo" },
   { label: "Date PR", key: "prDate" },
   { label: "PA No.", key: "paNo" },
@@ -384,7 +403,10 @@ export default function TrackingPage() {
     const q = query(collection(db, "trackingTabs", activeTab, "rows"), orderBy("no"));
     const unsub = onSnapshot(
       q,
-      (snap) => setRows(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<TrackingRow, "id">) }))),
+      (snap) => setRows(snap.docs.map((d) => {
+        const data = d.data() as Omit<TrackingRow, "id">;
+        return { id: d.id, ...data, status: normalizeStatus(data.status) };
+      })),
       (err) => setLoadError(err.message)
     );
     return unsub;
@@ -447,6 +469,7 @@ export default function TrackingPage() {
         if (!key || value === undefined || value === "" || value === "-") continue;
         if (key.toLowerCase().includes("date")) out[key] = excelDateToISO(value);
         else if (["qty", "unitPrice", "discount", "budget", "saveCost", "no"].includes(key)) out[key] = typeof value === "number" ? value : Number(value) || undefined;
+        else if (key === "status") out[key] = normalizeStatus(String(value));
         else out[key] = String(value).trim();
       }
       if (out.no === undefined) out.no = (rows.length || 0) + i + 1;
@@ -467,6 +490,24 @@ export default function TrackingPage() {
       await batch.commit();
     }
     alert(`นำเข้าสำเร็จ ${imported.length} แถว`);
+  };
+
+  const exportToExcel = () => {
+    if (!activeTab) return;
+    const tabName = tabs.find((t) => t.id === activeTab)?.name ?? "tracking";
+    const data = filteredRows.map((r) => {
+      const { subtotal, vat, total } = computeMoney(r);
+      const out: Record<string, unknown> = {};
+      for (const { label, key } of COLUMNS) {
+        if (!key || !label) continue;
+        out[label] = key === "subtotal" ? subtotal : key === "vat" ? vat : key === "total" ? total : r[key];
+      }
+      return out;
+    });
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wbOut = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wbOut, ws, tabName.slice(0, 31));
+    XLSX.writeFile(wbOut, `${tabName}-tracking.xlsx`);
   };
 
   const filteredRows = useMemo(() => {
@@ -586,6 +627,9 @@ export default function TrackingPage() {
             <button type="button" onClick={() => fileInputRef.current?.click()} style={{ ...secondaryBtnStyle, display: "inline-flex", alignItems: "center", gap: 6 }}>
               <IconFileSpreadsheet size={15} stroke={1.75} /> นำเข้าจาก Excel
             </button>
+            <button type="button" onClick={exportToExcel} style={{ ...secondaryBtnStyle, display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <IconFileSpreadsheet size={15} stroke={1.75} /> Export Excel
+            </button>
             <button type="button" onClick={() => setEditingRow("new")} style={{ ...primaryBtnStyle, display: "inline-flex", alignItems: "center", gap: 6 }}>
               <IconPlus size={15} stroke={2} /> เพิ่มแถว
             </button>
@@ -642,6 +686,7 @@ export default function TrackingPage() {
                         {r.urgent ? <IconFlagFilled size={14} stroke={1.75} style={{ color: "var(--danger)" }} /> : <IconFlag size={14} stroke={1.75} style={{ color: "var(--text-faint)" }} />}
                       </td>
                       <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.no}</td>
+                      <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.company}</td>
                       <td style={{ padding: "8px 12px", fontWeight: 600, color: "var(--text-strong)" }}>{r.prNo}</td>
                       <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.prDate}</td>
                       <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.paNo}</td>
@@ -677,7 +722,7 @@ export default function TrackingPage() {
                 })}
                 {filteredRows.length === 0 && (
                   <tr>
-                    <td colSpan={17} style={{ padding: "var(--sp-5)", textAlign: "center", color: "var(--text-faint)" }}>
+                    <td colSpan={COLUMNS.length} style={{ padding: "var(--sp-5)", textAlign: "center", color: "var(--text-faint)" }}>
                       ไม่มีข้อมูล — กด "เพิ่มแถว" หรือ "นำเข้าจาก Excel"
                     </td>
                   </tr>
