@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
+import { db } from "./firebase";
 import {
   IconPlus,
   IconX,
@@ -8,14 +10,17 @@ import {
   IconUserExclamation,
   IconPencil,
   IconDeviceFloppy,
-  IconRotateClockwise2,
+  IconZoomIn,
+  IconZoomOut,
+  IconFocus2,
+  IconSearch,
 } from "@tabler/icons-react";
 import "./styles/orgchart.css";
 
 /* ============================================================
-   Data model — fully editable, persisted to localStorage so
-   changes (names, roles, headcount, vacancies, new boxes) stick
-   between visits. No backend yet, so this is the source of truth.
+   Data model — fully editable, persisted to Firestore so every
+   device that opens this page sees the same chart, and changes
+   (names, roles, headcount, vacancies, new boxes) sync live.
    ============================================================ */
 
 interface Person {
@@ -34,7 +39,7 @@ interface OrgNode {
   children: OrgNode[];
 }
 
-const STORAGE_KEY = "gunkul-orgchart-v1";
+const ORG_CHART_DOC = doc(db, "orgChart", "main");
 
 const uid = () =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -67,7 +72,7 @@ function defaultOrgChart(): OrgNode {
             id: uid(),
             title: "Purchasing Manager",
             scope: "Utility",
-            people: [person("Cherry", false, ["Utility"])],
+            people: [person("P'Cherry", false, ["Utility"])],
             children: [
               {
                 id: uid(),
@@ -79,18 +84,18 @@ function defaultOrgChart(): OrgNode {
                     id: uid(),
                     title: "Purchasing Engineer",
                     people: [
-                      person("Jame", false, ["Farm"]),
-                      person("Ploy", false, ["Farm"]),
-                      person("Mos", false, ["Farm"]),
-                      person("Nook", false, ["Farm"]),
-                      person("Benz", false, ["Wind", "Transformer", "COP"]),
+                      person("P'Jame", false, ["Farm"]),
+                      person("P'Ploy", false, ["Farm"]),
+                      person("P'Mos", false, ["Farm"]),
+                      person("P'Nook", false, ["Farm"]),
+                      person("P'Benz", false, ["Wind", "Transformer", "COP"]),
                     ],
                     children: [],
                   },
                   {
                     id: uid(),
                     title: "Purchasing Officer",
-                    people: [person("Is", false, ["O&M", "IT"])],
+                    people: [person("P'Is", false, ["O&M", "IT"])],
                     children: [],
                   },
                 ],
@@ -101,27 +106,27 @@ function defaultOrgChart(): OrgNode {
             id: uid(),
             title: "Purchasing Manager",
             scope: "Residential, C&I",
-            people: [person("Ruk", false, ["Residential", "C&I (Commercial and Industrial)"])],
+            people: [person("P'Ruk", false, ["Residential", "C&I (Commercial and Industrial)"])],
             children: [
               {
                 id: uid(),
                 title: "Imp & Exp Supervisor",
                 scope: "Imp & Exp, Shipping, GA, IT, Hemp",
-                people: [person("Nok", false, ["Oversea"])],
+                people: [person("P'Nok", false, ["Oversea"])],
                 children: [
                   {
                     id: uid(),
                     title: "Purchasing Officer",
                     scope: "Oversea",
-                    people: [person("Gam", false, ["Inverter", "PV Module", "General Affair"])],
+                    people: [person("P'Gam", false, ["Inverter", "PV Module", "General Affair"])],
                     children: [],
                   },
                   {
                     id: uid(),
                     title: "Shipping Officer",
                     people: [
-                      person("Keng", false, ["Custom Broker", "เคลียร์ตู้ ท่าเรือ สนามบิน"]),
-                      person("Nui", false, ["Custom Broker", "เคลียร์ตู้ ท่าเรือ สนามบิน"]),
+                      person("P'Keng", false, ["Custom Broker", "เคลียร์ตู้ ท่าเรือ สนามบิน"]),
+                      person("P'Nui", false, ["Custom Broker", "เคลียร์ตู้ ท่าเรือ สนามบิน"]),
                     ],
                     children: [],
                   },
@@ -138,13 +143,13 @@ function defaultOrgChart(): OrgNode {
                 id: uid(),
                 title: "Purchasing Supervisor",
                 scope: "Residential, C&I, Solar Rooftop, GDFF, FNC",
-                people: [person("Arm", false, ["Inverter & Optimizer"])],
+                people: [person("P'Arm", false, ["Inverter & Optimizer"])],
                 children: [
                   {
                     id: uid(),
                     title: "Purchasing Engineer",
                     people: [
-                      person("White", false, [
+                      person("P'White", false, [
                         "DC Cable",
                         "Mounting (Roof, Float, Farm)",
                         "Floater & Pile",
@@ -155,7 +160,7 @@ function defaultOrgChart(): OrgNode {
                         "CT & VT",
                         "Protection Relay",
                       ]),
-                      person("Kae", false, [
+                      person("P'Kae", false, [
                         "ACP & RTU",
                         "RMU, Switch Gear",
                         "AC Cable",
@@ -180,15 +185,6 @@ function defaultOrgChart(): OrgNode {
   };
 }
 
-function loadOrgChart(): OrgNode {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw) as OrgNode;
-  } catch {
-    /* fall through to default */
-  }
-  return defaultOrgChart();
-}
 
 /* ============================================================
    Immutable tree helpers
@@ -390,12 +386,16 @@ function NodeCard({
   onUpdate,
   onRemove,
   onAddChild,
+  registerPersonRef,
+  highlightIds,
 }: {
   node: OrgNode;
   isRoot: boolean;
   onUpdate: (fn: (n: OrgNode) => OrgNode) => void;
   onRemove: () => void;
   onAddChild: () => void;
+  registerPersonRef?: (id: string, el: HTMLDivElement | null) => void;
+  highlightIds?: Set<string>;
 }) {
   const filled = node.people.filter((p) => !p.vacant);
   const vacancies = node.people.filter((p) => p.vacant);
@@ -471,8 +471,14 @@ function NodeCard({
       {/* people chips */}
       {node.people.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-2)", marginTop: "var(--sp-3)" }}>
-          {filled.map((p) => (
-            <div key={p.id} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          {filled.map((p) => {
+            const isHighlighted = highlightIds?.has(p.id) ?? false;
+            return (
+            <div
+              key={p.id}
+              ref={(el) => registerPersonRef?.(p.id, el)}
+              style={{ display: "flex", flexDirection: "column", gap: 4 }}
+            >
               <span
                 style={{
                   display: "flex",
@@ -481,6 +487,7 @@ function NodeCard({
                   background: "var(--primary)",
                   borderRadius: "var(--radius)",
                   padding: "5px 8px 5px 6px",
+                  boxShadow: isHighlighted ? "0 0 0 3px var(--accent)" : undefined,
                 }}
               >
                 <span
@@ -498,7 +505,7 @@ function NodeCard({
                     fontWeight: 800,
                   }}
                 >
-                  {(p.name.trim()[0] ?? "?").toUpperCase()}
+                  {(p.name.trim().replace(/^P['’]/i, "")[0] ?? p.name.trim()[0] ?? "?").toUpperCase()}
                 </span>
                 <EditableText
                   value={p.name}
@@ -518,7 +525,8 @@ function NodeCard({
                 onChange={(m) => updatePerson(p.id, (pp) => ({ ...pp, material: m }))}
               />
             </div>
-          ))}
+            );
+          })}
           {vacancies.map((p) => (
             <span
               key={p.id}
@@ -593,11 +601,15 @@ function Branch({
   isRoot,
   onUpdate,
   onRemoveChild,
+  registerPersonRef,
+  highlightIds,
 }: {
   node: OrgNode;
   isRoot: boolean;
   onUpdate: (id: string, fn: (n: OrgNode) => OrgNode) => void;
   onRemoveChild: (id: string) => void;
+  registerPersonRef?: (id: string, el: HTMLDivElement | null) => void;
+  highlightIds?: Set<string>;
 }) {
   return (
     <li>
@@ -615,6 +627,8 @@ function Branch({
             ],
           }))
         }
+        registerPersonRef={registerPersonRef}
+        highlightIds={highlightIds}
       />
       {node.children.length > 0 && (
         <ul>
@@ -625,6 +639,8 @@ function Branch({
               isRoot={false}
               onUpdate={onUpdate}
               onRemoveChild={onRemoveChild}
+              registerPersonRef={registerPersonRef}
+              highlightIds={highlightIds}
             />
           ))}
         </ul>
@@ -634,28 +650,292 @@ function Branch({
 }
 
 /* ============================================================
-   Page
+   Pan & zoom viewport — click-drag to pan, scroll wheel to zoom,
+   so the chart no longer relies on the page scrollbar to navigate.
    ============================================================ */
 
-export default function OrgChartPage() {
-  const [root, setRoot] = useState<OrgNode>(loadOrgChart);
-  const [savedAt, setSavedAt] = useState<number | null>(null);
+const ZOOM_MIN = 0.35;
+const ZOOM_MAX = 1.6;
+const ZOOM_STEP = 0.1;
+
+export interface PanZoomCanvasHandle {
+  focusOn: (el: HTMLElement) => void;
+}
+
+const PanZoomCanvas = forwardRef<PanZoomCanvasHandle, { children: React.ReactNode }>(
+  function PanZoomCanvas({ children }, ref) {
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragState = useRef<{ startX: number; startY: number; panX: number; panY: number } | null>(null);
+  const moved = useRef(false);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(root));
-    setSavedAt(Date.now());
+    const el = viewportRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const dz = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP;
+      setZoom((z) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(z + dz).toFixed(2))));
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
+  useEffect(() => {
+    if (!isDragging) return;
+    const onMove = (e: MouseEvent) => {
+      const drag = dragState.current;
+      if (!drag) return;
+      const dx = e.clientX - drag.startX;
+      const dy = e.clientY - drag.startY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved.current = true;
+      setPan({ x: drag.panX + dx, y: drag.panY + dy });
+    };
+    const onUp = () => {
+      if (moved.current) {
+        const suppressClick = (e: MouseEvent) => {
+          e.stopPropagation();
+          e.preventDefault();
+        };
+        document.addEventListener("click", suppressClick, { capture: true, once: true });
+      }
+      dragState.current = null;
+      setIsDragging(false);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, [isDragging]);
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("button, input")) return;
+    moved.current = false;
+    dragState.current = { startX: e.clientX, startY: e.clientY, panX: pan.x, panY: pan.y };
+    setIsDragging(true);
+  };
+
+  const zoomBy = (delta: number) =>
+    setZoom((z) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(z + delta).toFixed(2))));
+
+  const resetView = () => {
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+  };
+
+  useImperativeHandle(ref, () => ({
+    focusOn: (el: HTMLElement) => {
+      const viewport = viewportRef.current;
+      if (!viewport) return;
+      const viewportRect = viewport.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      const dx = viewportRect.left + viewportRect.width / 2 - (elRect.left + elRect.width / 2);
+      const dy = viewportRect.top + viewportRect.height / 2 - (elRect.top + elRect.height / 2);
+      setPan((p) => ({ x: p.x + dx, y: p.y + dy }));
+    },
+  }));
+
+  return (
+    <div
+      ref={viewportRef}
+      onMouseDown={onMouseDown}
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        border: "1px solid var(--border)",
+        borderRadius: "var(--radius-lg)",
+        background: "var(--bg-elevated)",
+        height: "min(70vh, 760px)",
+        minHeight: 420,
+        cursor: isDragging ? "grabbing" : "grab",
+        userSelect: isDragging ? "none" : undefined,
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: "50%",
+          transform: `translate(-50%, 0) translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          transformOrigin: "top center",
+          padding: "var(--sp-6)",
+          transition: isDragging ? "none" : "transform 0.05s linear",
+        }}
+      >
+        {children}
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: "var(--sp-3)",
+          right: "var(--sp-3)",
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+          background: "var(--surface)",
+          border: "1px solid var(--border-strong)",
+          borderRadius: "var(--radius-full)",
+          padding: 4,
+          boxShadow: "var(--shadow-sm)",
+        }}
+      >
+        <button type="button" onClick={() => zoomBy(-ZOOM_STEP)} title="ซูมออก" style={zoomBtnStyle}>
+          <IconZoomOut size={16} stroke={1.75} />
+        </button>
+        <span style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)", minWidth: 38, textAlign: "center" }}>
+          {Math.round(zoom * 100)}%
+        </span>
+        <button type="button" onClick={() => zoomBy(ZOOM_STEP)} title="ซูมเข้า" style={zoomBtnStyle}>
+          <IconZoomIn size={16} stroke={1.75} />
+        </button>
+        <button type="button" onClick={resetView} title="รีเซ็ตมุมมอง" style={zoomBtnStyle}>
+          <IconFocus2 size={16} stroke={1.75} />
+        </button>
+      </div>
+    </div>
+  );
+  }
+);
+
+const zoomBtnStyle: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: 28,
+  height: 28,
+  border: "none",
+  background: "transparent",
+  color: "var(--text-muted)",
+  borderRadius: "var(--radius-full)",
+  cursor: "pointer",
+};
+
+interface SearchHit {
+  personId: string;
+  name: string;
+  title: string;
+  matchedMaterial?: string;
+}
+
+function collectPeople(node: OrgNode, acc: { person: Person; title: string }[]) {
+  for (const p of node.people) if (!p.vacant) acc.push({ person: p, title: node.title });
+  for (const c of node.children) collectPeople(c, acc);
+}
+
+export default function OrgChartPage() {
+  const [root, setRoot] = useState<OrgNode | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [savedAt, setSavedAt] = useState<number | null>(null);
+  const [query, setQuery] = useState("");
+  const canvasRef = useRef<PanZoomCanvasHandle>(null);
+  const personRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const skipNextSave = useRef(false);
+
+  // Live-synced from Firestore so every device sees the same chart.
+  useEffect(() => {
+    const unsub = onSnapshot(
+      ORG_CHART_DOC,
+      (snap) => {
+        setLoadError(null);
+        if (snap.exists()) {
+          skipNextSave.current = true;
+          setRoot(snap.data().tree as OrgNode);
+        } else {
+          const initial = defaultOrgChart();
+          setDoc(ORG_CHART_DOC, { tree: initial });
+          skipNextSave.current = true;
+          setRoot(initial);
+        }
+      },
+      (err) => {
+        setLoadError(err.message);
+      }
+    );
+    return unsub;
+  }, []);
+
+  useEffect(() => {
+    if (root === null) return;
+    if (skipNextSave.current) {
+      skipNextSave.current = false;
+      setSavedAt(Date.now());
+      return;
+    }
+    const t = setTimeout(() => {
+      setDoc(ORG_CHART_DOC, { tree: root }).then(() => setSavedAt(Date.now()));
+    }, 400);
+    return () => clearTimeout(t);
   }, [root]);
 
   const updateById = (id: string, fn: (n: OrgNode) => OrgNode) =>
-    setRoot((r) => mapNode(r, id, fn));
+    setRoot((r) => (r ? mapNode(r, id, fn) : r));
 
-  const removeById = (id: string) => setRoot((r) => removeNode(r, id));
+  const removeById = (id: string) => setRoot((r) => (r ? removeNode(r, id) : r));
 
-  const reset = () => {
-    if (window.confirm("รีเซ็ตผังองค์กรกลับเป็นค่าเริ่มต้น? การแก้ไขทั้งหมดจะหายไป")) {
-      setRoot(defaultOrgChart());
-    }
+  const registerPersonRef = (id: string, el: HTMLDivElement | null) => {
+    if (el) personRefs.current.set(id, el);
+    else personRefs.current.delete(id);
   };
+
+  const hits: SearchHit[] = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q || !root) return [];
+    const all: { person: Person; title: string }[] = [];
+    collectPeople(root, all);
+    const results: SearchHit[] = [];
+    for (const { person, title } of all) {
+      if (person.name.toLowerCase().includes(q)) {
+        results.push({ personId: person.id, name: person.name, title });
+        continue;
+      }
+      const matchedMaterial = person.material?.find((m) => m.toLowerCase().includes(q));
+      if (matchedMaterial) {
+        results.push({ personId: person.id, name: person.name, title, matchedMaterial });
+      }
+    }
+    return results;
+  }, [query, root]);
+
+  const highlightIds = useMemo(() => new Set(hits.map((h) => h.personId)), [hits]);
+
+  const goToHit = (personId: string) => {
+    const el = personRefs.current.get(personId);
+    if (el) canvasRef.current?.focusOn(el);
+  };
+
+  if (loadError) {
+    return (
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "var(--sp-7) var(--sp-5)" }}>
+        <div
+          style={{
+            color: "var(--danger)",
+            background: "color-mix(in srgb, var(--danger) 10%, transparent)",
+            border: "1px solid color-mix(in srgb, var(--danger) 30%, transparent)",
+            borderRadius: "var(--radius)",
+            padding: "var(--sp-4)",
+            fontSize: "var(--fs-sm)",
+          }}
+        >
+          โหลดผังองค์กรไม่สำเร็จ: {loadError}
+          <br />
+          (ส่วนใหญ่เกิดจาก Firestore security rules ยังไม่อนุญาตให้อ่าน/เขียน collection "orgChart" — ต้องไปเพิ่ม rule ใน Firebase Console)
+        </div>
+      </div>
+    );
+  }
+
+  if (!root) {
+    return (
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "var(--sp-7) var(--sp-5)", color: "var(--text-muted)" }}>
+        กำลังโหลดผังองค์กร...
+      </div>
+    );
+  }
 
   return (
     <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "var(--sp-7) var(--sp-5)" }}>
@@ -692,31 +972,83 @@ export default function OrgChartPage() {
             เพิ่ม/ลบคนหรือตำแหน่งได้เสมอ รองรับการ scale up หรือรวมสายงานในอนาคต
           </p>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-3)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-3)", position: "relative" }}>
+          <div style={{ position: "relative" }}>
+            <IconSearch
+              size={15}
+              stroke={1.75}
+              style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "var(--text-faint)" }}
+            />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="ค้นหาคน หรืองาน/อุปกรณ์ที่ดูแล เช่น DC Cable"
+              style={{
+                font: "inherit",
+                fontSize: "var(--fs-xs)",
+                color: "var(--text)",
+                background: "var(--surface)",
+                border: "1px solid var(--border-strong)",
+                borderRadius: "var(--radius)",
+                padding: "var(--sp-2) var(--sp-3) var(--sp-2) 32px",
+                width: 240,
+              }}
+            />
+            {query.trim() && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "calc(100% + 4px)",
+                  left: 0,
+                  right: 0,
+                  zIndex: 20,
+                  maxHeight: 260,
+                  overflowY: "auto",
+                  background: "var(--surface)",
+                  border: "1px solid var(--border-strong)",
+                  borderRadius: "var(--radius)",
+                  boxShadow: "var(--shadow)",
+                }}
+              >
+                {hits.length === 0 ? (
+                  <div style={{ padding: "var(--sp-3)", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>
+                    ไม่พบผลลัพธ์
+                  </div>
+                ) : (
+                  hits.map((h) => (
+                    <button
+                      key={h.personId}
+                      type="button"
+                      onClick={() => goToHit(h.personId)}
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        textAlign: "left",
+                        border: "none",
+                        borderBottom: "1px solid var(--border)",
+                        background: "transparent",
+                        cursor: "pointer",
+                        padding: "var(--sp-2) var(--sp-3)",
+                        color: "var(--text)",
+                        fontSize: "var(--fs-xs)",
+                      }}
+                    >
+                      <div style={{ fontWeight: 700 }}>{h.name}</div>
+                      <div style={{ color: "var(--text-muted)" }}>
+                        {h.title}
+                        {h.matchedMaterial ? ` · ${h.matchedMaterial}` : ""}
+                      </div>
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
           {savedAt && (
             <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>
               <IconDeviceFloppy size={14} stroke={1.75} /> บันทึกอัตโนมัติในเบราว์เซอร์นี้
             </span>
           )}
-          <button
-            type="button"
-            onClick={reset}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              border: "1px solid var(--border-strong)",
-              background: "var(--surface)",
-              color: "var(--text)",
-              borderRadius: "var(--radius)",
-              padding: "var(--sp-2) var(--sp-3)",
-              fontSize: "var(--fs-xs)",
-              cursor: "pointer",
-            }}
-          >
-            <IconRotateClockwise2 size={14} stroke={1.75} />
-            รีเซ็ตเป็นค่าเริ่มต้น
-          </button>
         </div>
       </div>
 
@@ -738,11 +1070,18 @@ export default function OrgChartPage() {
         ทุกช่องแก้ไขได้: คลิกชื่อ/ตำแหน่ง, กดปุ่มเล็กบนการ์ดเพื่อเพิ่มคน ตำแหน่งว่าง หรือเพิ่มตำแหน่งการดูแล
       </div>
 
-      <div style={{ overflowX: "auto", paddingBottom: "var(--sp-5)" }}>
+      <PanZoomCanvas ref={canvasRef}>
         <ul className="org-tree">
-          <Branch node={root} isRoot onUpdate={updateById} onRemoveChild={removeById} />
+          <Branch
+            node={root}
+            isRoot
+            onUpdate={updateById}
+            onRemoveChild={removeById}
+            registerPersonRef={registerPersonRef}
+            highlightIds={highlightIds}
+          />
         </ul>
-      </div>
+      </PanZoomCanvas>
     </div>
   );
 }
