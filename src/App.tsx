@@ -63,7 +63,7 @@ export default function App() {
             borderTop: "1px solid var(--border)",
           }}
         >
-          © {new Date().getFullYear()} บริษัท กันกุล เอ็นจิเนียริ่ง จำกัด (มหาชน) สงวนสิทธิ์ทุกประการ
+          © {new Date().getFullYear()} Gunkul Engineering Public Company Limited. All rights reserved.
         </footer>
       </main>
     </div>
