@@ -78,7 +78,6 @@ function defaultOrgChart(): OrgNode {
                   {
                     id: uid(),
                     title: "Purchasing Engineer",
-                    notes: ["รวม 2 ตำแหน่งที่ยังว่าง"],
                     people: [
                       person("Jame", false, ["Farm"]),
                       person("Ploy", false, ["Farm"]),
@@ -91,7 +90,6 @@ function defaultOrgChart(): OrgNode {
                   {
                     id: uid(),
                     title: "Purchasing Officer",
-                    notes: ["แผนเปลี่ยนตำแหน่งเป็น Engineer"],
                     people: [person("Is", false, ["O&M", "IT"])],
                     children: [],
                   },
@@ -109,7 +107,6 @@ function defaultOrgChart(): OrgNode {
                 id: uid(),
                 title: "Imp & Exp Supervisor",
                 scope: "Imp & Exp, Shipping, GA, IT, Hemp",
-                notes: ["เดิมอยู่ภายใต้ Purchasing Manager (Utility) — ย้ายมาอยู่ภายใต้สายนี้แล้ว"],
                 people: [person("Nok", false, ["Oversea"])],
                 children: [
                   {
@@ -146,7 +143,6 @@ function defaultOrgChart(): OrgNode {
                   {
                     id: uid(),
                     title: "Purchasing Engineer",
-                    notes: ["รวม 1 ตำแหน่งที่ยังว่าง", "แผนเปลี่ยนตำแหน่ง Admin เป็น Engineer"],
                     people: [
                       person("White", false, [
                         "DC Cable",
