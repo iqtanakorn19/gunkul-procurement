@@ -510,10 +510,7 @@ export default function TrackingPage() {
         <IconClipboardList size={16} stroke={1.75} />
         PR / PA / PO Tracking
       </div>
-      <h1 style={{ margin: 0, color: "var(--text-strong)" }}>PR/PO Tracking</h1>
-      <p style={{ margin: "var(--sp-2) 0 var(--sp-5)", color: "var(--text-muted)", fontSize: "var(--fs-sm)", maxWidth: "70ch" }}>
-        แท็ปแยกตามผู้ดูแล format กลางเดียวกัน ทุกคนแก้ไขข้อมูลของตัวเองได้ และ supervisor เปิดดูทุกแท็ปเพื่อเช็คงานได้ในที่เดียว
-      </p>
+      <h1 style={{ margin: "0 0 var(--sp-5)", color: "var(--text-strong)" }}>PR/PO Tracking</h1>
 
       {/* Tabs bar */}
       <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)", flexWrap: "wrap", borderBottom: "1px solid var(--border)", marginBottom: "var(--sp-4)", paddingBottom: "var(--sp-2)" }}>
