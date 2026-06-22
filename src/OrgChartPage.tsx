@@ -97,11 +97,19 @@ function defaultOrgChart(): OrgNode {
                   },
                 ],
               },
+            ],
+          },
+          {
+            id: uid(),
+            title: "Purchasing Manager",
+            scope: "Residential, C&I",
+            people: [person("Ruk", false, ["Residential", "C&I (Commercial and Industrial)"])],
+            children: [
               {
                 id: uid(),
                 title: "Imp & Exp Supervisor",
                 scope: "Imp & Exp, Shipping, GA, IT, Hemp",
-                notes: ["ดูแลร่วมกับสาย Purchasing Manager (Residential, C&I)"],
+                notes: ["เดิมอยู่ภายใต้ Purchasing Manager (Utility) — ย้ายมาอยู่ภายใต้สายนี้แล้ว"],
                 people: [person("Nok", false, ["Oversea"])],
                 children: [
                   {
@@ -122,14 +130,6 @@ function defaultOrgChart(): OrgNode {
                   },
                 ],
               },
-            ],
-          },
-          {
-            id: uid(),
-            title: "Purchasing Manager",
-            scope: "Residential, C&I",
-            people: [person("Ruk", false, ["Residential", "C&I (Commercial and Industrial)"])],
-            children: [
               {
                 id: uid(),
                 title: "Purchasing Supervisor",
@@ -565,10 +565,10 @@ function NodeCard({
           <IconUserPlus size={13} stroke={1.75} /> เพิ่มคน
         </button>
         <button type="button" onClick={() => addPerson(true)} style={miniBtnStyle}>
-          <IconUserExclamation size={13} stroke={1.75} /> เพิ่มตำแหน่งว่าง
+          <IconUserExclamation size={13} stroke={1.75} /> ตำแหน่งว่าง
         </button>
         <button type="button" onClick={onAddChild} style={miniBtnStyle}>
-          <IconPlus size={13} stroke={1.75} /> เพิ่มตำแหน่งใต้สังกัด
+          <IconPlus size={13} stroke={1.75} /> เพิ่มตำแหน่งการดูแล
         </button>
       </div>
     </div>
@@ -739,7 +739,7 @@ export default function OrgChartPage() {
         }}
       >
         <IconPencil size={14} stroke={1.75} style={{ flexShrink: 0, color: "var(--info)" }} />
-        ทุกช่องแก้ไขได้: คลิกชื่อ/ตำแหน่ง, กดปุ่มเล็กบนการ์ดเพื่อเพิ่มคน เพิ่มตำแหน่งว่าง หรือเพิ่มตำแหน่งใต้สังกัด
+        ทุกช่องแก้ไขได้: คลิกชื่อ/ตำแหน่ง, กดปุ่มเล็กบนการ์ดเพื่อเพิ่มคน ตำแหน่งว่าง หรือเพิ่มตำแหน่งการดูแล
       </div>
 
       <div style={{ overflowX: "auto", paddingBottom: "var(--sp-5)" }}>
