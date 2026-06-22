@@ -1,4 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
+import { db } from "./firebase";
 import {
   IconPlus,
   IconX,
@@ -16,9 +18,9 @@ import {
 import "./styles/orgchart.css";
 
 /* ============================================================
-   Data model — fully editable, persisted to localStorage so
-   changes (names, roles, headcount, vacancies, new boxes) stick
-   between visits. No backend yet, so this is the source of truth.
+   Data model — fully editable, persisted to Firestore so every
+   device that opens this page sees the same chart, and changes
+   (names, roles, headcount, vacancies, new boxes) sync live.
    ============================================================ */
 
 interface Person {
@@ -37,7 +39,7 @@ interface OrgNode {
   children: OrgNode[];
 }
 
-const STORAGE_KEY = "gunkul-orgchart-v2";
+const ORG_CHART_DOC = doc(db, "orgChart", "main");
 
 const uid = () =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -183,15 +185,6 @@ function defaultOrgChart(): OrgNode {
   };
 }
 
-function loadOrgChart(): OrgNode {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw) as OrgNode;
-  } catch {
-    /* fall through to default */
-  }
-  return defaultOrgChart();
-}
 
 /* ============================================================
    Immutable tree helpers
@@ -835,21 +828,46 @@ function collectPeople(node: OrgNode, acc: { person: Person; title: string }[]) 
 }
 
 export default function OrgChartPage() {
-  const [root, setRoot] = useState<OrgNode>(loadOrgChart);
+  const [root, setRoot] = useState<OrgNode | null>(null);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [query, setQuery] = useState("");
   const canvasRef = useRef<PanZoomCanvasHandle>(null);
   const personRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const skipNextSave = useRef(false);
+
+  // Live-synced from Firestore so every device sees the same chart.
+  useEffect(() => {
+    const unsub = onSnapshot(ORG_CHART_DOC, (snap) => {
+      if (snap.exists()) {
+        skipNextSave.current = true;
+        setRoot(snap.data().tree as OrgNode);
+      } else {
+        const initial = defaultOrgChart();
+        setDoc(ORG_CHART_DOC, { tree: initial });
+        skipNextSave.current = true;
+        setRoot(initial);
+      }
+    });
+    return unsub;
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(root));
-    setSavedAt(Date.now());
+    if (root === null) return;
+    if (skipNextSave.current) {
+      skipNextSave.current = false;
+      setSavedAt(Date.now());
+      return;
+    }
+    const t = setTimeout(() => {
+      setDoc(ORG_CHART_DOC, { tree: root }).then(() => setSavedAt(Date.now()));
+    }, 400);
+    return () => clearTimeout(t);
   }, [root]);
 
   const updateById = (id: string, fn: (n: OrgNode) => OrgNode) =>
-    setRoot((r) => mapNode(r, id, fn));
+    setRoot((r) => (r ? mapNode(r, id, fn) : r));
 
-  const removeById = (id: string) => setRoot((r) => removeNode(r, id));
+  const removeById = (id: string) => setRoot((r) => (r ? removeNode(r, id) : r));
 
   const registerPersonRef = (id: string, el: HTMLDivElement | null) => {
     if (el) personRefs.current.set(id, el);
@@ -858,7 +876,7 @@ export default function OrgChartPage() {
 
   const hits: SearchHit[] = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return [];
+    if (!q || !root) return [];
     const all: { person: Person; title: string }[] = [];
     collectPeople(root, all);
     const results: SearchHit[] = [];
@@ -881,6 +899,14 @@ export default function OrgChartPage() {
     const el = personRefs.current.get(personId);
     if (el) canvasRef.current?.focusOn(el);
   };
+
+  if (!root) {
+    return (
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "var(--sp-7) var(--sp-5)", color: "var(--text-muted)" }}>
+        กำลังโหลดผังองค์กร...
+      </div>
+    );
+  }
 
   return (
     <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "var(--sp-7) var(--sp-5)" }}>
