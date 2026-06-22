@@ -8,7 +8,6 @@ import {
   IconUserExclamation,
   IconPencil,
   IconDeviceFloppy,
-  IconRotateClockwise2,
   IconZoomIn,
   IconZoomOut,
   IconFocus2,
@@ -38,7 +37,7 @@ interface OrgNode {
   children: OrgNode[];
 }
 
-const STORAGE_KEY = "gunkul-orgchart-v1";
+const STORAGE_KEY = "gunkul-orgchart-v2";
 
 const uid = () =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -852,12 +851,6 @@ export default function OrgChartPage() {
 
   const removeById = (id: string) => setRoot((r) => removeNode(r, id));
 
-  const reset = () => {
-    if (window.confirm("รีเซ็ตผังองค์กรกลับเป็นค่าเริ่มต้น? การแก้ไขทั้งหมดจะหายไป")) {
-      setRoot(defaultOrgChart());
-    }
-  };
-
   const registerPersonRef = (id: string, el: HTMLDivElement | null) => {
     if (el) personRefs.current.set(id, el);
     else personRefs.current.delete(id);
@@ -1001,25 +994,6 @@ export default function OrgChartPage() {
               <IconDeviceFloppy size={14} stroke={1.75} /> บันทึกอัตโนมัติในเบราว์เซอร์นี้
             </span>
           )}
-          <button
-            type="button"
-            onClick={reset}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              border: "1px solid var(--border-strong)",
-              background: "var(--surface)",
-              color: "var(--text)",
-              borderRadius: "var(--radius)",
-              padding: "var(--sp-2) var(--sp-3)",
-              fontSize: "var(--fs-xs)",
-              cursor: "pointer",
-            }}
-          >
-            <IconRotateClockwise2 size={14} stroke={1.75} />
-            รีเซ็ตเป็นค่าเริ่มต้น
-          </button>
         </div>
       </div>
 
