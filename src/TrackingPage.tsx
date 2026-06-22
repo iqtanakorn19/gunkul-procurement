@@ -489,15 +489,20 @@ export default function TrackingPage() {
 
     const chunks: (typeof imported)[] = [];
     for (let i = 0; i < imported.length; i += 400) chunks.push(imported.slice(i, i + 400));
-    for (const chunk of chunks) {
-      const batch = writeBatch(db);
-      for (const r of chunk) {
-        const ref = doc(collection(db, "trackingTabs", activeTab, "rows"));
-        batch.set(ref, { ...r, createdAt: serverTimestamp() });
+    try {
+      for (const chunk of chunks) {
+        const batch = writeBatch(db);
+        for (const r of chunk) {
+          const ref = doc(collection(db, "trackingTabs", activeTab, "rows"));
+          batch.set(ref, { ...r, createdAt: serverTimestamp() });
+        }
+        await batch.commit();
       }
-      await batch.commit();
+      alert(`นำเข้าสำเร็จ ${imported.length} แถว`);
+    } catch (err) {
+      console.error("Import failed:", err);
+      alert(`นำเข้าไม่สำเร็จ: ${err instanceof Error ? err.message : String(err)}`);
     }
-    alert(`นำเข้าสำเร็จ ${imported.length} แถว`);
   };
 
   const exportToExcel = () => {
