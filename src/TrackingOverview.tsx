@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "./firebase";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from "recharts";
 import { IconAlertTriangle } from "@tabler/icons-react";
 import {
@@ -29,6 +29,7 @@ const cardStyle: React.CSSProperties = {
 export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
   const [rowsByTab, setRowsByTab] = useState<Record<string, TrackingRow[]>>({});
   const [scope, setScope] = useState<string>("all");
+  const [budgetCompany, setBudgetCompany] = useState<string>("all");
 
   useEffect(() => {
     const unsubs = tabs.map((tab) =>
@@ -76,21 +77,31 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     return tabs.map((t) => ({ name: t.name, count: (rowsByTab[t.id] ?? []).length }));
   }, [tabs, rowsByTab, scope]);
 
-  const { budgetData, companies } = useMemo(() => {
+  const companies = useMemo(() => {
     const companySet = new Set<string>();
-    const byMonth: Record<string, Record<string, number>> = {};
+    for (const r of rows) companySet.add(r.company?.trim() || "ไม่ระบุ");
+    return [...companySet].sort();
+  }, [rows]);
+
+  const monthlyData = useMemo(() => {
+    const byMonth: Record<string, number> = {};
     for (const r of rows) {
       const month = monthKey(r.poApprovedDate ?? r.paApprovedDate ?? r.prDate);
       if (!month) continue;
-      const company = r.company?.trim() || "ไม่ระบุ";
-      companySet.add(company);
-      byMonth[month] ??= {};
-      byMonth[month][company] = (byMonth[month][company] ?? 0) + computeMoney(r).total;
+      byMonth[month] = (byMonth[month] ?? 0) + computeMoney(r).total;
     }
-    const months = Object.keys(byMonth).sort();
-    const data = months.map((month) => ({ month, ...byMonth[month] }));
-    return { budgetData: data, companies: [...companySet].sort() };
+    return Object.keys(byMonth).sort().map((month) => ({ month, total: byMonth[month] }));
   }, [rows]);
+
+  const companyData = useMemo(() => {
+    const byCompany: Record<string, number> = {};
+    for (const r of rows) {
+      const company = r.company?.trim() || "ไม่ระบุ";
+      if (budgetCompany !== "all" && company !== budgetCompany) continue;
+      byCompany[company] = (byCompany[company] ?? 0) + computeMoney(r).total;
+    }
+    return Object.keys(byCompany).sort().map((company) => ({ company, total: byCompany[company] }));
+  }, [rows, budgetCompany]);
 
   const urgentRows = useMemo(
     () => rows.filter((r) => r.urgent).sort((a, b) => (b.no ?? 0) - (a.no ?? 0)).slice(0, 12),
@@ -166,22 +177,51 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
           </div>
         )}
 
-        {/* Budget by company & month */}
-        <div style={{ ...cardStyle, gridColumn: scope === "all" ? "1 / -1" : undefined }}>
-          <h3 style={{ margin: "0 0 var(--sp-3)", fontSize: "1rem", color: "var(--text-strong)" }}>มูลค่างาน (สุทธิ) ตามบริษัทและเดือน</h3>
-          {budgetData.length === 0 ? (
+        {/* Budget by month */}
+        <div style={cardStyle}>
+          <h3 style={{ margin: "0 0 var(--sp-3)", fontSize: "1rem", color: "var(--text-strong)" }}>มูลค่างาน (สุทธิ) ตามเดือน</h3>
+          {monthlyData.length === 0 ? (
             <div style={{ color: "var(--text-faint)", fontSize: "var(--fs-sm)" }}>ยังไม่มีข้อมูลวันที่ที่ใช้คำนวณได้</div>
           ) : (
-            <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={budgetData}>
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={monthlyData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" tick={{ fontSize: 11 }} />
                 <YAxis tickFormatter={(v) => baht(v)} tick={{ fontSize: 11 }} />
                 <Tooltip formatter={(v) => `฿${baht(Number(v) || 0)}`} />
-                <Legend />
-                {companies.map((c, i) => (
-                  <Bar key={c} dataKey={c} stackId="budget" fill={COMPANY_PALETTE[i % COMPANY_PALETTE.length]} />
-                ))}
+                <Bar dataKey="total" name="มูลค่ารวม" fill="var(--primary)" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+
+        {/* Budget by company */}
+        <div style={cardStyle}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--sp-3)" }}>
+            <h3 style={{ margin: 0, fontSize: "1rem", color: "var(--text-strong)" }}>มูลค่างาน (สุทธิ) ตามบริษัท</h3>
+            <select
+              value={budgetCompany}
+              onChange={(e) => setBudgetCompany(e.target.value)}
+              style={{ font: "inherit", fontSize: "var(--fs-xs)", color: "var(--text)", background: "var(--surface)", border: "1px solid var(--border-strong)", borderRadius: "var(--radius)", padding: "6px 8px" }}
+            >
+              <option value="all">ทุกบริษัท</option>
+              {companies.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+          {companyData.length === 0 ? (
+            <div style={{ color: "var(--text-faint)", fontSize: "var(--fs-sm)" }}>ยังไม่มีข้อมูล</div>
+          ) : (
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={companyData} layout="vertical" margin={{ left: 24 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" tickFormatter={(v) => baht(v)} tick={{ fontSize: 11 }} />
+                <YAxis type="category" dataKey="company" width={120} tick={{ fontSize: 11 }} />
+                <Tooltip formatter={(v) => `฿${baht(Number(v) || 0)}`} />
+                <Bar dataKey="total" name="มูลค่ารวม" radius={[0, 4, 4, 0]}>
+                  {companyData.map((d, i) => (
+                    <Cell key={d.company} fill={COMPANY_PALETTE[i % COMPANY_PALETTE.length]} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           )}
