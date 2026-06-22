@@ -43,15 +43,28 @@ export default function App() {
         userLabel={userLabel}
         onLogout={() => setLoggedIn(false)}
       />
-      <main style={{ flex: 1, minWidth: 0, overflowY: "auto" }}>
-        {currentPage === "home" && <HomePage setPage={setCurrentPage} />}
-        {currentPage === "dashboard" && <DashboardPage role={role} />}
-        {currentPage === "update" && <UpdatePage />}
-        {currentPage === "tasks" && <TaskPage />}
-        {currentPage === "vendor" && <VendorPage />}
-        {currentPage === "tracking" && <TrackingPage />}
-        {currentPage === "team" && <OrgChartPage />}
-        {currentPage === "knowledge" && <KnowledgePage />}
+      <main style={{ flex: 1, minWidth: 0, overflowY: "auto", display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 1 }}>
+          {currentPage === "home" && <HomePage setPage={setCurrentPage} />}
+          {currentPage === "dashboard" && <DashboardPage role={role} />}
+          {currentPage === "update" && <UpdatePage />}
+          {currentPage === "tasks" && <TaskPage />}
+          {currentPage === "vendor" && <VendorPage />}
+          {currentPage === "tracking" && <TrackingPage />}
+          {currentPage === "team" && <OrgChartPage />}
+          {currentPage === "knowledge" && <KnowledgePage />}
+        </div>
+        <footer
+          style={{
+            textAlign: "center",
+            padding: "var(--sp-4)",
+            fontSize: "var(--fs-xs)",
+            color: "var(--text-faint)",
+            borderTop: "1px solid var(--border)",
+          }}
+        >
+          © {new Date().getFullYear()} บริษัท กันกุล เอ็นจิเนียริ่ง จำกัด (มหาชน) สงวนสิทธิ์ทุกประการ
+        </footer>
       </main>
     </div>
   );
