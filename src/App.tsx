@@ -7,6 +7,7 @@ import DashboardPage from "./Dashboard";
 import UpdatePage from "./UpdatePage";
 import TaskPage from "./TaskPage";
 import KnowledgePage from "./KnowledgePage";
+import OrgChartPage from "./OrgChartPage";
 import LoginPage from "./LoginPage";
 import HomePage from "./HomePage";
 import Sidebar from "./Sidebar";
@@ -47,7 +48,7 @@ export default function App() {
         {currentPage === "update" && <UpdatePage />}
         {currentPage === "tasks" && <TaskPage />}
         {currentPage === "vendor" && <VendorPage />}
-        {currentPage === "team" && <div style={{ padding: "40px" }}><h1>👥 หน้า Team</h1></div>}
+        {currentPage === "team" && <OrgChartPage />}
         {currentPage === "knowledge" && <KnowledgePage />}
       </main>
     </div>
