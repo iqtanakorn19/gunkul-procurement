@@ -50,7 +50,7 @@ const person = (name: string, vacant = false, material?: string[]): Person => ({
   id: uid(),
   name,
   vacant,
-  material,
+  ...(material ? { material } : {}),
 });
 
 /* Default chart, transcribed from the two org-chart PDFs (PU Department,
@@ -436,7 +436,12 @@ function NodeCard({
             <EditableText
               value={node.scope ?? ""}
               placeholder="ขอบเขตงาน (ถ้ามี)"
-              onChange={(v) => onUpdate((n) => ({ ...n, scope: v || undefined }))}
+              onChange={(v) =>
+                onUpdate((n) => {
+                  const { scope: _scope, ...rest } = n;
+                  return v ? { ...rest, scope: v } : rest;
+                })
+              }
               style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)", fontWeight: 500 }}
             />
           </div>
