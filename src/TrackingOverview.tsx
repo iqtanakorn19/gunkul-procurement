@@ -6,7 +6,7 @@ import {
 } from "recharts";
 import { IconAlertTriangle } from "@tabler/icons-react";
 import {
-  STATUS_OPTIONS, STATUS_COLOR, computeMoney, baht,
+  STATUS_OPTIONS, STATUS_COLOR, computeMoney, baht, normalizeStatus,
 } from "./TrackingPage";
 import type { TrackingRow, Tab } from "./TrackingPage";
 
@@ -35,7 +35,10 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
       onSnapshot(query(collection(db, "trackingTabs", tab.id, "rows"), orderBy("no")), (snap) => {
         setRowsByTab((prev) => ({
           ...prev,
-          [tab.id]: snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<TrackingRow, "id">) })),
+          [tab.id]: snap.docs.map((d) => {
+            const data = d.data() as Omit<TrackingRow, "id">;
+            return { id: d.id, ...data, status: normalizeStatus(data.status) };
+          }),
         }));
       })
     );

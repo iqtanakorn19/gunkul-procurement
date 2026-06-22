@@ -211,6 +211,11 @@ const COLUMNS: { label: string; key?: SortKey }[] = [
   { label: "" },
 ];
 
+/* First 4 columns (flag, No., Company, PR No.) stay pinned to the left while
+   scrolling horizontally, so the row's identity is never lost off-screen. */
+const STICKY_WIDTHS = [40, 60, 110, 170];
+const stickyLeft = (i: number) => STICKY_WIDTHS.slice(0, i).reduce((a, b) => a + b, 0);
+
 /* ============================================================
    Row edit modal
    ============================================================ */
@@ -667,12 +672,14 @@ export default function TrackingPage() {
                 <tr style={{ background: "var(--bg-elevated)", textAlign: "left", color: "var(--text-muted)" }}>
                   {COLUMNS.map(({ label, key }, i) => {
                     const active = key && key === sortKey;
+                    const sticky = i < STICKY_WIDTHS.length;
                     return (
                       <th
                         key={label || i}
                         onClick={key ? () => toggleSort(key) : undefined}
                         style={{
-                          position: "sticky", top: 0, zIndex: 1, padding: "10px 12px",
+                          position: "sticky", top: 0, zIndex: sticky ? 3 : 1, padding: "10px 12px",
+                          ...(sticky ? { left: stickyLeft(i), minWidth: STICKY_WIDTHS[i], width: STICKY_WIDTHS[i] } : {}),
                           borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)",
                           cursor: key ? "pointer" : "default", userSelect: "none",
                           color: active ? "var(--text-strong)" : "var(--text-muted)",
@@ -697,22 +704,27 @@ export default function TrackingPage() {
                 {filteredRows.map((r) => {
                   const { subtotal, vat, total } = computeMoney(r);
                   const statusColor = r.status ? STATUS_COLOR[r.status] : undefined;
+                  const rowBg = r.urgent ? "color-mix(in srgb, var(--danger) 8%, var(--surface))" : "var(--surface)";
+                  const stickyTd = (i: number): React.CSSProperties =>
+                    i < STICKY_WIDTHS.length
+                      ? { position: "sticky", left: stickyLeft(i), zIndex: 1, background: rowBg }
+                      : {};
                   return (
                     <tr
                       key={r.id}
                       style={{
                         borderBottom: "1px solid var(--border)",
-                        background: r.urgent ? "color-mix(in srgb, var(--danger) 8%, transparent)" : undefined,
+                        background: rowBg,
                         cursor: "pointer",
                       }}
                       onClick={() => setEditingRow(r)}
                     >
-                      <td style={{ padding: "8px 12px" }}>
+                      <td style={{ padding: "8px 12px", ...stickyTd(0) }}>
                         {r.urgent ? <IconFlagFilled size={14} stroke={1.75} style={{ color: "var(--danger)" }} /> : <IconFlag size={14} stroke={1.75} style={{ color: "var(--text-faint)" }} />}
                       </td>
-                      <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.no}</td>
-                      <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.company}</td>
-                      <td style={{ padding: "8px 12px", fontWeight: 600, color: "var(--text-strong)" }}>{r.prNo}</td>
+                      <td style={{ padding: "8px 12px", color: "var(--text-muted)", ...stickyTd(1) }}>{r.no}</td>
+                      <td style={{ padding: "8px 12px", color: "var(--text-muted)", ...stickyTd(2) }}>{r.company}</td>
+                      <td style={{ padding: "8px 12px", fontWeight: 600, color: "var(--text-strong)", ...stickyTd(3) }}>{r.prNo}</td>
                       <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.prDate}</td>
                       <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.paNo}</td>
                       <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.poNo}</td>
