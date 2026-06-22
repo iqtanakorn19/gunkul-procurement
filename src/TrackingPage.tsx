@@ -197,7 +197,11 @@ const COLUMNS: { label: string; key?: SortKey }[] = [
   { label: "PR No.", key: "prNo" },
   { label: "Date PR", key: "prDate" },
   { label: "PA No.", key: "paNo" },
+  { label: "Date PA Submitted", key: "paSubmittedDate" },
+  { label: "Date PA Approved", key: "paApprovedDate" },
   { label: "PO No.", key: "poNo" },
+  { label: "Date PO Submitted", key: "poSubmittedDate" },
+  { label: "Date PO Approved", key: "poApprovedDate" },
   { label: "Project", key: "project" },
   { label: "Description", key: "description" },
   { label: "Vendor", key: "vendor" },
@@ -736,7 +740,11 @@ export default function TrackingPage() {
                       <td style={{ padding: "8px 12px", fontWeight: 600, color: "var(--text-strong)", ...stickyTd(3) }}>{r.prNo}</td>
                       <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.prDate}</td>
                       <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.paNo}</td>
+                      <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.paSubmittedDate}</td>
+                      <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.paApprovedDate}</td>
                       <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.poNo}</td>
+                      <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.poSubmittedDate}</td>
+                      <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.poApprovedDate}</td>
                       <td style={{ padding: "8px 12px", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>{r.project}</td>
                       <td style={{ padding: "8px 12px", maxWidth: 240, overflow: "hidden", textOverflow: "ellipsis" }}>{r.description}</td>
                       <td style={{ padding: "8px 12px" }}>{r.vendor}</td>
