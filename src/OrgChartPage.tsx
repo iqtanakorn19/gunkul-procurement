@@ -22,6 +22,7 @@ interface Person {
   id: string;
   name: string;
   vacant?: boolean;
+  material?: string[];
 }
 
 interface OrgNode {
@@ -40,7 +41,12 @@ const uid = () =>
     ? crypto.randomUUID()
     : `id-${Math.random().toString(36).slice(2)}-${Date.now()}`;
 
-const person = (name: string, vacant = false): Person => ({ id: uid(), name, vacant });
+const person = (name: string, vacant = false, material?: string[]): Person => ({
+  id: uid(),
+  name,
+  vacant,
+  material,
+});
 
 /* Default chart, transcribed from the two org-chart PDFs (PU Department,
    GKE — approved naming, 13/01/2026) and cleaned up. Vacancies and the
@@ -61,7 +67,7 @@ function defaultOrgChart(): OrgNode {
             id: uid(),
             title: "Purchasing Manager",
             scope: "Utility",
-            people: [person("Cherry")],
+            people: [person("Cherry", false, ["Utility"])],
             children: [
               {
                 id: uid(),
@@ -74,10 +80,11 @@ function defaultOrgChart(): OrgNode {
                     title: "Purchasing Engineer",
                     notes: ["รวม 2 ตำแหน่งที่ยังว่าง"],
                     people: [
-                      person("Jame"),
-                      person("Ploy"),
-                      person("Mos"),
-                      person("Nook"),
+                      person("Jame", false, ["Farm"]),
+                      person("Ploy", false, ["Farm"]),
+                      person("Mos", false, ["Farm"]),
+                      person("Nook", false, ["Farm"]),
+                      person("Benz", false, ["Wind", "Transformer", "COP"]),
                     ],
                     children: [],
                   },
@@ -85,7 +92,7 @@ function defaultOrgChart(): OrgNode {
                     id: uid(),
                     title: "Purchasing Officer",
                     notes: ["แผนเปลี่ยนตำแหน่งเป็น Engineer"],
-                    people: [person("Is")],
+                    people: [person("Is", false, ["O&M", "IT"])],
                     children: [],
                   },
                 ],
@@ -95,18 +102,22 @@ function defaultOrgChart(): OrgNode {
                 title: "Imp & Exp Supervisor",
                 scope: "Imp & Exp, Shipping, GA, IT, Hemp",
                 notes: ["ดูแลร่วมกับสาย Purchasing Manager (Residential, C&I)"],
-                people: [person("P'Nok")],
+                people: [person("Nok", false, ["Oversea"])],
                 children: [
                   {
                     id: uid(),
-                    title: "Purchasing Officer (Oversea)",
-                    people: [person("", true)],
+                    title: "Purchasing Officer",
+                    scope: "Oversea",
+                    people: [person("Gam", false, ["Inverter", "PV Module", "General Affair"])],
                     children: [],
                   },
                   {
                     id: uid(),
                     title: "Shipping Officer",
-                    people: [person("Gam"), person("Keng"), person("Nhui")],
+                    people: [
+                      person("Keng", false, ["Custom Broker", "เคลียร์ตู้ ท่าเรือ สนามบิน"]),
+                      person("Nui", false, ["Custom Broker", "เคลียร์ตู้ ท่าเรือ สนามบิน"]),
+                    ],
                     children: [],
                   },
                 ],
@@ -117,7 +128,7 @@ function defaultOrgChart(): OrgNode {
             id: uid(),
             title: "Purchasing Manager",
             scope: "Residential, C&I",
-            people: [person("Ruk")],
+            people: [person("Ruk", false, ["Residential", "C&I (Commercial and Industrial)"])],
             children: [
               {
                 id: uid(),
@@ -130,16 +141,35 @@ function defaultOrgChart(): OrgNode {
                 id: uid(),
                 title: "Purchasing Supervisor",
                 scope: "Residential, C&I, Solar Rooftop, GDFF, FNC",
-                people: [person("Arm")],
+                people: [person("Arm", false, ["Inverter & Optimizer"])],
                 children: [
                   {
                     id: uid(),
                     title: "Purchasing Engineer",
                     notes: ["รวม 1 ตำแหน่งที่ยังว่าง", "แผนเปลี่ยนตำแหน่ง Admin เป็น Engineer"],
                     people: [
-                      person("Benz"),
-                      person("White"),
-                      person("Kae"),
+                      person("White", false, [
+                        "DC Cable",
+                        "Mounting (Roof, Float, Farm)",
+                        "Floater & Pile",
+                        "Rapid Shutdown",
+                        "ลอผ้า",
+                        "PQM",
+                        "EDMI",
+                        "CT & VT",
+                        "Protection Relay",
+                      ]),
+                      person("Kae", false, [
+                        "ACP & RTU",
+                        "RMU, Switch Gear",
+                        "AC Cable",
+                        "Pyranometer",
+                        "Module Temp",
+                        "Wind Speed",
+                        "Tank & Pump",
+                        "SCADA Things (IPC, MiniPC, ADAM, Sim, Router & ETC.)",
+                        "CCTV",
+                      ]),
                       person("", true),
                     ],
                     children: [],
@@ -257,6 +287,104 @@ function EditableText({
 }
 
 /* ============================================================
+   Material / responsibility tags for each person
+   ============================================================ */
+
+function MaterialTags({
+  material,
+  onChange,
+}: {
+  material: string[];
+  onChange: (m: string[]) => void;
+}) {
+  const [adding, setAdding] = useState(false);
+  const [draft, setDraft] = useState("");
+
+  const commitAdd = () => {
+    const v = draft.trim();
+    setDraft("");
+    setAdding(false);
+    if (v) onChange([...material, v]);
+  };
+
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 4, paddingLeft: 30 }}>
+      {material.map((m, i) => (
+        <span
+          key={i}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 3,
+            background: "var(--surface-2)",
+            border: "1px solid var(--border)",
+            borderRadius: "var(--radius-sm)",
+            padding: "1px 6px",
+            fontSize: "10.5px",
+            color: "var(--text-muted)",
+            fontWeight: 500,
+          }}
+        >
+          {m}
+          <IconX
+            size={10}
+            stroke={2.25}
+            style={{ cursor: "pointer", color: "var(--text-faint)" }}
+            onClick={() => onChange(material.filter((_, j) => j !== i))}
+          />
+        </span>
+      ))}
+      {adding ? (
+        <input
+          autoFocus
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onBlur={commitAdd}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") commitAdd();
+            if (e.key === "Escape") {
+              setDraft("");
+              setAdding(false);
+            }
+          }}
+          placeholder="งาน/อุปกรณ์ที่ดูแล"
+          style={{
+            font: "inherit",
+            fontSize: "10.5px",
+            color: "var(--text)",
+            background: "var(--surface)",
+            border: "1px solid var(--primary)",
+            borderRadius: "var(--radius-sm)",
+            padding: "1px 6px",
+            width: 120,
+          }}
+        />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setAdding(true)}
+          title="เพิ่มงาน/อุปกรณ์ที่ดูแล"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 2,
+            border: "1px dashed var(--border-strong)",
+            background: "transparent",
+            color: "var(--text-faint)",
+            borderRadius: "var(--radius-sm)",
+            padding: "1px 6px",
+            fontSize: "10.5px",
+            cursor: "pointer",
+          }}
+        >
+          <IconPlus size={10} stroke={2} /> งาน
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ============================================================
    Node card
    ============================================================ */
 
@@ -348,47 +476,52 @@ function NodeCard({
       {node.people.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-2)", marginTop: "var(--sp-3)" }}>
           {filled.map((p) => (
-            <span
-              key={p.id}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                background: "var(--primary)",
-                borderRadius: "var(--radius)",
-                padding: "5px 8px 5px 6px",
-              }}
-            >
+            <div key={p.id} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               <span
                 style={{
-                  display: "inline-flex",
+                  display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                  width: 22,
-                  height: 22,
-                  borderRadius: "50%",
-                  background: "var(--primary-contrast)",
-                  color: "var(--primary)",
-                  fontSize: 11,
-                  fontWeight: 800,
+                  gap: 8,
+                  background: "var(--primary)",
+                  borderRadius: "var(--radius)",
+                  padding: "5px 8px 5px 6px",
                 }}
               >
-                {(p.name.trim()[0] ?? "?").toUpperCase()}
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    width: 22,
+                    height: 22,
+                    borderRadius: "50%",
+                    background: "var(--primary-contrast)",
+                    color: "var(--primary)",
+                    fontSize: 11,
+                    fontWeight: 800,
+                  }}
+                >
+                  {(p.name.trim()[0] ?? "?").toUpperCase()}
+                </span>
+                <EditableText
+                  value={p.name}
+                  placeholder="ชื่อ"
+                  onChange={(v) => updatePerson(p.id, (pp) => ({ ...pp, name: v }))}
+                  style={{ flex: 1, fontSize: "var(--fs-sm)", color: "var(--primary-contrast)", fontWeight: 700 }}
+                />
+                <IconX
+                  size={13}
+                  stroke={2}
+                  style={{ cursor: "pointer", color: "var(--primary-contrast)", opacity: 0.7, flexShrink: 0 }}
+                  onClick={() => removePerson(p.id)}
+                />
               </span>
-              <EditableText
-                value={p.name}
-                placeholder="ชื่อ"
-                onChange={(v) => updatePerson(p.id, (pp) => ({ ...pp, name: v }))}
-                style={{ flex: 1, fontSize: "var(--fs-sm)", color: "var(--primary-contrast)", fontWeight: 700 }}
+              <MaterialTags
+                material={p.material ?? []}
+                onChange={(m) => updatePerson(p.id, (pp) => ({ ...pp, material: m }))}
               />
-              <IconX
-                size={13}
-                stroke={2}
-                style={{ cursor: "pointer", color: "var(--primary-contrast)", opacity: 0.7, flexShrink: 0 }}
-                onClick={() => removePerson(p.id)}
-              />
-            </span>
+            </div>
           ))}
           {vacancies.map((p) => (
             <span
