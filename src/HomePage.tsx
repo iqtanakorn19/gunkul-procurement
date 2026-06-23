@@ -22,6 +22,7 @@ import {
   IconUserCog,
   IconCalculator,
   IconBuildingStore,
+  IconBuildingWarehouse,
   IconFileCheck,
   IconCoin,
   IconBuildingBank,
@@ -457,6 +458,7 @@ const STAKEHOLDERS = [
   { icon: IconBuildingStore, color: "var(--warning)", role: "Vendor / Supplier", desc: "ผู้ขายสินค้า–บริการ เข้าร่วมกระบวนการประมูล RFQ" },
   { icon: IconFileCheck, color: "var(--success)", role: "Admin", desc: "ตรวจสอบความถูกต้องของเอกสารและใบส่งของ" },
   { icon: IconCoin, color: "var(--primary)", role: "Finance / Account", desc: "จ่ายเงินให้ Supplier หลัง Good Receive เรียบร้อย" },
+  { icon: IconBuildingWarehouse, color: "var(--info)", role: "Warehouse", desc: "รับของเข้า เก็บสต๊อกไว้ให้ และจ่ายของออกเมื่อมีการเบิกใช้งาน" },
 ];
 
 const WORKFLOW = [
@@ -466,6 +468,7 @@ const WORKFLOW = [
   { icon: IconShieldCheck, title: "Price Approval (PA)", detail: "เปิด PA ใน D365 ส่งเข้า Alfresco เพื่ออนุมัติตามวงเงิน (Manager / VP / CEO) เร่งด่วนใช้ Fast Track ได้" },
   { icon: IconReceipt, title: "Purchase Order (PO)", detail: "หลัง PA ผ่าน เปิด PO ใน D365 ตรวจ Company / PR / PA / Project ให้ตรงกัน แล้ว Confirm เพื่อให้มีผลทางกฎหมาย" },
   { icon: IconTruckDelivery, title: "Good Receipt (GR)", detail: "ใช้ Invoice + Delivery Order ตรวจเทียบ PO แล้ว Receive ใน D365 หากของไม่ครบให้แก้ Quantity ตามจริง" },
+  { icon: IconBuildingWarehouse, title: "Warehouse", detail: "Warehouse รับของเข้าเก็บไว้ที่คลัง เมื่อหน้างานต้องใช้อุปกรณ์ก็ทำเรื่องเบิกของออกจากคลังตามจริง" },
 ];
 
 const PA_TIERS = [
@@ -830,7 +833,7 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
         <Section
           eyebrow="หัวใจของงาน"
           title="กระบวนการจัดซื้อ ตั้งแต่ต้นจนจบ"
-          intro="ฝ่ายจัดซื้อทำหน้าที่แปลงความต้องการจากหน้างาน ให้กลายเป็นสัญญาและคำสั่งซื้อ ผ่าน 6 ขั้นตอนหลัก"
+          intro="ฝ่ายจัดซื้อทำหน้าที่แปลงความต้องการจากหน้างาน ให้กลายเป็นสัญญาและคำสั่งซื้อ ผ่าน 7 ขั้นตอนหลัก"
         >
           <WorkflowTimeline steps={WORKFLOW} />
         </Section>

@@ -31,6 +31,31 @@ const STEPS = [
   { name: "ติดตามการจ่ายเงิน", detail: "บัญชีโอนเงินให้ Supplier หลัง GR Approve ครบ" },
 ];
 
+const KICKOFF_CHECKLIST = [
+  { item: "เอกสารโครงการ & Layout หน้างาน", detail: "ผัง Site Plan, พื้นที่ Laydown, เส้นทางขนส่งเข้าหน้างาน" },
+  { item: "Spec อุปกรณ์หลัก", detail: "แผงโซลาร์ (กำลังวัตต์, ยี่ห้อที่ Engineer อนุมัติ), Inverter & Optimizer, โครงสร้างรับแผง (Racking)" },
+  { item: "Spec อุปกรณ์ไฟฟ้า", detail: "สายไฟ, หม้อแปลง, อุปกรณ์ไฟฟ้า, อุปกรณ์ต่อสาย ตาม BOQ ของ Engineer" },
+  { item: "งบประมาณเริ่มต้น (Budget)", detail: "ตัวเลขจาก Tender ใช้เทียบกับราคาที่ได้จาก RFQ" },
+  { item: "Timeline โครงการ", detail: "วันที่ต้องส่งของหน้างาน เทียบกับ Lead time ของ Supplier แต่ละราย" },
+  { item: "รายชื่อ Vendor ที่เกี่ยวข้อง", detail: "ตรวจสอบใน Vendor Master ว่ามี Vendor ที่ทำของประเภทนี้แล้วหรือยัง" },
+  { item: "ผู้ติดต่อหน้างาน", detail: "PM / Engineer ผู้รับผิดชอบโครงการ เพื่อประสาน Spec และวันส่งมอบ" },
+];
+
+const INCOTERM_TERMS = [
+  { term: "EXW (Ex Works)", detail: "ผู้ขายส่งมอบของที่โรงงาน/คลังตัวเอง ผู้ซื้อรับผิดชอบขนส่งและความเสี่ยงทั้งหมดจากจุดนั้น" },
+  { term: "FOB (Free on Board)", detail: "ผู้ขายรับผิดชอบจนของขึ้นเรือที่ท่าต้นทาง ความเสี่ยงโอนให้ผู้ซื้อหลังของขึ้นเรือ" },
+  { term: "CIF (Cost, Insurance & Freight)", detail: "ผู้ขายจ่ายค่าขนส่งและประกันภัยถึงท่าปลายทาง แต่ความเสี่ยงโอนให้ผู้ซื้อตั้งแต่ของขึ้นเรือ" },
+  { term: "DAP (Delivered at Place)", detail: "ผู้ขายส่งของถึงปลายทางที่ตกลงไว้ ผู้ซื้อรับผิดชอบพิธีการนำเข้าและภาษีเอง" },
+  { term: "DDP (Delivered Duty Paid)", detail: "ผู้ขายรับผิดชอบทุกอย่างถึงปลายทาง รวมพิธีการนำเข้าและภาษีให้ผู้ซื้อแล้ว" },
+];
+
+const OVERSEA_STEPS = [
+  { name: "ตรวจสอบ Incoterm กับ Supplier", detail: "ตกลงให้ชัดว่าใครรับผิดชอบขนส่ง, ประกันภัย, และพิธีการนำเข้า-ส่งออกช่วงใดบ้าง" },
+  { name: "เตรียมเอกสารนำเข้า", detail: "Invoice, Packing List, Bill of Lading / Airway Bill, Certificate of Origin ตามที่กรมศุลกากรกำหนด" },
+  { name: "ประสาน Shipping / Customs Broker", detail: "แจ้งกำหนดวันเรือ/เครื่องบินถึง เพื่อเคลียร์สินค้าออกจากท่า/สนามบินให้ทันหน้างาน" },
+  { name: "ตรวจรับของหลังเคลียร์ศุลกากร", detail: "ตรวจสภาพสินค้าและจำนวนเทียบกับ Packing List ก่อนส่งต่อ Warehouse" },
+];
+
 const TYPE_BADGE: Record<string, { bg: string; color: string; label: string }> = {
   wi: { bg: "#dbeafe", color: "#1e40af", label: "WI Document" },
   manual: { bg: "#d1fae5", color: "#065f46", label: "Manual" },
@@ -217,6 +242,54 @@ export default function KnowledgePage() {
                 <div>
                   <p style={{ margin: "0 0 2px", fontSize: "14px", fontWeight: "600", color: "#1e293b" }}>{step.name}</p>
                   <p style={{ margin: 0, fontSize: "12px", color: "#64748b" }}>{step.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Kick-off Checklist */}
+        <div style={{ background: "white", borderRadius: "20px", padding: "28px", marginBottom: "24px", boxShadow: "0 2px 12px rgba(26,60,110,0.07)", border: "1px solid rgba(226,201,126,0.2)" }}>
+          <p style={{ margin: "0 0 16px", fontSize: "16px", fontWeight: "700", color: "#1a3c6e" }}>🚀 Kick-off Checklist: เริ่มโครงการต้องเตรียมอะไรบ้าง</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {KICKOFF_CHECKLIST.map((c) => (
+              <div key={c.item} style={{ display: "flex", gap: "12px", alignItems: "flex-start", padding: "12px 14px", borderRadius: "10px", background: "#f8faff" }}>
+                <div style={{ width: "28px", height: "28px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", flexShrink: 0, background: "#dbeafe" }}>
+                  ☐
+                </div>
+                <div>
+                  <p style={{ margin: "0 0 2px", fontSize: "14px", fontWeight: "600", color: "#1e293b" }}>{c.item}</p>
+                  <p style={{ margin: 0, fontSize: "12px", color: "#64748b" }}>{c.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* OVERSEA & Incoterm */}
+        <div style={{ background: "white", borderRadius: "20px", padding: "28px", marginBottom: "24px", boxShadow: "0 2px 12px rgba(26,60,110,0.07)", border: "1px solid rgba(226,201,126,0.2)" }}>
+          <p style={{ margin: "0 0 16px", fontSize: "16px", fontWeight: "700", color: "#1a3c6e" }}>🌐 OVERSEA & Incoterm: ความรู้พื้นฐานการนำเข้าสินค้าจากต่างประเทศ</p>
+
+          <p style={{ margin: "0 0 10px", fontSize: "13px", fontWeight: "700", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.04em" }}>Incoterm ที่พบบ่อย</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "10px", marginBottom: "20px" }}>
+            {INCOTERM_TERMS.map((t) => (
+              <div key={t.term} style={{ background: "#f8faff", borderRadius: "10px", padding: "12px 14px", borderLeft: "3px solid #e2c97e" }}>
+                <p style={{ margin: "0 0 4px", fontSize: "13px", fontWeight: "700", color: "#1a3c6e" }}>{t.term}</p>
+                <p style={{ margin: 0, fontSize: "12px", color: "#64748b", lineHeight: 1.5 }}>{t.detail}</p>
+              </div>
+            ))}
+          </div>
+
+          <p style={{ margin: "0 0 10px", fontSize: "13px", fontWeight: "700", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.04em" }}>ขั้นตอนการสั่งซื้อจากต่างประเทศ (OVERSEA)</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {OVERSEA_STEPS.map((s, i) => (
+              <div key={s.name} style={{ display: "flex", gap: "12px", alignItems: "flex-start", padding: "12px 14px", borderRadius: "10px", background: "#f8faff" }}>
+                <div style={{ width: "28px", height: "28px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: "700", flexShrink: 0, background: "#1a3c6e", color: "white" }}>
+                  {i + 1}
+                </div>
+                <div>
+                  <p style={{ margin: "0 0 2px", fontSize: "14px", fontWeight: "600", color: "#1e293b" }}>{s.name}</p>
+                  <p style={{ margin: 0, fontSize: "12px", color: "#64748b" }}>{s.detail}</p>
                 </div>
               </div>
             ))}
