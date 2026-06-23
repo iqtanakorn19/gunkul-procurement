@@ -41,12 +41,28 @@ const KICKOFF_CHECKLIST = [
   { item: "ผู้ติดต่อหน้างาน", detail: "PM / Engineer ผู้รับผิดชอบโครงการ เพื่อประสาน Spec และวันส่งมอบ" },
 ];
 
-const INCOTERM_TERMS = [
-  { term: "EXW (Ex Works)", detail: "ผู้ขายส่งมอบของที่โรงงาน/คลังตัวเอง ผู้ซื้อรับผิดชอบขนส่งและความเสี่ยงทั้งหมดจากจุดนั้น" },
-  { term: "FOB (Free on Board)", detail: "ผู้ขายรับผิดชอบจนของขึ้นเรือที่ท่าต้นทาง ความเสี่ยงโอนให้ผู้ซื้อหลังของขึ้นเรือ" },
-  { term: "CIF (Cost, Insurance & Freight)", detail: "ผู้ขายจ่ายค่าขนส่งและประกันภัยถึงท่าปลายทาง แต่ความเสี่ยงโอนให้ผู้ซื้อตั้งแต่ของขึ้นเรือ" },
-  { term: "DAP (Delivered at Place)", detail: "ผู้ขายส่งของถึงปลายทางที่ตกลงไว้ ผู้ซื้อรับผิดชอบพิธีการนำเข้าและภาษีเอง" },
-  { term: "DDP (Delivered Duty Paid)", detail: "ผู้ขายรับผิดชอบทุกอย่างถึงปลายทาง รวมพิธีการนำเข้าและภาษีให้ผู้ซื้อแล้ว" },
+const INCOTERM_GROUPS: { group: string; terms: { code: string; name: string; transfer: string }[] }[] = [
+  {
+    group: "ขนส่งทางใดก็ได้ (Any Mode)",
+    terms: [
+      { code: "EXW", name: "Ex Works", transfer: "ผู้ขายส่งมอบของที่หน้าโรงงาน/คลังตัวเอง — ผู้ซื้อรับผิดชอบขนส่งและความเสี่ยงทั้งหมดตั้งแต่จุดนั้น" },
+      { code: "FCA", name: "Free Carrier", transfer: "ผู้ขายส่งของให้ผู้ขนส่งที่ผู้ซื้อกำหนด ณ จุดที่ตกลงไว้ — ความเสี่ยงโอนตอนส่งมอบให้ผู้ขนส่ง" },
+      { code: "CPT", name: "Carriage Paid To", transfer: "ผู้ขายจ่ายค่าขนส่งถึงปลายทาง แต่ความเสี่ยงโอนให้ผู้ซื้อตั้งแต่ส่งมอบให้ผู้ขนส่งรายแรก" },
+      { code: "CIP", name: "Carriage & Insurance Paid To", transfer: "เหมือน CPT แต่ผู้ขายต้องทำประกันภัยให้ด้วย (ระดับคุ้มครองสูงสุด)" },
+      { code: "DPU", name: "Delivered at Place Unloaded", transfer: "ผู้ขายส่งและขนของลงที่ปลายทาง — ความเสี่ยงโอนหลังขนของลงเรียบร้อย" },
+      { code: "DAP", name: "Delivered at Place", transfer: "ผู้ขายส่งของถึงปลายทางที่ตกลงไว้ (ยังไม่ขนลง) ผู้ซื้อรับผิดชอบพิธีการนำเข้า/ภาษีเอง" },
+      { code: "DDP", name: "Delivered Duty Paid", transfer: "ผู้ขายรับผิดชอบทุกอย่างถึงปลายทาง รวมพิธีการนำเข้าและภาษีให้ผู้ซื้อแล้ว" },
+    ],
+  },
+  {
+    group: "ขนส่งทางเรือเท่านั้น (Sea & Inland Waterway)",
+    terms: [
+      { code: "FAS", name: "Free Alongside Ship", transfer: "ผู้ขายส่งของไปวางข้างเรือที่ท่าต้นทาง — ความเสี่ยงโอนตอนของถึงข้างเรือ" },
+      { code: "FOB", name: "Free on Board", transfer: "ผู้ขายรับผิดชอบจนของขึ้นเรือที่ท่าต้นทาง — ความเสี่ยงโอนให้ผู้ซื้อหลังของขึ้นเรือ" },
+      { code: "CFR", name: "Cost & Freight", transfer: "ผู้ขายจ่ายค่าขนส่งถึงท่าปลายทาง แต่ความเสี่ยงโอนให้ผู้ซื้อตั้งแต่ของขึ้นเรือ" },
+      { code: "CIF", name: "Cost, Insurance & Freight", transfer: "เหมือน CFR แต่ผู้ขายต้องทำประกันภัยให้ด้วย — Incoterm ที่ใช้บ่อยที่สุดในการนำเข้าอุปกรณ์" },
+    ],
+  },
 ];
 
 const OVERSEA_STEPS = [
@@ -250,7 +266,16 @@ export default function KnowledgePage() {
 
         {/* Kick-off Checklist */}
         <div style={{ background: "white", borderRadius: "20px", padding: "28px", marginBottom: "24px", boxShadow: "0 2px 12px rgba(26,60,110,0.07)", border: "1px solid rgba(226,201,126,0.2)" }}>
-          <p style={{ margin: "0 0 16px", fontSize: "16px", fontWeight: "700", color: "#1a3c6e" }}>🚀 Kick-off Checklist: เริ่มโครงการต้องเตรียมอะไรบ้าง</p>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px", marginBottom: "16px" }}>
+            <p style={{ margin: 0, fontSize: "16px", fontWeight: "700", color: "#1a3c6e" }}>🚀 Kick-off Checklist: เริ่มโครงการต้องเตรียมอะไรบ้าง</p>
+            <span style={{ flexShrink: 0, fontSize: "11px", fontWeight: "700", color: "#92400e", background: "#fef3c7", padding: "3px 10px", borderRadius: "999px" }}>
+              เร็วๆนี้: Item Master
+            </span>
+          </div>
+          <p style={{ margin: "0 0 16px", fontSize: "12px", color: "#94a3b8", lineHeight: 1.6 }}>
+            รายการนี้เป็นภาพรวมคร่าวๆ ก่อน — เวอร์ชันเต็มกำลังพัฒนาในหน้า Item Master โดยจะดึงข้อมูลจาก PO ย้อนหลังมา analyze
+            ให้กรอกแค่ขนาดโครงการ (Watt) แล้วระบบ list อุปกรณ์ที่ต้องใช้พร้อมราคาให้อัตโนมัติ
+          </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             {KICKOFF_CHECKLIST.map((c) => (
               <div key={c.item} style={{ display: "flex", gap: "12px", alignItems: "flex-start", padding: "12px 14px", borderRadius: "10px", background: "#f8faff" }}>
@@ -268,20 +293,46 @@ export default function KnowledgePage() {
 
         {/* OVERSEA & Incoterm */}
         <div style={{ background: "white", borderRadius: "20px", padding: "28px", marginBottom: "24px", boxShadow: "0 2px 12px rgba(26,60,110,0.07)", border: "1px solid rgba(226,201,126,0.2)" }}>
-          <p style={{ margin: "0 0 16px", fontSize: "16px", fontWeight: "700", color: "#1a3c6e" }}>🌐 OVERSEA & Incoterm: ความรู้พื้นฐานการนำเข้าสินค้าจากต่างประเทศ</p>
+          <p style={{ margin: "0 0 6px", fontSize: "16px", fontWeight: "700", color: "#1a3c6e" }}>🌐 OVERSEA & Incoterm</p>
+          <p style={{ margin: "0 0 18px", fontSize: "13px", color: "#64748b" }}>ความรู้พื้นฐานการนำเข้าสินค้าจากต่างประเทศ ตามมาตรฐาน Incoterms 2020</p>
 
-          <p style={{ margin: "0 0 10px", fontSize: "13px", fontWeight: "700", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.04em" }}>Incoterm ที่พบบ่อย</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "10px", marginBottom: "20px" }}>
-            {INCOTERM_TERMS.map((t) => (
-              <div key={t.term} style={{ background: "#f8faff", borderRadius: "10px", padding: "12px 14px", borderLeft: "3px solid #e2c97e" }}>
-                <p style={{ margin: "0 0 4px", fontSize: "13px", fontWeight: "700", color: "#1a3c6e" }}>{t.term}</p>
-                <p style={{ margin: 0, fontSize: "12px", color: "#64748b", lineHeight: 1.5 }}>{t.detail}</p>
-              </div>
-            ))}
+          <div style={{ borderRadius: "14px", overflow: "hidden", marginBottom: "20px", border: "1px solid #e2e8f0" }}>
+            <img src="/incoterms-2020.png" alt="Incoterms 2020 — Point of Delivery and Transfer of Risk" style={{ width: "100%", display: "block" }} />
           </div>
 
-          <p style={{ margin: "0 0 10px", fontSize: "13px", fontWeight: "700", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.04em" }}>ขั้นตอนการสั่งซื้อจากต่างประเทศ (OVERSEA)</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <div style={{ display: "flex", gap: "16px", marginBottom: "16px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "#64748b" }}>
+              <span style={{ width: "14px", height: "14px", borderRadius: "3px", background: "#65c466", display: "inline-block" }} /> ผู้ขายรับผิดชอบ (Seller's obligation)
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "#64748b" }}>
+              <span style={{ width: "14px", height: "14px", borderRadius: "3px", background: "#38bdf8", display: "inline-block" }} /> ผู้ซื้อรับผิดชอบ (Buyer's obligation)
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "#64748b" }}>
+              ⚠️ จุดโอนความเสี่ยง (Transfer of risk)
+            </div>
+          </div>
+
+          {INCOTERM_GROUPS.map((g) => (
+            <div key={g.group} style={{ marginBottom: "18px" }}>
+              <p style={{ margin: "0 0 10px", fontSize: "13px", fontWeight: "700", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.04em" }}>{g.group}</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {g.terms.map((t) => (
+                  <div key={t.code} style={{ display: "flex", gap: "12px", alignItems: "flex-start", padding: "12px 14px", borderRadius: "10px", background: "#f8faff", borderLeft: "3px solid #e2c97e" }}>
+                    <span style={{ flexShrink: 0, fontSize: "12px", fontWeight: "800", color: "#1a3c6e", background: "#dbeafe", borderRadius: "6px", padding: "4px 8px", minWidth: "44px", textAlign: "center" }}>
+                      {t.code}
+                    </span>
+                    <div>
+                      <p style={{ margin: "0 0 2px", fontSize: "13px", fontWeight: "700", color: "#1e293b" }}>{t.name}</p>
+                      <p style={{ margin: 0, fontSize: "12px", color: "#64748b", lineHeight: 1.5 }}>{t.transfer}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <p style={{ margin: "10px 0 0", fontSize: "13px", fontWeight: "700", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.04em" }}>ขั้นตอนการสั่งซื้อจากต่างประเทศ (OVERSEA)</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "10px" }}>
             {OVERSEA_STEPS.map((s, i) => (
               <div key={s.name} style={{ display: "flex", gap: "12px", alignItems: "flex-start", padding: "12px 14px", borderRadius: "10px", background: "#f8faff" }}>
                 <div style={{ width: "28px", height: "28px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: "700", flexShrink: 0, background: "#1a3c6e", color: "white" }}>

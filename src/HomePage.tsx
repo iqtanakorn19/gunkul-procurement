@@ -6,7 +6,6 @@ import {
   IconFileInvoice,
   IconShieldCheck,
   IconClockHour4,
-  IconAlertTriangle,
   IconMapPin,
   IconWorld,
   IconUsersGroup,
@@ -842,7 +841,7 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
         <Section
           eyebrow="ระดับการอนุมัติ"
           title="วงเงินอนุมัติราคา (Price Approval)"
-          intro="ก่อนเปิด PO ทุกครั้งต้องผ่าน PA ก่อน — ระดับผู้อนุมัติขึ้นกับมูลค่า กรณีเร่งด่วนเลือก Fast Track แล้วแนบไฟล์ Compare ภายหลังได้"
+          intro="ก่อนเปิด PO ทุกครั้งต้องผ่าน PA ก่อน — ระดับผู้อนุมัติขึ้นกับมูลค่า (รายละเอียดขั้นตอนเต็มดูได้ที่ Knowledge Base)"
         >
           <div style={grid(240)}>
             {PA_TIERS.map((t, i) => (
@@ -941,8 +940,9 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
 
         {/* 9. Timeline & risk */}
         <Section
-          eyebrow="ไทม์ไลน์ & ความเสี่ยง"
-          title="ระยะเวลาและจุดที่ต้องระวัง"
+          eyebrow="ไทม์ไลน์"
+          title="ระยะเวลาโดยรวม"
+          intro="Bottleneck สำคัญที่สุดคือใบอนุญาต อ.1 (รายละเอียดดูที่ Knowledge Base)"
         >
           <div style={grid(220)}>
             {LEAD_TIMES.map((l) => (
@@ -954,28 +954,6 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
                 <div style={{ fontSize: "var(--fs-sm)", color: "var(--text-muted)", marginTop: "2px" }}>{l.scale}</div>
               </HoverCard>
             ))}
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              gap: "var(--sp-3)",
-              marginTop: "var(--sp-4)",
-              padding: "var(--sp-4) var(--sp-5)",
-              borderRadius: "var(--radius-lg)",
-              background: tint("var(--danger)"),
-              border: "1px solid color-mix(in srgb, var(--danger) 35%, transparent)",
-            }}
-          >
-            <IconAlertTriangle size={24} stroke={1.75} style={{ color: "var(--danger)", flexShrink: 0 }} />
-            <div>
-              <div style={{ fontWeight: 700, color: "var(--text-strong)" }}>
-                Bottleneck สำคัญที่สุด: ใบอนุญาต อ.1
-              </div>
-              <p style={{ margin: "var(--sp-1) 0 0", color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.6 }}>
-                ใบอนุญาต อ.1 ใช้เวลาอย่างน้อย 6 เดือน หากล่าช้าจะทำให้ต้นทุนบานปลายและโครงการทั้งหมด delay
-              </p>
-            </div>
           </div>
         </Section>
 
