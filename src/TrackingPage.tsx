@@ -27,9 +27,7 @@ import {
   IconChevronUp,
   IconChevronDown,
   IconSelector,
-  IconChartBar,
 } from "@tabler/icons-react";
-import TrackingOverview from "./TrackingOverview";
 
 /* ============================================================
    Unified PR/PA/PO tracking schema — union of every column found
@@ -387,7 +385,6 @@ export default function TrackingPage() {
   const [renamingTab, setRenamingTab] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("no");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
-  const [view, setView] = useState<"data" | "overview">("data");
 
   const toggleSort = (key: SortKey) => {
     if (key === sortKey) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
@@ -572,28 +569,12 @@ export default function TrackingPage() {
         <IconClipboardList size={16} stroke={1.75} />
         PR / PA / PO Tracking
       </div>
-      <h1 style={{ margin: "0 0 var(--sp-5)", color: "var(--text-strong)" }}>PR/PO Tracking</h1>
+      <h1 style={{ margin: "0 0 var(--sp-5)", color: "var(--text-strong)" }}>Tracking Sheet</h1>
 
       {/* Tabs bar */}
       <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)", flexWrap: "wrap", borderBottom: "1px solid var(--border)", marginBottom: "var(--sp-4)", paddingBottom: "var(--sp-2)" }}>
-        <button
-          type="button"
-          onClick={() => setView("overview")}
-          style={{
-            display: "flex", alignItems: "center", gap: 6,
-            background: view === "overview" ? "var(--accent-bg)" : "transparent",
-            border: `1px solid ${view === "overview" ? "var(--accent)" : "var(--border)"}`,
-            borderRadius: "var(--radius-full)", padding: "5px 12px",
-            cursor: "pointer", fontSize: "var(--fs-sm)",
-            color: view === "overview" ? "var(--text-strong)" : "var(--text-muted)",
-            fontWeight: view === "overview" ? 700 : 500,
-          }}
-        >
-          <IconChartBar size={14} stroke={2} /> Overview
-        </button>
-        <div style={{ width: 1, alignSelf: "stretch", background: "var(--border)" }} />
         {tabs.map((tab) => {
-          const active = view === "data" && tab.id === activeTab;
+          const active = tab.id === activeTab;
           return (
             <div
               key={tab.id}
@@ -606,7 +587,7 @@ export default function TrackingPage() {
                 color: active ? "var(--text-strong)" : "var(--text-muted)",
                 fontWeight: active ? 700 : 500,
               }}
-              onClick={() => { setActiveTab(tab.id); setView("data"); }}
+              onClick={() => setActiveTab(tab.id)}
             >
               {renamingTab === tab.id ? (
                 <input
@@ -636,13 +617,7 @@ export default function TrackingPage() {
         </button>
       </div>
 
-      {view === "overview" ? (
-        tabs.length === 0 ? (
-          <div style={{ color: "var(--text-muted)", fontSize: "var(--fs-sm)" }}>ยังไม่มีแท็ป — กด "เพิ่มแท็ป" เพื่อเริ่มต้น</div>
-        ) : (
-          <TrackingOverview tabs={tabs} />
-        )
-      ) : !activeTab ? (
+      {!activeTab ? (
         <div style={{ color: "var(--text-muted)", fontSize: "var(--fs-sm)" }}>ยังไม่มีแท็ป — กด "เพิ่มแท็ป" เพื่อเริ่มต้น</div>
       ) : (
         <>

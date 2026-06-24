@@ -5,8 +5,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { auth } from "./firebase";
 import DashboardPage from "./Dashboard";
-import UpdatePage from "./UpdatePage";
-import TaskPage from "./TaskPage";
 import KnowledgePage from "./KnowledgePage";
 import ESGPage from "./ESGPage";
 import OrgChartPage from "./OrgChartPage";
@@ -47,9 +45,7 @@ export default function App() {
       <main style={{ flex: 1, minWidth: 0, overflowY: "auto", display: "flex", flexDirection: "column" }}>
         <div style={{ flex: 1 }}>
           {currentPage === "home" && <HomePage setPage={setCurrentPage} />}
-          {currentPage === "dashboard" && <DashboardPage role={role} />}
-          {currentPage === "update" && <UpdatePage />}
-          {currentPage === "tasks" && <TaskPage />}
+          {currentPage === "dashboard" && <DashboardPage />}
           {currentPage === "vendor" && <VendorPage />}
           {currentPage === "tracking" && <TrackingPage />}
           {currentPage === "team" && <OrgChartPage />}

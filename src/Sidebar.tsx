@@ -3,8 +3,6 @@ import { useTheme } from "./ThemeContext";
 import {
   IconHome2,
   IconLayoutDashboard,
-  IconChecklist,
-  IconTimeline,
   IconBuildingWarehouse,
   IconClipboardList,
   IconBook2,
@@ -18,8 +16,6 @@ import {
 export type Page =
   | "home"
   | "dashboard"
-  | "update"
-  | "tasks"
   | "vendor"
   | "tracking"
   | "team"
@@ -29,10 +25,8 @@ export type Page =
 const NAV_ITEMS: { page: Page; label: string; icon: typeof IconHome2 }[] = [
   { page: "home", label: "Home", icon: IconHome2 },
   { page: "dashboard", label: "Dashboard", icon: IconLayoutDashboard },
-  { page: "tasks", label: "Task List", icon: IconChecklist },
-  { page: "update", label: "Update", icon: IconTimeline },
   { page: "vendor", label: "Vendor Directory", icon: IconBuildingWarehouse },
-  { page: "tracking", label: "PR/PO Tracking", icon: IconClipboardList },
+  { page: "tracking", label: "Tracking Sheet", icon: IconClipboardList },
   { page: "knowledge", label: "Knowledge Base", icon: IconBook2 },
   { page: "esg", label: "ESG & Sustainability", icon: IconLeaf },
   { page: "team", label: "Organization Chart", icon: IconSitemap },
