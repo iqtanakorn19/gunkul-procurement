@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  collection, onSnapshot, doc, addDoc, updateDoc, deleteDoc, writeBatch,
+} from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from "./firebase";
 import {
   IconFileText,
-  IconUserPlus,
-  IconShoppingCart,
   IconShieldCheck,
-  IconPackage,
   IconDeviceDesktop,
   IconFolders,
   IconSearch,
@@ -14,27 +16,39 @@ import {
   IconCheck,
   IconAlertTriangle,
   IconPencil,
+  IconTrash,
+  IconPlus,
+  IconUpload,
 } from "@tabler/icons-react";
 import { Reveal, IconBadge, Section, HoverCard, grid, tint } from "./components/PageKit";
+
+type DocType = "wi" | "manual" | "scope";
 
 interface Doc {
   id: string;
   title: string;
   description: string;
-  type: "wi" | "manual" | "scope";
+  type: DocType;
   pages: string;
   url: string;
-  icon: typeof IconFileText;
 }
 
-const DOCS: Doc[] = [
-  { id: "wi001", title: "WI-001 — Add Vendor", description: "ขั้นตอนการเพิ่ม Vendor ใหม่เข้าระบบ D365 พร้อมเอกสารที่ต้องเตรียม", type: "wi", pages: "19 หน้า", url: "/documents/draft%20WI_Add%20Vendor_01.pdf", icon: IconUserPlus },
-  { id: "wi002", title: "WI-002 — Purchase Order", description: "ขั้นตอนการสร้าง PO ในระบบ D365 ตั้งแต่รับ PR จนถึงส่งให้ Supplier", type: "wi", pages: "33 หน้า", url: "/documents/draft%20WI_Purchase%20Order_01.pdf", icon: IconShoppingCart },
-  { id: "wi003", title: "WI-003 — Price Approval", description: "กระบวนการขออนุมัติราคา PA ตามระดับวงเงิน Manager / VP / CEO", type: "wi", pages: "30 หน้า", url: "/documents/draft%20WI_Price%20Approval_01.pdf", icon: IconShieldCheck },
-  { id: "wi004", title: "WI-004 — Good Receipt", description: "ขั้นตอนการทำ Good Receive หลัง Supplier ส่งของ เพื่อให้บัญชีจ่ายเงินได้", type: "wi", pages: "16 หน้า", url: "/documents/draft%20WI_Good%20Receipt_01.pdf", icon: IconPackage },
-  { id: "manual", title: "GK User Manual — D365 PU", description: "คู่มือการใช้งาน Microsoft Dynamics 365 สำหรับฝ่ายจัดซื้อ", type: "manual", pages: "", url: "/documents/GK_User_Manual_PU_V1.0.pdf", icon: IconDeviceDesktop },
-  { id: "scope", title: "Procurement Scope & Overview", description: "ภาพรวมฝ่ายจัดซื้อ Stakeholder, กระบวนการทำงาน, โครงการปัจจุบัน EPC/PPA", type: "scope", pages: "", url: "/documents/procurement_scope.pdf", icon: IconFolders },
+/* One-time seed for the "knowledgeDocs" Firestore collection — only written
+   if the collection is empty on first load, so existing edits never get clobbered. */
+const SEED_DOCS: Omit<Doc, "id">[] = [
+  { title: "WI-001 — Add Vendor", description: "ขั้นตอนการเพิ่ม Vendor ใหม่เข้าระบบ D365 พร้อมเอกสารที่ต้องเตรียม", type: "wi", pages: "19 หน้า", url: "/documents/draft%20WI_Add%20Vendor_01.pdf" },
+  { title: "WI-002 — Purchase Order", description: "ขั้นตอนการสร้าง PO ในระบบ D365 ตั้งแต่รับ PR จนถึงส่งให้ Supplier", type: "wi", pages: "33 หน้า", url: "/documents/draft%20WI_Purchase%20Order_01.pdf" },
+  { title: "WI-003 — Price Approval", description: "กระบวนการขออนุมัติราคา PA ตามระดับวงเงิน Manager / VP / CEO", type: "wi", pages: "30 หน้า", url: "/documents/draft%20WI_Price%20Approval_01.pdf" },
+  { title: "WI-004 — Good Receipt", description: "ขั้นตอนการทำ Good Receive หลัง Supplier ส่งของ เพื่อให้บัญชีจ่ายเงินได้", type: "wi", pages: "16 หน้า", url: "/documents/draft%20WI_Good%20Receipt_01.pdf" },
+  { title: "GK User Manual — D365 PU", description: "คู่มือการใช้งาน Microsoft Dynamics 365 สำหรับฝ่ายจัดซื้อ", type: "manual", pages: "", url: "/documents/GK_User_Manual_PU_V1.0.pdf" },
+  { title: "Procurement Scope & Overview", description: "ภาพรวมฝ่ายจัดซื้อ Stakeholder, กระบวนการทำงาน, โครงการปัจจุบัน EPC/PPA", type: "scope", pages: "", url: "/documents/procurement_scope.pdf" },
 ];
+
+const TYPE_ICON: Record<DocType, typeof IconFileText> = {
+  wi: IconShieldCheck,
+  manual: IconDeviceDesktop,
+  scope: IconFolders,
+};
 
 const STEPS = [
   { name: "รับ PR / RFQ จากทีม PM", detail: "Project Manager ส่ง Purchase Requisition มาให้ฝ่ายจัดซื้อ" },
@@ -95,32 +109,35 @@ const TYPE_BADGE: Record<string, { color: string; label: string }> = {
   scope: { color: "var(--warning)", label: "Scope Guide" },
 };
 
-const EDITS_STORAGE_KEY = "gunkul-knowledge-doc-edits";
-type DocEdits = Record<string, { title?: string; description?: string }>;
-
-function loadDocEdits(): DocEdits {
-  if (typeof window === "undefined") return {};
-  try {
-    return JSON.parse(window.localStorage.getItem(EDITS_STORAGE_KEY) ?? "{}");
-  } catch {
-    return {};
-  }
-}
-
 function DocEditModal({
   doc,
   onSave,
   onClose,
 }: {
-  doc: Doc;
-  onSave: (title: string, description: string) => void;
+  doc: Doc | null;
+  onSave: (data: { title: string; description: string; type: DocType; pages: string }, file: File | null) => Promise<void>;
   onClose: () => void;
 }) {
-  const [title, setTitle] = useState(doc.title);
-  const [description, setDescription] = useState(doc.description);
+  const isNew = doc === null;
+  const [title, setTitle] = useState(doc?.title ?? "");
+  const [description, setDescription] = useState(doc?.description ?? "");
+  const [type, setType] = useState<DocType>(doc?.type ?? "wi");
+  const [pages, setPages] = useState(doc?.pages ?? "");
+  const [file, setFile] = useState<File | null>(null);
+  const [saving, setSaving] = useState(false);
   const inputStyle: React.CSSProperties = {
     font: "inherit", fontSize: "var(--fs-sm)", color: "var(--text)", background: "var(--surface)",
     border: "1px solid var(--border-strong)", borderRadius: "var(--radius-sm)", padding: "8px 10px", width: "100%",
+  };
+
+  const handleSave = async () => {
+    if (!title.trim() || (isNew && !file)) return;
+    setSaving(true);
+    try {
+      await onSave({ title: title.trim(), description: description.trim(), type, pages: pages.trim() }, file);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -130,7 +147,7 @@ function DocEditModal({
     >
       <div style={{ background: "var(--surface)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", width: "min(480px, 100%)", padding: "var(--sp-5)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--sp-4)" }}>
-          <h3 style={{ margin: 0, color: "var(--text-strong)" }}>แก้ไขข้อมูลเอกสาร</h3>
+          <h3 style={{ margin: 0, color: "var(--text-strong)" }}>{isNew ? "เพิ่มเอกสารใหม่" : "แก้ไขข้อมูลเอกสาร"}</h3>
           <button type="button" onClick={onClose} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-faint)" }}>
             <IconX size={20} stroke={1.75} />
           </button>
@@ -139,20 +156,47 @@ function DocEditModal({
           ชื่อเอกสาร
           <input style={inputStyle} value={title} onChange={(e) => setTitle(e.target.value)} />
         </label>
-        <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
+        <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)", marginBottom: "var(--sp-3)" }}>
           คำอธิบาย
           <textarea style={{ ...inputStyle, minHeight: 80, resize: "vertical" }} value={description} onChange={(e) => setDescription(e.target.value)} />
         </label>
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "var(--sp-2)", marginTop: "var(--sp-4)" }}>
+        <div style={{ display: "flex", gap: "var(--sp-3)", marginBottom: "var(--sp-3)" }}>
+          <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)", flex: 1 }}>
+            ประเภท
+            <select style={inputStyle} value={type} onChange={(e) => setType(e.target.value as DocType)}>
+              <option value="wi">WI Document</option>
+              <option value="manual">Manual</option>
+              <option value="scope">Scope Guide</option>
+            </select>
+          </label>
+          <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)", flex: 1 }}>
+            จำนวนหน้า (ไม่บังคับ)
+            <input style={inputStyle} value={pages} onChange={(e) => setPages(e.target.value)} placeholder="เช่น 19 หน้า" />
+          </label>
+        </div>
+        <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)", marginBottom: "var(--sp-4)" }}>
+          {isNew ? "ไฟล์ PDF" : "แทนที่ไฟล์ PDF (ไม่บังคับ — เช่น หลัง Revise WI ใหม่)"}
+          <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)" }}>
+            <IconUpload size={16} stroke={1.75} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
+            <input
+              type="file"
+              accept="application/pdf"
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+              style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}
+            />
+          </div>
+        </label>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "var(--sp-2)" }}>
           <button type="button" onClick={onClose} style={{ border: "1px solid var(--border-strong)", background: "var(--surface)", color: "var(--text)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", cursor: "pointer" }}>
             ยกเลิก
           </button>
           <button
             type="button"
-            onClick={() => onSave(title.trim() || doc.title, description.trim())}
-            style={{ border: "none", background: "var(--primary)", color: "var(--primary-contrast)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", fontWeight: 600, cursor: "pointer" }}
+            disabled={saving || !title.trim() || (isNew && !file)}
+            onClick={handleSave}
+            style={{ border: "none", background: "var(--primary)", color: "var(--primary-contrast)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", fontWeight: 600, cursor: saving ? "default" : "pointer", opacity: saving ? 0.7 : 1 }}
           >
-            บันทึก
+            {saving ? "กำลังบันทึก..." : "บันทึก"}
           </button>
         </div>
       </div>
@@ -165,18 +209,52 @@ export default function KnowledgePage() {
   const [filter, setFilter] = useState<"all" | "wi" | "manual" | "scope">("all");
   const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null);
   const [doneSteps, setDoneSteps] = useState<boolean[]>(Array(9).fill(false));
-  const [docEdits, setDocEdits] = useState<DocEdits>(loadDocEdits);
+  const [docs, setDocs] = useState<Doc[]>([]);
   const [editingDoc, setEditingDoc] = useState<Doc | null>(null);
+  const [addingDoc, setAddingDoc] = useState(false);
 
-  const docs = DOCS.map((d) => ({ ...d, ...docEdits[d.id] }));
-
-  const saveDocEdit = (id: string, title: string, description: string) => {
-    setDocEdits((prev) => {
-      const next = { ...prev, [id]: { title, description } };
-      window.localStorage.setItem(EDITS_STORAGE_KEY, JSON.stringify(next));
-      return next;
+  useEffect(() => {
+    let seeded = false;
+    const colRef = collection(db, "knowledgeDocs");
+    const unsub = onSnapshot(colRef, async (snap) => {
+      if (snap.empty && !seeded) {
+        seeded = true;
+        const batch = writeBatch(db);
+        SEED_DOCS.forEach((d) => batch.set(doc(colRef), d));
+        await batch.commit();
+        return;
+      }
+      setDocs(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Doc, "id">) })));
     });
+    return unsub;
+  }, []);
+
+  const uploadPdf = async (id: string, file: File) => {
+    const fileRef = ref(storage, `knowledgeDocs/${id}-${file.name}`);
+    await uploadBytes(fileRef, file);
+    return getDownloadURL(fileRef);
+  };
+
+  const saveDocEdit = async (data: { title: string; description: string; type: DocType; pages: string }, file: File | null) => {
+    if (!editingDoc) return;
+    const update: Partial<Doc> = { ...data };
+    if (file) update.url = await uploadPdf(editingDoc.id, file);
+    await updateDoc(doc(db, "knowledgeDocs", editingDoc.id), update);
     setEditingDoc(null);
+  };
+
+  const addNewDoc = async (data: { title: string; description: string; type: DocType; pages: string }, file: File | null) => {
+    if (!file) return;
+    const newRef = await addDoc(collection(db, "knowledgeDocs"), { ...data, url: "" });
+    const url = await uploadPdf(newRef.id, file);
+    await updateDoc(newRef, { url });
+    setAddingDoc(false);
+  };
+
+  const deleteDocItem = async (id: string) => {
+    if (!window.confirm("ยืนยันการลบเอกสารนี้?")) return;
+    await deleteDoc(doc(db, "knowledgeDocs", id));
+    setSelectedDoc(null);
   };
 
   const filtered = docs.filter((d) => {
@@ -205,7 +283,15 @@ export default function KnowledgePage() {
         <DocEditModal
           doc={editingDoc}
           onClose={() => setEditingDoc(null)}
-          onSave={(title, description) => saveDocEdit(editingDoc.id, title, description)}
+          onSave={saveDocEdit}
+        />
+      )}
+
+      {addingDoc && (
+        <DocEditModal
+          doc={null}
+          onClose={() => setAddingDoc(false)}
+          onSave={addNewDoc}
         />
       )}
 
@@ -248,7 +334,7 @@ export default function KnowledgePage() {
                 flexShrink: 0,
               }}
             >
-              <IconBadge icon={selectedDoc.icon} color="#fffdf8" size={40} />
+              <IconBadge icon={TYPE_ICON[selectedDoc.type]} color="#fffdf8" size={40} />
               <div style={{ flex: 1 }}>
                 <p style={{ margin: 0, color: "#fffdf8", fontSize: "var(--fs-body)", fontWeight: 700 }}>
                   {selectedDoc.title}
@@ -278,6 +364,24 @@ export default function KnowledgePage() {
                   <IconDownload size={16} stroke={2} />
                   ดาวน์โหลด
                 </a>
+                <button
+                  onClick={() => deleteDocItem(selectedDoc.id)}
+                  title="ลบเอกสาร"
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: "var(--radius-full)",
+                    border: "none",
+                    background: "rgba(255,255,255,0.15)",
+                    color: "white",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <IconTrash size={18} stroke={2} />
+                </button>
                 <button
                   onClick={() => setSelectedDoc(null)}
                   style={{
@@ -344,9 +448,9 @@ export default function KnowledgePage() {
           <Reveal delay={120} style={{ marginTop: "var(--sp-5)" }}>
             <div style={{ display: "flex", gap: "var(--sp-3)", flexWrap: "wrap" }}>
               {[
-                { label: "เอกสารทั้งหมด", count: DOCS.length },
-                { label: "WI Documents", count: DOCS.filter((d) => d.type === "wi").length },
-                { label: "Manuals & Guides", count: DOCS.filter((d) => d.type !== "wi").length },
+                { label: "เอกสารทั้งหมด", count: docs.length },
+                { label: "WI Documents", count: docs.filter((d) => d.type === "wi").length },
+                { label: "Manuals & Guides", count: docs.filter((d) => d.type !== "wi").length },
               ].map((s) => (
                 <div
                   key={s.label}
@@ -372,7 +476,7 @@ export default function KnowledgePage() {
           eyebrow="เอกสารอ้างอิง"
           title="เอกสารทั้งหมด"
           right={
-            <div style={{ display: "flex", gap: "var(--sp-2)", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "var(--sp-2)", flexWrap: "wrap", alignItems: "center" }}>
               {(["all", "wi", "manual", "scope"] as const).map((f) => (
                 <button
                   key={f}
@@ -393,6 +497,26 @@ export default function KnowledgePage() {
                   {f === "all" ? "ทั้งหมด" : f === "wi" ? "WI Documents" : f === "manual" ? "Manual" : "Scope & Guide"}
                 </button>
               ))}
+              <button
+                type="button"
+                onClick={() => setAddingDoc(true)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "6px 16px",
+                  borderRadius: "var(--radius-full)",
+                  border: "1.5px solid var(--primary)",
+                  background: "var(--primary)",
+                  color: "var(--primary-contrast)",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: "var(--fs-xs)",
+                }}
+              >
+                <IconPlus size={14} stroke={2} />
+                เพิ่มเอกสาร
+              </button>
             </div>
           }
         >
@@ -437,15 +561,25 @@ export default function KnowledgePage() {
                 return (
                   <HoverCard key={doc.id} onClick={() => setSelectedDoc(doc)}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                      <IconBadge icon={doc.icon} color="var(--primary)" />
-                      <button
-                        type="button"
-                        onClick={(e) => { e.stopPropagation(); setEditingDoc(doc); }}
-                        title="แก้ไขข้อมูลเอกสาร"
-                        style={{ border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", borderRadius: "var(--radius-sm)", padding: 5, cursor: "pointer", display: "inline-flex" }}
-                      >
-                        <IconPencil size={14} stroke={1.75} />
-                      </button>
+                      <IconBadge icon={TYPE_ICON[doc.type]} color="var(--primary)" />
+                      <div style={{ display: "flex", gap: 6 }}>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); setEditingDoc(doc); }}
+                          title="แก้ไขข้อมูลเอกสาร"
+                          style={{ border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", borderRadius: "var(--radius-sm)", padding: 5, cursor: "pointer", display: "inline-flex" }}
+                        >
+                          <IconPencil size={14} stroke={1.75} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); deleteDocItem(doc.id); }}
+                          title="ลบเอกสาร"
+                          style={{ border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", borderRadius: "var(--radius-sm)", padding: 5, cursor: "pointer", display: "inline-flex" }}
+                        >
+                          <IconTrash size={14} stroke={1.75} />
+                        </button>
+                      </div>
                     </div>
                     <div style={{ fontWeight: 600, color: "var(--text-strong)", marginTop: "var(--sp-3)" }}>{doc.title}</div>
                     <p style={{ margin: "var(--sp-1) 0 var(--sp-3)", color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.55 }}>
