@@ -89,7 +89,8 @@ export default function Sidebar({
       }}
     >
       {/* Brand */}
-      <div
+      <button
+        onClick={() => onNavigate("home")}
         style={{
           display: "flex",
           alignItems: "center",
@@ -97,7 +98,13 @@ export default function Sidebar({
           height: "var(--header-h)",
           padding: collapsed ? "0" : "0 var(--sp-4)",
           justifyContent: collapsed ? "center" : "flex-start",
+          border: "none",
           borderBottom: "1px solid var(--border)",
+          background: "transparent",
+          cursor: "pointer",
+          width: "100%",
+          textAlign: "left",
+          fontFamily: "inherit",
         }}
       >
         <img
@@ -124,7 +131,7 @@ export default function Sidebar({
             Procurement
           </span>
         )}
-      </div>
+      </button>
 
       {/* Nav */}
       <nav style={{ flex: 1, overflowY: "auto", padding: "var(--sp-3) 0" }}>
