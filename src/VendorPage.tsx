@@ -7,6 +7,8 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
   PieChart, Pie, AreaChart, Area, CartesianGrid,
 } from "recharts";
+import { fetchVendorPOLines, countsAsSpend, type POLine } from "./data/procurement";
+import ImportModal from "./components/ImportModal";
 
 type VendorStatus = "active" | "inactive";
 type ViewMode = "card" | "table";
@@ -154,6 +156,28 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
   const [note, setNote] = useState(vendor.note || "");
   const toggleCat = (c: string) => setCats(p => p.includes(c) ? p.filter(x => x !== c) : [...p, c]);
 
+  // PO drill-down: lazy-load this vendor's PO lines, grouped by PO number.
+  const [poLines, setPoLines] = useState<POLine[] | null>(null);
+  const [expandedPO, setExpandedPO] = useState<string | null>(null);
+  useEffect(() => {
+    let alive = true;
+    fetchVendorPOLines(vendor.vendorCode).then(ls => { if (alive) setPoLines(ls); });
+    return () => { alive = false; };
+  }, [vendor.vendorCode]);
+
+  const poGroups = useMemo(() => {
+    if (!poLines) return [];
+    const map = new Map<string, { poNumber: string; date: string; status: string; amount: number; lines: POLine[] }>();
+    for (const l of poLines) {
+      let g = map.get(l.poNumber);
+      if (!g) { g = { poNumber: l.poNumber, date: l.poDate, status: l.status, amount: 0, lines: [] }; map.set(l.poNumber, g); }
+      g.lines.push(l);
+      if (countsAsSpend(l.status)) g.amount += l.amountTHB;
+      if (l.poDate > g.date) g.date = l.poDate;
+    }
+    return [...map.values()].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  }, [poLines]);
+
   const catData = useMemo(() =>
     Object.entries(vendor.categorySpend || {})
       .map(([name, value]) => ({ name, value: Math.max(value, 0) }))
@@ -274,6 +298,54 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
             )}
           </div>
 
+          {/* PO HISTORY */}
+          <div style={{ marginBottom: "22px" }}>
+            <p style={{ margin: "0 0 10px", fontSize: "11px", color: "#94a3b8", fontWeight: "700" }}>
+              🧾 ประวัติใบสั่งซื้อ {poGroups.length > 0 && `(${poGroups.length} PO)`}
+            </p>
+            {poLines === null ? (
+              <p style={{ margin: 0, color: "#cbd5e1", fontSize: "13px" }}>กำลังโหลด...</p>
+            ) : poGroups.length === 0 ? (
+              <p style={{ margin: 0, color: "#cbd5e1", fontSize: "13px" }}>ยังไม่มีข้อมูล PO — นำเข้าไฟล์ All_Purchase orders ก่อน</p>
+            ) : (
+              <div style={{ maxHeight: "260px", overflowY: "auto", border: "1px solid #f1f5f9", borderRadius: "12px" }}>
+                {poGroups.map(g => {
+                  const open = expandedPO === g.poNumber;
+                  return (
+                    <div key={g.poNumber} style={{ borderBottom: "1px solid #f1f5f9" }}>
+                      <button onClick={() => setExpandedPO(open ? null : g.poNumber)} style={{
+                        width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center",
+                        padding: "10px 14px", border: "none", background: open ? "#f8faff" : "white", cursor: "pointer", textAlign: "left",
+                      }}>
+                        <span style={{ display: "flex", flexDirection: "column" }}>
+                          <span style={{ fontSize: "13px", fontWeight: "700", color: "#1a3c6e" }}>{open ? "▼" : "▶"} {g.poNumber}</span>
+                          <span style={{ fontSize: "11px", color: "#94a3b8" }}>{g.date || "-"} · {g.lines.length} รายการ{g.status === "Canceled" ? " · ยกเลิก" : ""}</span>
+                        </span>
+                        <strong style={{ fontSize: "13px", color: "#1a3c6e" }}>{bahtFull(g.amount)}</strong>
+                      </button>
+                      {open && (
+                        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px", background: "#fafbff" }}>
+                          <tbody>
+                            {g.lines.map((l, i) => (
+                              <tr key={i} style={{ borderTop: "1px solid #eef2f7" }}>
+                                <td style={{ padding: "7px 14px", color: "#475569" }}>
+                                  {l.itemNumber && <span style={{ color: "#94a3b8", marginRight: "6px" }}>{l.itemNumber}</span>}
+                                  {l.productName || l.category || "-"}
+                                </td>
+                                <td style={{ padding: "7px 10px", textAlign: "right", color: "#94a3b8", whiteSpace: "nowrap" }}>{l.qty ? `${l.qty.toLocaleString()} ${l.unit}` : ""}</td>
+                                <td style={{ padding: "7px 14px", textAlign: "right", fontWeight: "700", color: "#1a3c6e", whiteSpace: "nowrap" }}>{bahtFull(l.amountTHB)}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
           <div style={{ marginBottom: "22px" }}>
             <p style={{ margin: "0 0 8px", fontSize: "11px", color: "#94a3b8", fontWeight: "700" }}>💬 หมายเหตุ</p>
             <textarea value={note} onChange={e => setNote(e.target.value)} onBlur={() => onSaveNote(note)} rows={2}
@@ -300,6 +372,7 @@ export default function VendorPage() {
   const [detailVendor, setDetailVendor] = useState<Vendor | undefined>();
   const [showCharts, setShowCharts] = useState(true);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [showImport, setShowImport] = useState(false);
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "vendors"), (snap) => {
@@ -382,6 +455,8 @@ export default function VendorPage() {
         .vendor-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(26,60,110,0.16) !important; }
       `}</style>
 
+      {showImport && <ImportModal onClose={() => setShowImport(false)} />}
+
       {detailVendor && (
         <VendorDetailModal vendor={detailVendor}
           onClose={() => setDetailVendor(undefined)}
@@ -395,10 +470,15 @@ export default function VendorPage() {
       <div style={{ background: "linear-gradient(135deg, #0f2244 0%, #1a3c6e 45%, #2d5a9e 100%)", padding: "44px 40px 36px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: "-60px", right: "-60px", width: "240px", height: "240px", borderRadius: "50%", background: "rgba(226,201,126,0.08)" }} />
         <div style={{ maxWidth: "1200px", margin: "0 auto", position: "relative" }}>
-          <div>
-            <span style={{ background: "rgba(226,201,126,0.2)", border: "1px solid rgba(226,201,126,0.4)", color: "#e2c97e", padding: "4px 14px", borderRadius: "999px", fontSize: "12px", fontWeight: "700", letterSpacing: "0.08em" }}>PROCUREMENT</span>
-            <h1 style={{ margin: "10px 0 8px", color: "white", fontSize: "clamp(24px, 4vw, 36px)", fontWeight: "800" }}>🏢 Vendor Directory</h1>
-            <p style={{ margin: 0, color: "rgba(255,255,255,0.55)", fontSize: "15px" }}>ฐานข้อมูล Vendor จากประวัติการสั่งซื้อจริง</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "16px" }}>
+            <div>
+              <span style={{ background: "rgba(226,201,126,0.2)", border: "1px solid rgba(226,201,126,0.4)", color: "#e2c97e", padding: "4px 14px", borderRadius: "999px", fontSize: "12px", fontWeight: "700", letterSpacing: "0.08em" }}>PROCUREMENT</span>
+              <h1 style={{ margin: "10px 0 8px", color: "white", fontSize: "clamp(24px, 4vw, 36px)", fontWeight: "800" }}>🏢 Vendor Directory</h1>
+              <p style={{ margin: 0, color: "rgba(255,255,255,0.55)", fontSize: "15px" }}>ฐานข้อมูล Vendor จากประวัติการสั่งซื้อจริง</p>
+            </div>
+            <button onClick={() => setShowImport(true)} style={{ background: "rgba(226,201,126,0.2)", border: "1px solid rgba(226,201,126,0.5)", color: "#e2c97e", padding: "10px 20px", borderRadius: "12px", cursor: "pointer", fontWeight: "700", fontSize: "14px" }}>
+              📥 นำเข้าข้อมูล
+            </button>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginTop: "28px", maxWidth: "760px" }}>
             {[

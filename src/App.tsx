@@ -11,6 +11,7 @@ import OrgChartPage from "./OrgChartPage";
 import LoginPage from "./LoginPage";
 import HomePage from "./HomePage";
 import ProjectPage from "./ProjectPage";
+import ItemMasterPage from "./ItemMasterPage";
 import Sidebar from "./Sidebar";
 import type { Page } from "./Sidebar";
 
@@ -49,6 +50,7 @@ export default function App() {
           {currentPage === "dashboard" && <DashboardPage />}
           {currentPage === "project" && <ProjectPage />}
           {currentPage === "vendor" && <VendorPage />}
+          {currentPage === "itemmaster" && <ItemMasterPage />}
           {currentPage === "tracking" && <TrackingPage />}
           {currentPage === "team" && <OrgChartPage />}
           {currentPage === "knowledge" && <KnowledgePage />}
