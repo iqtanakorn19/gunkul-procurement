@@ -1,7 +1,7 @@
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import {
-  collection, onSnapshot, doc, addDoc, updateDoc, deleteDoc, writeBatch,
+  collection, onSnapshot, doc, addDoc, updateDoc, deleteDoc, writeBatch, setDoc, arrayUnion,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import {
@@ -34,6 +34,30 @@ export const COLOR_STATUS_HEX: Record<ColorStatus, string> = {
   Hold: "#3a8fd6",
   "On going": "#9aa3ad",
 };
+
+export const TOC_OPTIONS = ["Not yet", "WIP", "Done"] as const;
+export type TocStatus = (typeof TOC_OPTIONS)[number];
+
+/* Canonical brand lists used for new entries; existing free-text values entered before
+   this list existed are normalized for chart grouping via BRAND_NORMALIZE below. */
+export const PV_BRAND_BASE = [
+  "JA Solar", "Jinko", "Longi", "Trina", "AKCOM", "Aiko", "Huasun", "Rizen", "Sharp", "JA Solar & Trina", "-",
+];
+export const INVERTER_BRAND_BASE = ["Huawei", "ABB", "SMA", "SolarEdge", "Sungrow", "-"];
+export const BESS_BRAND_BASE = ["Huawei", "Sungrow", "-"];
+
+const PV_BRAND_NORMALIZE: Record<string, string> = {
+  "JA": "JA Solar", "JA SOLAR": "JA Solar", "JA Solar": "JA Solar",
+  "JINKO": "Jinko", "Jinko": "Jinko",
+  "JA & Trina": "JA Solar & Trina",
+  "Aiko \n(Light Weight)": "Aiko", "Aiko": "Aiko",
+};
+const INVERTER_BRAND_NORMALIZE: Record<string, string> = {
+  "Huawei": "Huawei", "HUawei": "Huawei",
+  "Solar EDGE": "SolarEdge", "Solar Edge": "SolarEdge", "SolarEDGE": "SolarEdge", "SolarEdge": "SolarEdge",
+};
+export const normalizePvBrand = (brand: string) => PV_BRAND_NORMALIZE[brand] ?? brand;
+export const normalizeInverterBrand = (brand: string) => INVERTER_BRAND_NORMALIZE[brand] ?? brand;
 
 export interface ProjectPhase {
   name: string;
@@ -84,6 +108,7 @@ export interface ProjectSeed {
   engPic: string;
   status: ProjectStatus;
   colorStatus: ColorStatus;
+  toc: TocStatus;
   boi: string;
   note: string;
   estimateSiteMob: string;
@@ -109,7 +134,7 @@ const EMPTY_PROJECT: ProjectSeed = {
   materialThbWatt: null, labourThbWatt: null, subconName: "", awardDate: "", pvBrand: "",
   powerClass: "", inverterBrand: "", inverterModel: "", optimizer: "", bessBrand: "",
   bessSize: "", om: "", kickoffDate: "", puPic: "", pmPic: "", engPic: "", status: "ไม่ระบุ",
-  colorStatus: "On going", boi: "", note: "", estimateSiteMob: "", forecastSiteMob1: "",
+  colorStatus: "On going", toc: "Not yet", boi: "", note: "", estimateSiteMob: "", forecastSiteMob1: "",
   forecastSiteMob2: "", phases: [],
 };
 
@@ -134,12 +159,51 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
+function BrandSelect({
+  label, value, onChange, baseOptions, customOptions, onAddCustom,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  baseOptions: string[];
+  customOptions: string[];
+  onAddCustom: (v: string) => void;
+}) {
+  const ADD_NEW = "__add_new__";
+  const options = Array.from(new Set([...baseOptions, ...customOptions, ...(value ? [value] : [])]));
+  return (
+    <Field label={label}>
+      <select
+        style={inputStyle}
+        value={value}
+        onChange={(e) => {
+          if (e.target.value === ADD_NEW) {
+            const v = window.prompt(`เพิ่ม ${label} ใหม่:`);
+            if (v && v.trim()) {
+              onAddCustom(v.trim());
+              onChange(v.trim());
+            }
+            return;
+          }
+          onChange(e.target.value);
+        }}
+      >
+        <option value="">-</option>
+        {options.filter((o) => o !== "-" && o !== "").map((o) => <option key={o} value={o}>{o}</option>)}
+        <option value={ADD_NEW}>+ เพิ่มเจ้าใหม่...</option>
+      </select>
+    </Field>
+  );
+}
+
 function ProjectEditModal({
-  project, onSave, onClose,
+  project, onSave, onClose, customBrandOptions, onAddCustomBrand,
 }: {
   project: Project | null;
   onSave: (data: ProjectSeed) => Promise<void>;
   onClose: () => void;
+  customBrandOptions: { pv: string[]; inverter: string[]; bess: string[] };
+  onAddCustomBrand: (type: "pv" | "inverter" | "bess", value: string) => Promise<void>;
 }) {
   const [data, setData] = useState<ProjectSeed>(project ? { ...project } : { ...EMPTY_PROJECT });
   const [saving, setSaving] = useState(false);
@@ -226,12 +290,12 @@ function ProjectEditModal({
           <div style={{ borderTop: "1px solid var(--border)", paddingTop: "var(--sp-3)" }}>
             <strong style={{ fontSize: "var(--fs-sm)" }}>สเปคอุปกรณ์</strong>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "var(--sp-3)", marginTop: "var(--sp-2)" }}>
-              <Field label="PV Brand"><input style={inputStyle} value={data.pvBrand} onChange={(e) => set("pvBrand", e.target.value)} /></Field>
+              <BrandSelect label="PV Brand" value={data.pvBrand} onChange={(v) => set("pvBrand", v)} baseOptions={PV_BRAND_BASE} customOptions={customBrandOptions.pv} onAddCustom={(v) => onAddCustomBrand("pv", v)} />
               <Field label="Power Class"><input style={inputStyle} value={data.powerClass} onChange={(e) => set("powerClass", e.target.value)} /></Field>
-              <Field label="Inverter Brand"><input style={inputStyle} value={data.inverterBrand} onChange={(e) => set("inverterBrand", e.target.value)} /></Field>
+              <BrandSelect label="Inverter Brand" value={data.inverterBrand} onChange={(v) => set("inverterBrand", v)} baseOptions={INVERTER_BRAND_BASE} customOptions={customBrandOptions.inverter} onAddCustom={(v) => onAddCustomBrand("inverter", v)} />
               <Field label="Inverter Model"><input style={inputStyle} value={data.inverterModel} onChange={(e) => set("inverterModel", e.target.value)} /></Field>
               <Field label="Optimizer"><input style={inputStyle} value={data.optimizer} onChange={(e) => set("optimizer", e.target.value)} /></Field>
-              <Field label="BESS Brand"><input style={inputStyle} value={data.bessBrand} onChange={(e) => set("bessBrand", e.target.value)} /></Field>
+              <BrandSelect label="BESS Brand" value={data.bessBrand} onChange={(v) => set("bessBrand", v)} baseOptions={BESS_BRAND_BASE} customOptions={customBrandOptions.bess} onAddCustom={(v) => onAddCustomBrand("bess", v)} />
               <Field label="BESS Size (kWh)"><input style={inputStyle} value={data.bessSize} onChange={(e) => set("bessSize", e.target.value)} /></Field>
               <Field label="OM"><input style={inputStyle} value={data.om} onChange={(e) => set("om", e.target.value)} /></Field>
             </div>
@@ -252,6 +316,11 @@ function ProjectEditModal({
               <Field label="สถานะสี (ตามไฮไลท์)">
                 <select style={inputStyle} value={data.colorStatus} onChange={(e) => set("colorStatus", e.target.value as ColorStatus)}>
                   {COLOR_STATUS_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
+                </select>
+              </Field>
+              <Field label="TOC">
+                <select style={inputStyle} value={data.toc} onChange={(e) => set("toc", e.target.value as TocStatus)}>
+                  {TOC_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
                 </select>
               </Field>
               <Field label="BOI"><input style={inputStyle} value={data.boi} onChange={(e) => set("boi", e.target.value)} /></Field>
@@ -338,6 +407,26 @@ export default function ProjectPage() {
   const [sortBy, setSortBy] = useState<"name" | "jobNo" | "kWp" | "status">("jobNo");
   const [sortAsc, setSortAsc] = useState(true);
   const [editingCell, setEditingCell] = useState<{ projectId: string; field: keyof Project; value: string } | null>(null);
+  const [customBrandOptions, setCustomBrandOptions] = useState<{ pv: string[]; inverter: string[]; bess: string[] }>({ pv: [], inverter: [], bess: [] });
+
+  useEffect(() => {
+    const ref = doc(db, "settings", "brandOptions");
+    const unsub = onSnapshot(ref, (snap) => {
+      const d = snap.data();
+      setCustomBrandOptions({
+        pv: (d?.pv as string[]) ?? [],
+        inverter: (d?.inverter as string[]) ?? [],
+        bess: (d?.bess as string[]) ?? [],
+      });
+    });
+    return unsub;
+  }, []);
+
+  const addCustomBrand = async (type: "pv" | "inverter" | "bess", value: string) => {
+    const v = value.trim();
+    if (!v) return;
+    await setDoc(doc(db, "settings", "brandOptions"), { [type]: arrayUnion(v) }, { merge: true });
+  };
 
   useEffect(() => {
     let seeded = false;
@@ -442,29 +531,32 @@ export default function ProjectPage() {
   const pvBrandChartData = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of projects) {
-      if (p.pvBrand) counts[p.pvBrand] = (counts[p.pvBrand] ?? 0) + 1;
+      if (p.pvBrand) {
+        const b = normalizePvBrand(p.pvBrand);
+        counts[b] = (counts[b] ?? 0) + 1;
+      }
     }
     return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 8);
   }, [projects]);
 
   const capacityChartData = useMemo(() => {
-    const ranges: Record<string, number> = { "0-5": 0, "5-10": 0, "10-20": 0, "20-50": 0, "50+": 0 };
+    const ranges: Record<string, number> = { "< 500 kWp": 0, "> 500 kWp": 0 };
     for (const p of projects) {
       if (p.capacityKwp) {
-        if (p.capacityKwp < 5) ranges["0-5"]++;
-        else if (p.capacityKwp < 10) ranges["5-10"]++;
-        else if (p.capacityKwp < 20) ranges["10-20"]++;
-        else if (p.capacityKwp < 50) ranges["20-50"]++;
-        else ranges["50+"]++;
+        if (p.capacityKwp < 500) ranges["< 500 kWp"]++;
+        else ranges["> 500 kWp"]++;
       }
     }
-    return Object.entries(ranges).map(([name, count]) => ({ name: `${name} kWp`, count })).filter((d) => d.count > 0);
+    return Object.entries(ranges).map(([name, count]) => ({ name, count })).filter((d) => d.count > 0);
   }, [projects]);
 
   const inverterBrandChartData = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of projects) {
-      if (p.inverterBrand) counts[p.inverterBrand] = (counts[p.inverterBrand] ?? 0) + 1;
+      if (p.inverterBrand) {
+        const b = normalizeInverterBrand(p.inverterBrand);
+        counts[b] = (counts[b] ?? 0) + 1;
+      }
     }
     return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 8);
   }, [projects]);
@@ -641,6 +733,7 @@ export default function ProjectPage() {
                     { label: "Job", key: "jobNo" as const },
                     { label: "ชื่อโครงการ", key: "name" as const },
                     { label: "Status", key: undefined },
+                    { label: "TOC", key: undefined },
                   ] as { label: string; key?: "jobNo" | "name" }[]).map(({ label, key }, i) => (
                     <th
                       key={label}
@@ -688,9 +781,6 @@ export default function ProjectPage() {
                     { label: "สถานะ" },
                     { label: "BOI" },
                     { label: "Remark" },
-                    { label: "Est. Site Mob" },
-                    { label: "Forecast Site Mob 1" },
-                    { label: "Forecast Site Mob 2" },
                     { label: "" },
                   ].map(({ label }, idx) => (
                     <th
@@ -752,6 +842,36 @@ export default function ProjectPage() {
                           </span>
                         )}
                       </td>
+                      <td style={{ padding: "8px 10px", cursor: "pointer" }} onClick={() => setEditingCell({ projectId: p.id, field: "toc", value: p.toc })}>
+                        {editingCell?.projectId === p.id && editingCell.field === "toc" ? (
+                          <select
+                            autoFocus
+                            value={editingCell.value}
+                            onChange={(e) => setEditingCell({ ...editingCell, value: e.target.value })}
+                            onBlur={() => {
+                              if (editingCell.value !== p.toc) {
+                                saveInlineEdit(p.id, "toc", editingCell.value as TocStatus);
+                              } else {
+                                setEditingCell(null);
+                              }
+                            }}
+                            style={{ ...inputStyle, padding: "2px 4px", fontSize: "11px" }}
+                          >
+                            {TOC_OPTIONS.map((o) => (
+                              <option key={o} value={o}>{o}</option>
+                            ))}
+                          </select>
+                        ) : (
+                          <span style={{
+                            display: "inline-flex", alignItems: "center", padding: "0.2rem 0.55rem",
+                            borderRadius: "999px", fontSize: "10px",
+                            background: p.toc === "Done" ? "color-mix(in srgb, var(--success) 16%, transparent)" : p.toc === "WIP" ? "color-mix(in srgb, var(--warning) 16%, transparent)" : "color-mix(in srgb, var(--danger) 16%, transparent)",
+                            color: p.toc === "Done" ? "var(--success)" : p.toc === "WIP" ? "var(--warning)" : "var(--danger)",
+                          }}>
+                            {p.toc}
+                          </span>
+                        )}
+                      </td>
                       <td style={{ padding: "8px 10px" }}>{p.roofType || "-"}</td>
                       <td style={{ padding: "8px 10px" }}>{p.contractType}</td>
                       <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.capacityKwp ?? "-"}</td>
@@ -783,9 +903,6 @@ export default function ProjectPage() {
                       <td style={{ padding: "8px 10px" }}>{p.status}</td>
                       <td style={{ padding: "8px 10px" }}>{p.boi || "-"}</td>
                       <td style={{ padding: "8px 10px", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", color: "var(--text-muted)" }}>{p.note || "-"}</td>
-                      <td style={{ padding: "8px 10px" }}>{p.estimateSiteMob || "-"}</td>
-                      <td style={{ padding: "8px 10px" }}>{p.forecastSiteMob1 || "-"}</td>
-                      <td style={{ padding: "8px 10px" }}>{p.forecastSiteMob2 || "-"}</td>
                       <td style={{ padding: "8px 10px" }}>
                         <button onClick={() => setEditingProject(p)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-muted)", marginRight: "0.4rem" }}>
                           <IconPencil size={16} />
@@ -804,10 +921,10 @@ export default function ProjectPage() {
       </Section>
 
       {editingProject && (
-        <ProjectEditModal project={editingProject} onSave={saveProjectEdit} onClose={() => setEditingProject(null)} />
+        <ProjectEditModal project={editingProject} onSave={saveProjectEdit} onClose={() => setEditingProject(null)} customBrandOptions={customBrandOptions} onAddCustomBrand={addCustomBrand} />
       )}
       {addingProject && (
-        <ProjectEditModal project={null} onSave={addNewProject} onClose={() => setAddingProject(false)} />
+        <ProjectEditModal project={null} onSave={addNewProject} onClose={() => setAddingProject(false)} customBrandOptions={customBrandOptions} onAddCustomBrand={addCustomBrand} />
       )}
     </div>
   );
