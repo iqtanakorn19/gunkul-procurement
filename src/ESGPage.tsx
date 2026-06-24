@@ -61,10 +61,10 @@ const SSCM_STEPS = [
 ];
 
 const SUPPLIER_GROUPS = [
-  { name: "Critical Tier-1 Supplier", count: "38 ราย", value: "679.5 ลบ.", desc: "มูลค่าซื้อขายสูง ≥80% ของมูลค่ารวม / ตัวเลือกน้อยราย / สำคัญต่อธุรกิจสูง", color: "var(--danger)" },
-  { name: "Tier-1 Supplier", count: "65 ราย", value: "160.2 ลบ.", desc: "มูลค่าปานกลาง-ต่ำ ซื้อขายต่อเนื่อง สำคัญปานกลาง", color: "var(--warning)" },
-  { name: "General Supplier", count: "525 ราย", value: "76.1 ลบ.", desc: "มูลค่าต่ำ ซื้อครั้งเดียว สำคัญน้อย", color: "var(--info)" },
-  { name: "Affiliated Company", count: "16 ราย", value: "364.4 ลบ.", desc: "คู่ค้าที่เป็นบริษัทในเครือกลุ่ม GUNKUL", color: "var(--success)" },
+  { name: "Critical Tier-1 Supplier", count: "38 ราย", countNum: 38, value: "679.5 ลบ.", valueNum: 679.5, desc: "มูลค่าซื้อขายสูง ≥80% ของมูลค่ารวม / ตัวเลือกน้อยราย / สำคัญต่อธุรกิจสูง", color: "var(--danger)" },
+  { name: "Tier-1 Supplier", count: "65 ราย", countNum: 65, value: "160.2 ลบ.", valueNum: 160.2, desc: "มูลค่าปานกลาง-ต่ำ ซื้อขายต่อเนื่อง สำคัญปานกลาง", color: "var(--warning)" },
+  { name: "General Supplier", count: "525 ราย", countNum: 525, value: "76.1 ลบ.", valueNum: 76.1, desc: "มูลค่าต่ำ ซื้อครั้งเดียว สำคัญน้อย", color: "var(--info)" },
+  { name: "Affiliated Company", count: "16 ราย", countNum: 16, value: "364.4 ลบ.", valueNum: 364.4, desc: "คู่ค้าที่เป็นบริษัทในเครือกลุ่ม GUNKUL", color: "var(--success)" },
 ];
 
 const RISK_LEVELS = [
@@ -73,6 +73,13 @@ const RISK_LEVELS = [
   { range: "5–8", level: "ความเสี่ยงสูง", action: "กำหนดมาตรการควบคุมเพื่อลดความเสี่ยง", color: "var(--warning)" },
   { range: "9–16", level: "ความเสี่ยงสูงมาก", action: "กำหนดมาตรการควบคุมเพื่อลดความเสี่ยง + On-site Audit ภาคบังคับ", color: "var(--danger)" },
 ];
+
+function riskColor(score: number) {
+  if (score <= 2) return "var(--success)";
+  if (score <= 4) return "var(--info)";
+  if (score <= 8) return "var(--warning)";
+  return "var(--danger)";
+}
 
 const GRADES = [
   { grade: "A", label: "ดีมาก", score: "> 80%", result: "คงสถานะคู่ค้าใน AVL", color: "var(--success)" },
@@ -257,6 +264,34 @@ export default function ESGPage() {
 
         {/* Supplier groups */}
         <Section eyebrow="จำแนกคู่ค้า" title="4 กลุ่มคู่ค้า" intro="จัดกลุ่มตามมูลค่าซื้อขายและความสำคัญต่อธุรกิจ — ตัวอย่างจริงจากกลุ่ม GKE">
+          <HoverCard interactive={false} style={{ marginBottom: "var(--sp-4)" }}>
+            <p style={{ margin: "0 0 var(--sp-4)", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+              มูลค่าซื้อขายต่อกลุ่ม (ล้านบาท)
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-3)" }}>
+              {(() => {
+                const max = Math.max(...SUPPLIER_GROUPS.map((g) => g.valueNum));
+                return SUPPLIER_GROUPS.map((g) => (
+                  <div key={g.name} style={{ display: "flex", alignItems: "center", gap: "var(--sp-3)" }}>
+                    <span style={{ width: 150, flexShrink: 0, fontSize: "var(--fs-xs)", fontWeight: 600, color: "var(--text-strong)" }}>{g.name}</span>
+                    <div style={{ flex: 1, height: 14, borderRadius: "var(--radius-full)", background: "var(--surface-2)", overflow: "hidden" }}>
+                      <div
+                        style={{
+                          height: "100%",
+                          width: `${(g.valueNum / max) * 100}%`,
+                          background: g.color,
+                          borderRadius: "var(--radius-full)",
+                          transition: "width 0.6s cubic-bezier(0.22,1,0.36,1)",
+                        }}
+                      />
+                    </div>
+                    <span style={{ width: 90, flexShrink: 0, textAlign: "right", fontSize: "var(--fs-xs)", fontWeight: 700, color: g.color }}>{g.value}</span>
+                    <span style={{ width: 60, flexShrink: 0, textAlign: "right", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>{g.count}</span>
+                  </div>
+                ));
+              })()}
+            </div>
+          </HoverCard>
           <div style={grid(240)}>
             {SUPPLIER_GROUPS.map((g) => (
               <HoverCard key={g.name}>
@@ -287,6 +322,57 @@ export default function ESGPage() {
           title="ระดับความเสี่ยงคู่ค้า"
           intro="คะแนนความเสี่ยง = โอกาสที่จะเกิด (Likelihood) × ผลกระทบ (Impact) ครอบคลุม 4 ด้าน: สินค้า&บริการ / ดำเนินธุรกิจ / สิ่งแวดล้อม / สังคม"
         >
+          <HoverCard interactive={false} style={{ marginBottom: "var(--sp-4)" }}>
+            <div style={{ display: "flex", gap: "var(--sp-3)" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  writingMode: "vertical-rl",
+                  transform: "rotate(180deg)",
+                  fontSize: "var(--fs-xs)",
+                  fontWeight: 700,
+                  color: "var(--text-faint)",
+                  flexShrink: 0,
+                }}
+              >
+                โอกาสเกิด (Likelihood) →
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--sp-2)" }}>
+                  {[4, 3, 2, 1].map((l) =>
+                    [1, 2, 3, 4].map((i) => {
+                      const score = l * i;
+                      return (
+                        <div
+                          key={`${l}-${i}`}
+                          title={`โอกาส ${l} × ผลกระทบ ${i} = ${score}`}
+                          style={{
+                            aspectRatio: "1",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "var(--radius-sm)",
+                            background: tint(riskColor(score)),
+                            color: riskColor(score),
+                            fontWeight: 800,
+                            fontSize: "var(--fs-sm)",
+                          }}
+                        >
+                          {score}
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+                <p style={{ margin: "var(--sp-2) 0 0", textAlign: "center", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)" }}>
+                  ผลกระทบ (Impact) →
+                </p>
+              </div>
+            </div>
+          </HoverCard>
           <HoverCard interactive={false}>
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-2)" }}>
               {RISK_LEVELS.map((r) => (
@@ -333,6 +419,42 @@ export default function ESGPage() {
           title="เกรดประเมินคู่ค้า"
           intro="ประเมินทุก 6 เดือน ด้วยใบประเมินผู้ขาย/ผู้รับเหมา ครอบคลุมมิติเศรษฐกิจ สังคม สิ่งแวดล้อม"
         >
+          <HoverCard interactive={false} style={{ marginBottom: "var(--sp-4)" }}>
+            <div style={{ display: "flex", height: 28, borderRadius: "var(--radius-full)", overflow: "hidden" }}>
+              {[
+                { grade: "F", width: 50, color: "var(--danger)" },
+                { grade: "D", width: 10, color: "var(--warning)" },
+                { grade: "C", width: 10, color: "var(--info)" },
+                { grade: "B", width: 10, color: "var(--success)" },
+                { grade: "A", width: 20, color: "var(--success)" },
+              ].map((s) => (
+                <div
+                  key={s.grade}
+                  style={{
+                    width: `${s.width}%`,
+                    background: s.color,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    fontWeight: 800,
+                    fontSize: "var(--fs-xs)",
+                    opacity: s.grade === "F" ? 0.85 : 1,
+                  }}
+                >
+                  {s.grade}
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: "var(--sp-2)", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>
+              <span>0%</span>
+              <span>50%</span>
+              <span>60%</span>
+              <span>70%</span>
+              <span>80%</span>
+              <span>100%</span>
+            </div>
+          </HoverCard>
           <div style={grid(200)}>
             {GRADES.map((g) => (
               <HoverCard key={g.grade}>
