@@ -526,39 +526,71 @@ export default function ProjectPage() {
           </div>
         ) : (
           <div style={{ overflowX: "auto" }}>
-            <div style={{ marginBottom: "var(--sp-3)", display: "flex", gap: "var(--sp-2)", alignItems: "center", fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
-              <span>เรียงลำดับ:</span>
-              {[{ key: "jobNo", label: "Job No." }, { key: "name", label: "ชื่อ" }, { key: "kWp", label: "kWp" }, { key: "status", label: "สถานะ" }].map((o) => (
-                <button
-                  key={o.key}
-                  onClick={() => {
-                    if (sortBy === o.key) setSortAsc(!sortAsc);
-                    else { setSortBy(o.key as typeof sortBy); setSortAsc(true); }
-                  }}
-                  style={{
-                    border: sortBy === o.key ? "1px solid var(--accent)" : "1px solid var(--border-strong)",
-                    background: sortBy === o.key ? "color-mix(in srgb, var(--accent) 12%, transparent)" : "transparent",
-                    color: sortBy === o.key ? "var(--accent)" : "var(--text-muted)",
-                    borderRadius: "var(--radius-sm)", padding: "0.3rem 0.6rem", cursor: "pointer", fontSize: "var(--fs-xs)",
-                  }}
-                >
-                  {o.label} {sortBy === o.key && (sortAsc ? "↑" : "↓")}
-                </button>
-              ))}
-            </div>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--fs-sm)" }}>
               <thead>
                 <tr style={{ textAlign: "left", borderBottom: "1px solid var(--border-strong)" }}>
-                  <th style={{ padding: "0.5rem" }}>Job</th>
-                  <th style={{ padding: "0.5rem" }}>ชื่อโครงการ</th>
+                  <th style={{ padding: 0 }}>
+                    <button
+                      onClick={() => {
+                        if (sortBy === "jobNo") setSortAsc(!sortAsc);
+                        else { setSortBy("jobNo"); setSortAsc(true); }
+                      }}
+                      style={{
+                        width: "100%", textAlign: "left", padding: "0.5rem", border: "none", background: "transparent",
+                        cursor: "pointer", fontWeight: sortBy === "jobNo" ? 600 : 500, color: sortBy === "jobNo" ? "var(--accent)" : "var(--text-strong)",
+                      }}
+                    >
+                      Job {sortBy === "jobNo" && (sortAsc ? "↑" : "↓")}
+                    </button>
+                  </th>
+                  <th style={{ padding: 0 }}>
+                    <button
+                      onClick={() => {
+                        if (sortBy === "name") setSortAsc(!sortAsc);
+                        else { setSortBy("name"); setSortAsc(true); }
+                      }}
+                      style={{
+                        width: "100%", textAlign: "left", padding: "0.5rem", border: "none", background: "transparent",
+                        cursor: "pointer", fontWeight: sortBy === "name" ? 600 : 500, color: sortBy === "name" ? "var(--accent)" : "var(--text-strong)",
+                      }}
+                    >
+                      ชื่อโครงการ {sortBy === "name" && (sortAsc ? "↑" : "↓")}
+                    </button>
+                  </th>
                   <th style={{ padding: "0.5rem" }}>ประเภท</th>
-                  <th style={{ padding: "0.5rem" }}>kWp</th>
+                  <th style={{ padding: 0 }}>
+                    <button
+                      onClick={() => {
+                        if (sortBy === "kWp") setSortAsc(!sortAsc);
+                        else { setSortBy("kWp"); setSortAsc(true); }
+                      }}
+                      style={{
+                        width: "100%", textAlign: "left", padding: "0.5rem", border: "none", background: "transparent",
+                        cursor: "pointer", fontWeight: sortBy === "kWp" ? 600 : 500, color: sortBy === "kWp" ? "var(--accent)" : "var(--text-strong)",
+                      }}
+                    >
+                      kWp {sortBy === "kWp" && (sortAsc ? "↑" : "↓")}
+                    </button>
+                  </th>
                   <th style={{ padding: "0.5rem" }}>PV</th>
                   <th style={{ padding: "0.5rem" }}>Inverter</th>
                   <th style={{ padding: "0.5rem" }}>Optimizer</th>
                   <th style={{ padding: "0.5rem" }}>BESS</th>
                   <th style={{ padding: "0.5rem" }}>PM PIC</th>
-                  <th style={{ padding: "0.5rem" }}>สถานะ</th>
+                  <th style={{ padding: 0 }}>
+                    <button
+                      onClick={() => {
+                        if (sortBy === "status") setSortAsc(!sortAsc);
+                        else { setSortBy("status"); setSortAsc(true); }
+                      }}
+                      style={{
+                        width: "100%", textAlign: "left", padding: "0.5rem", border: "none", background: "transparent",
+                        cursor: "pointer", fontWeight: sortBy === "status" ? 600 : 500, color: sortBy === "status" ? "var(--accent)" : "var(--text-strong)",
+                      }}
+                    >
+                      สถานะ {sortBy === "status" && (sortAsc ? "↑" : "↓")}
+                    </button>
+                  </th>
                   <th style={{ padding: "0.5rem" }} />
                 </tr>
               </thead>
