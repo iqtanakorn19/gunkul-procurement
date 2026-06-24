@@ -112,10 +112,18 @@ export default function ItemMasterPage() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, "items"), (snap) => {
-      setItems(snap.docs.map((d) => d.data() as ItemAgg));
-      setLoading(false);
-    });
+    const unsub = onSnapshot(
+      collection(db, "items"),
+      (snap) => {
+        setItems(snap.docs.map((d) => d.data() as ItemAgg));
+        setLoading(false);
+      },
+      (err) => {
+        // Don't hang on "loading" forever if the listener errors (e.g. rules).
+        console.error("items snapshot error:", err);
+        setLoading(false);
+      },
+    );
     return () => unsub();
   }, []);
 
