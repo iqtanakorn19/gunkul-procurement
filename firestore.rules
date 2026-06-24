@@ -1,0 +1,36 @@
+rules_version = '2';
+
+// Firestore security rules for the Gunkul Procurement app.
+// All app data requires an authenticated user (email/password login).
+//
+// HOW TO APPLY:
+//   Firebase Console → Firestore Database → Rules tab →
+//   paste this whole file → Publish.
+//
+// Keep this file in sync with the collections used in src/ so the rules
+// are version-controlled alongside the code.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Any signed-in user can read/write app data.
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    match /vendors/{doc}        { allow read, write: if signedIn(); }
+    match /items/{doc}          { allow read, write: if signedIn(); }
+    match /poLines/{doc}        { allow read, write: if signedIn(); }
+    match /meta/{doc}           { allow read, write: if signedIn(); }
+    match /homeProjects/{doc}   { allow read, write: if signedIn(); }
+    match /kickoffProjects/{doc}{ allow read, write: if signedIn(); }
+    match /knowledgeDocs/{doc}  { allow read, write: if signedIn(); }
+    match /orgChart/{doc}       { allow read, write: if signedIn(); }
+    match /settings/{doc}       { allow read, write: if signedIn(); }
+
+    // Tracking sheets keep their rows in a sub-collection.
+    match /trackingTabs/{tab} {
+      allow read, write: if signedIn();
+      match /rows/{row}        { allow read, write: if signedIn(); }
+    }
+  }
+}
