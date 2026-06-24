@@ -266,16 +266,7 @@ export default function KnowledgePage() {
 
         {/* Kick-off Checklist */}
         <div style={{ background: "white", borderRadius: "20px", padding: "28px", marginBottom: "24px", boxShadow: "0 2px 12px rgba(26,60,110,0.07)", border: "1px solid rgba(226,201,126,0.2)" }}>
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px", marginBottom: "16px" }}>
-            <p style={{ margin: 0, fontSize: "16px", fontWeight: "700", color: "#1a3c6e" }}>🚀 Kick-off Checklist: เริ่มโครงการต้องเตรียมอะไรบ้าง</p>
-            <span style={{ flexShrink: 0, fontSize: "11px", fontWeight: "700", color: "#92400e", background: "#fef3c7", padding: "3px 10px", borderRadius: "999px" }}>
-              เร็วๆนี้: Item Master
-            </span>
-          </div>
-          <p style={{ margin: "0 0 16px", fontSize: "12px", color: "#94a3b8", lineHeight: 1.6 }}>
-            รายการนี้เป็นภาพรวมคร่าวๆ ก่อน — เวอร์ชันเต็มกำลังพัฒนาในหน้า Item Master โดยจะดึงข้อมูลจาก PO ย้อนหลังมา analyze
-            ให้กรอกแค่ขนาดโครงการ (Watt) แล้วระบบ list อุปกรณ์ที่ต้องใช้พร้อมราคาให้อัตโนมัติ
-          </p>
+          <p style={{ margin: "0 0 16px", fontSize: "16px", fontWeight: "700", color: "#1a3c6e" }}>🚀 Kick-off Checklist: เริ่มโครงการต้องเตรียมอะไรบ้าง</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             {KICKOFF_CHECKLIST.map((c) => (
               <div key={c.item} style={{ display: "flex", gap: "12px", alignItems: "flex-start", padding: "12px 14px", borderRadius: "10px", background: "#f8faff" }}>
@@ -345,24 +336,6 @@ export default function KnowledgePage() {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Quick Reference */}
-        <p style={{ fontSize: "16px", fontWeight: "700", color: "#1a3c6e", marginBottom: "12px" }}>⚡ Quick Reference</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px" }}>
-          {[
-            { label: "Approval — Manager", value: "< 100,000 บาท" },
-            { label: "Approval — VP", value: "100,000 – 499,999 บาท" },
-            { label: "Approval — CEO", value: "≥ 500,000 บาท" },
-            { label: "Lead time < 1 MW", value: "2–3 เดือน" },
-            { label: "Lead time > 1 MW", value: "4–6 เดือน" },
-            { label: "Bottleneck หลัก", value: "ใบอนุญาต อ.1 (≥ 6 เดือน)" },
-          ].map(r => (
-            <div key={r.label} style={{ background: "white", borderRadius: "10px", padding: "14px 16px", borderLeft: "3px solid #e2c97e", boxShadow: "0 1px 6px rgba(26,60,110,0.06)" }}>
-              <p style={{ margin: "0 0 4px", fontSize: "11px", color: "#94a3b8", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>{r.label}</p>
-              <p style={{ margin: 0, fontSize: "14px", fontWeight: "700", color: "#1a3c6e" }}>{r.value}</p>
-            </div>
-          ))}
         </div>
       </div>
     </div>
