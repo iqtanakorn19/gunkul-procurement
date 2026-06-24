@@ -389,6 +389,9 @@ export default function VendorPage() {
         } as Vendor;
       }));
       setLoading(false);
+    }, (err) => {
+      console.error("vendors snapshot error:", err);
+      setLoading(false);
     });
     return () => unsub();
   }, []);
