@@ -484,7 +484,7 @@ export default function ProjectPage() {
           <IconBuildingFactory2 size={16} stroke={1.75} />
           Project
         </div>
-        <h1 style={{ margin: "0 0 var(--sp-5)", color: "var(--text-strong)" }}>โครงการทั้งหมด (Kick Off)</h1>
+        <h1 style={{ margin: "0 0 var(--sp-5)", color: "var(--text-strong)" }}>โครงการทั้งหมด</h1>
       </Reveal>
 
       {loadError && (
