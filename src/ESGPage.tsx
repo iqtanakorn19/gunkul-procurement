@@ -60,11 +60,18 @@ const SSCM_STEPS = [
   },
 ];
 
+const GROUP_SCALE = [
+  "var(--navy-deep)",
+  "color-mix(in srgb, var(--navy-deep) 55%, var(--accent) 45%)",
+  "color-mix(in srgb, var(--navy-deep) 25%, var(--accent) 75%)",
+  "var(--accent)",
+];
+
 const SUPPLIER_GROUPS = [
-  { name: "Critical Tier-1 Supplier", count: "38 ราย", countNum: 38, value: "679.5 ลบ.", valueNum: 679.5, desc: "มูลค่าซื้อขายสูง ≥80% ของมูลค่ารวม / ตัวเลือกน้อยราย / สำคัญต่อธุรกิจสูง", color: "var(--danger)" },
-  { name: "Tier-1 Supplier", count: "65 ราย", countNum: 65, value: "160.2 ลบ.", valueNum: 160.2, desc: "มูลค่าปานกลาง-ต่ำ ซื้อขายต่อเนื่อง สำคัญปานกลาง", color: "var(--warning)" },
-  { name: "General Supplier", count: "525 ราย", countNum: 525, value: "76.1 ลบ.", valueNum: 76.1, desc: "มูลค่าต่ำ ซื้อครั้งเดียว สำคัญน้อย", color: "var(--info)" },
-  { name: "Affiliated Company", count: "16 ราย", countNum: 16, value: "364.4 ลบ.", valueNum: 364.4, desc: "คู่ค้าที่เป็นบริษัทในเครือกลุ่ม GUNKUL", color: "var(--success)" },
+  { rank: "01", name: "Critical Tier-1 Supplier", count: "38 ราย", countNum: 38, value: "679.5 ลบ.", valueNum: 679.5, desc: "มูลค่าซื้อขายสูง ≥80% ของมูลค่ารวม / ตัวเลือกน้อยราย / สำคัญต่อธุรกิจสูง", color: GROUP_SCALE[0] },
+  { rank: "02", name: "Tier-1 Supplier", count: "65 ราย", countNum: 65, value: "160.2 ลบ.", valueNum: 160.2, desc: "มูลค่าปานกลาง-ต่ำ ซื้อขายต่อเนื่อง สำคัญปานกลาง", color: GROUP_SCALE[1] },
+  { rank: "03", name: "General Supplier", count: "525 ราย", countNum: 525, value: "76.1 ลบ.", valueNum: 76.1, desc: "มูลค่าต่ำ ซื้อครั้งเดียว สำคัญน้อย", color: GROUP_SCALE[2] },
+  { rank: "04", name: "Affiliated Company", count: "16 ราย", countNum: 16, value: "364.4 ลบ.", valueNum: 364.4, desc: "คู่ค้าที่เป็นบริษัทในเครือกลุ่ม GUNKUL", color: GROUP_SCALE[3] },
 ];
 
 const RISK_LEVELS = [
@@ -74,11 +81,13 @@ const RISK_LEVELS = [
   { range: "9–16", level: "ความเสี่ยงสูงมาก", action: "กำหนดมาตรการควบคุมเพื่อลดความเสี่ยง + On-site Audit ภาคบังคับ", color: "var(--danger)" },
 ];
 
-function riskColor(score: number) {
-  if (score <= 2) return "var(--success)";
-  if (score <= 4) return "var(--info)";
-  if (score <= 8) return "var(--warning)";
-  return "var(--danger)";
+function riskCellStyle(score: number) {
+  const t = (score - 1) / 15;
+  const hue = 152 - t * 152;
+  return {
+    background: `hsl(${hue}, 62%, ${94 - t * 8}%)`,
+    color: `hsl(${hue}, 55%, ${30 - t * 8}%)`,
+  };
 }
 
 const GRADES = [
@@ -264,56 +273,50 @@ export default function ESGPage() {
 
         {/* Supplier groups */}
         <Section eyebrow="จำแนกคู่ค้า" title="4 กลุ่มคู่ค้า" intro="จัดกลุ่มตามมูลค่าซื้อขายและความสำคัญต่อธุรกิจ — ตัวอย่างจริงจากกลุ่ม GKE">
-          <HoverCard interactive={false} style={{ marginBottom: "var(--sp-4)" }}>
-            <p style={{ margin: "0 0 var(--sp-4)", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+          <HoverCard interactive={false}>
+            <p style={{ margin: "0 0 var(--sp-5)", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
               มูลค่าซื้อขายต่อกลุ่ม (ล้านบาท)
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-3)" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-5)" }}>
               {(() => {
                 const max = Math.max(...SUPPLIER_GROUPS.map((g) => g.valueNum));
                 return SUPPLIER_GROUPS.map((g) => (
-                  <div key={g.name} style={{ display: "flex", alignItems: "center", gap: "var(--sp-3)" }}>
-                    <span style={{ width: 150, flexShrink: 0, fontSize: "var(--fs-xs)", fontWeight: 600, color: "var(--text-strong)" }}>{g.name}</span>
-                    <div style={{ flex: 1, height: 14, borderRadius: "var(--radius-full)", background: "var(--surface-2)", overflow: "hidden" }}>
-                      <div
+                  <div key={g.name}>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: "var(--sp-3)", marginBottom: "var(--sp-2)" }}>
+                      <span
                         style={{
-                          height: "100%",
-                          width: `${(g.valueNum / max) * 100}%`,
-                          background: g.color,
-                          borderRadius: "var(--radius-full)",
-                          transition: "width 0.6s cubic-bezier(0.22,1,0.36,1)",
+                          fontFamily: "var(--font-serif)",
+                          fontSize: "var(--fs-sm)",
+                          fontWeight: 700,
+                          color: g.color,
+                          flexShrink: 0,
                         }}
-                      />
+                      >
+                        {g.rank}
+                      </span>
+                      <span style={{ flexShrink: 0, fontSize: "var(--fs-sm)", fontWeight: 700, color: "var(--text-strong)" }}>{g.name}</span>
+                      <span style={{ flex: 1, fontSize: "var(--fs-xs)", color: "var(--text-faint)", lineHeight: 1.5 }}>{g.desc}</span>
                     </div>
-                    <span style={{ width: 90, flexShrink: 0, textAlign: "right", fontSize: "var(--fs-xs)", fontWeight: 700, color: g.color }}>{g.value}</span>
-                    <span style={{ width: 60, flexShrink: 0, textAlign: "right", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>{g.count}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-3)" }}>
+                      <div style={{ flex: 1, height: 10, borderRadius: "var(--radius-full)", background: "var(--surface-2)", overflow: "hidden" }}>
+                        <div
+                          style={{
+                            height: "100%",
+                            width: `${(g.valueNum / max) * 100}%`,
+                            background: g.color,
+                            borderRadius: "var(--radius-full)",
+                            transition: "width 0.6s cubic-bezier(0.22,1,0.36,1)",
+                          }}
+                        />
+                      </div>
+                      <span style={{ width: 84, flexShrink: 0, textAlign: "right", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-strong)" }}>{g.value}</span>
+                      <span style={{ width: 56, flexShrink: 0, textAlign: "right", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>{g.count}</span>
+                    </div>
                   </div>
                 ));
               })()}
             </div>
           </HoverCard>
-          <div style={grid(240)}>
-            {SUPPLIER_GROUPS.map((g) => (
-              <HoverCard key={g.name}>
-                <span
-                  style={{
-                    display: "inline-block",
-                    fontSize: "var(--fs-xs)",
-                    fontWeight: 700,
-                    color: g.color,
-                    background: tint(g.color),
-                    padding: "3px 10px",
-                    borderRadius: "var(--radius-full)",
-                    marginBottom: "var(--sp-3)",
-                  }}
-                >
-                  {g.count} • {g.value}
-                </span>
-                <p style={{ margin: "0 0 var(--sp-2)", fontWeight: 700, color: "var(--text-strong)" }}>{g.name}</p>
-                <p style={{ margin: 0, fontSize: "var(--fs-xs)", color: "var(--text-muted)", lineHeight: 1.6 }}>{g.desc}</p>
-              </HoverCard>
-            ))}
-          </div>
         </Section>
 
         {/* Risk matrix */}
@@ -322,91 +325,72 @@ export default function ESGPage() {
           title="ระดับความเสี่ยงคู่ค้า"
           intro="คะแนนความเสี่ยง = โอกาสที่จะเกิด (Likelihood) × ผลกระทบ (Impact) ครอบคลุม 4 ด้าน: สินค้า&บริการ / ดำเนินธุรกิจ / สิ่งแวดล้อม / สังคม"
         >
-          <HoverCard interactive={false} style={{ marginBottom: "var(--sp-4)" }}>
-            <div style={{ display: "flex", gap: "var(--sp-3)" }}>
+          <HoverCard interactive={false}>
+            <div style={{ display: "flex", gap: "var(--sp-4)" }}>
               <div
                 style={{
                   display: "flex",
-                  flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
                   writingMode: "vertical-rl",
-                  transform: "rotate(180deg)",
                   fontSize: "var(--fs-xs)",
                   fontWeight: 700,
                   color: "var(--text-faint)",
                   flexShrink: 0,
                 }}
               >
-                โอกาสเกิด (Likelihood) →
+                โอกาสเกิด (Likelihood)
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--sp-2)" }}>
-                  {[4, 3, 2, 1].map((l) =>
-                    [1, 2, 3, 4].map((i) => {
+                <div style={{ display: "flex", gap: "var(--sp-2)" }}>
+                  <div style={{ width: 22, flexShrink: 0 }} />
+                  {[1, 2, 3, 4].map((i) => (
+                    <span key={i} style={{ flex: 1, textAlign: "center", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)" }}>
+                      {i}
+                    </span>
+                  ))}
+                </div>
+                {[4, 3, 2, 1].map((l) => (
+                  <div key={l} style={{ display: "flex", gap: "var(--sp-2)", marginTop: "var(--sp-2)" }}>
+                    <span style={{ width: 22, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)" }}>
+                      {l}
+                    </span>
+                    {[1, 2, 3, 4].map((i) => {
                       const score = l * i;
                       return (
                         <div
-                          key={`${l}-${i}`}
+                          key={i}
                           title={`โอกาส ${l} × ผลกระทบ ${i} = ${score}`}
                           style={{
+                            flex: 1,
                             aspectRatio: "1",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
                             borderRadius: "var(--radius-sm)",
-                            background: tint(riskColor(score)),
-                            color: riskColor(score),
                             fontWeight: 800,
                             fontSize: "var(--fs-sm)",
+                            ...riskCellStyle(score),
                           }}
                         >
                           {score}
                         </div>
                       );
-                    })
-                  )}
-                </div>
-                <p style={{ margin: "var(--sp-2) 0 0", textAlign: "center", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)" }}>
-                  ผลกระทบ (Impact) →
+                    })}
+                  </div>
+                ))}
+                <p style={{ margin: "var(--sp-3) 0 0", textAlign: "center", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)" }}>
+                  ผลกระทบ (Impact)
                 </p>
               </div>
             </div>
-          </HoverCard>
-          <HoverCard interactive={false}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-2)" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--sp-3)", marginTop: "var(--sp-5)", paddingTop: "var(--sp-4)", borderTop: "1px solid var(--border)" }}>
               {RISK_LEVELS.map((r) => (
-                <div
-                  key={r.range}
-                  style={{
-                    display: "flex",
-                    gap: "var(--sp-3)",
-                    alignItems: "center",
-                    padding: "var(--sp-3)",
-                    borderRadius: "var(--radius)",
-                    background: "var(--surface-2)",
-                    borderLeft: `3px solid ${r.color}`,
-                  }}
-                >
-                  <span
-                    style={{
-                      flexShrink: 0,
-                      fontSize: "var(--fs-xs)",
-                      fontWeight: 800,
-                      color: r.color,
-                      background: tint(r.color),
-                      borderRadius: "var(--radius-sm)",
-                      padding: "4px 10px",
-                      minWidth: 52,
-                      textAlign: "center",
-                    }}
-                  >
-                    {r.range}
+                <div key={r.range} style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)" }}>
+                  <span style={{ width: 10, height: 10, borderRadius: "var(--radius-full)", background: r.color, flexShrink: 0 }} />
+                  <span style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
+                    <strong style={{ color: "var(--text-strong)" }}>{r.range}</strong> {r.level}
                   </span>
-                  <div>
-                    <p style={{ margin: "0 0 2px", fontSize: "var(--fs-sm)", fontWeight: 700, color: "var(--text-strong)" }}>{r.level}</p>
-                    <p style={{ margin: 0, fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>{r.action}</p>
-                  </div>
                 </div>
               ))}
             </div>
@@ -419,72 +403,45 @@ export default function ESGPage() {
           title="เกรดประเมินคู่ค้า"
           intro="ประเมินทุก 6 เดือน ด้วยใบประเมินผู้ขาย/ผู้รับเหมา ครอบคลุมมิติเศรษฐกิจ สังคม สิ่งแวดล้อม"
         >
-          <HoverCard interactive={false} style={{ marginBottom: "var(--sp-4)" }}>
-            <div style={{ display: "flex", height: 28, borderRadius: "var(--radius-full)", overflow: "hidden" }}>
+          <HoverCard interactive={false}>
+            <div style={{ display: "flex", height: 10, borderRadius: "var(--radius-full)", overflow: "hidden", marginBottom: "var(--sp-6)" }}>
               {[
-                { grade: "F", width: 50, color: "var(--danger)" },
-                { grade: "D", width: 10, color: "var(--warning)" },
-                { grade: "C", width: 10, color: "var(--info)" },
-                { grade: "B", width: 10, color: "var(--success)" },
-                { grade: "A", width: 20, color: "var(--success)" },
-              ].map((s) => (
-                <div
-                  key={s.grade}
-                  style={{
-                    width: `${s.width}%`,
-                    background: s.color,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "white",
-                    fontWeight: 800,
-                    fontSize: "var(--fs-xs)",
-                    opacity: s.grade === "F" ? 0.85 : 1,
-                  }}
-                >
-                  {s.grade}
-                </div>
+                { width: 50, color: "var(--danger)" },
+                { width: 10, color: "var(--warning)" },
+                { width: 10, color: "var(--info)" },
+                { width: 10, color: "var(--success)" },
+                { width: 20, color: "var(--success)" },
+              ].map((s, i) => (
+                <div key={i} style={{ width: `${s.width}%`, background: s.color }} />
               ))}
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: "var(--sp-2)", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>
-              <span>0%</span>
-              <span>50%</span>
-              <span>60%</span>
-              <span>70%</span>
-              <span>80%</span>
-              <span>100%</span>
-            </div>
-          </HoverCard>
-          <div style={grid(200)}>
-            {GRADES.map((g) => (
-              <HoverCard key={g.grade}>
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-3)", marginBottom: "var(--sp-2)" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "var(--sp-3)" }}>
+              {GRADES.map((g) => (
+                <div key={g.grade} style={{ textAlign: "center" }}>
                   <span
                     style={{
+                      display: "inline-flex",
                       width: 40,
                       height: 40,
                       borderRadius: "var(--radius-full)",
-                      display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       fontWeight: 800,
                       fontSize: "var(--fs-h3)",
                       background: tint(g.color),
                       color: g.color,
-                      flexShrink: 0,
+                      marginBottom: "var(--sp-2)",
                     }}
                   >
                     {g.grade}
                   </span>
-                  <div>
-                    <p style={{ margin: 0, fontWeight: 700, color: "var(--text-strong)" }}>{g.label}</p>
-                    <p style={{ margin: 0, fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>{g.score}</p>
-                  </div>
+                  <p style={{ margin: "0 0 2px", fontSize: "var(--fs-sm)", fontWeight: 700, color: "var(--text-strong)" }}>{g.label}</p>
+                  <p style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>{g.score}</p>
+                  <p style={{ margin: 0, fontSize: "var(--fs-xs)", color: "var(--text-muted)", lineHeight: 1.55 }}>{g.result}</p>
                 </div>
-                <p style={{ margin: 0, fontSize: "var(--fs-xs)", color: "var(--text-muted)", lineHeight: 1.6 }}>{g.result}</p>
-              </HoverCard>
-            ))}
-          </div>
+              ))}
+            </div>
+          </HoverCard>
         </Section>
 
         {/* Responsibility table */}
