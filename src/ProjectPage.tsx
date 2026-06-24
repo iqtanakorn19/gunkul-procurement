@@ -146,6 +146,26 @@ const EMPTY_PROJECT: ProjectSeed = {
   forecastSiteMob2: "", phases: [],
 };
 
+const SOFT_PALETTE = ["#7CA6D8", "#8FCBAE", "#F2B6A0", "#D6B8E0", "#F4D58D", "#9AD0D6", "#C9B7A0", "#A8B8D8"];
+
+function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div style={{
+      background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)",
+      padding: "var(--sp-4)", transition: "box-shadow 0.2s ease, transform 0.2s ease",
+    }}
+      onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 6px 20px rgba(0,0,0,0.06)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+      onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "translateY(0)"; }}
+    >
+      <h4 style={{ margin: "0 0 var(--sp-3)", fontSize: "var(--fs-sm)", fontWeight: 600, color: "var(--text-strong)" }}>{title}</h4>
+      {children}
+    </div>
+  );
+}
+
+const PIE_LABEL = (e: { name?: string; value?: number; percent?: number }) =>
+  `${e.name ?? ""} (${e.percent ? Math.round(e.percent * 100) : 0}%)`;
+
 const STICKY_WIDTHS = [60, 200];
 const stickyLeft = (i: number) => STICKY_WIDTHS.slice(0, i).reduce((a, b) => a + b, 0);
 
@@ -534,6 +554,14 @@ export default function ProjectPage() {
     return Object.entries(counts).map(([name, count]) => ({ name, count }));
   }, [projects]);
 
+  const subconChartData = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const p of projects) {
+      if (p.subconName) counts[p.subconName] = (counts[p.subconName] ?? 0) + 1;
+    }
+    return Object.entries(counts).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value).slice(0, 8);
+  }, [projects]);
+
   const roofChartData = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of projects) {
@@ -606,99 +634,117 @@ export default function ProjectPage() {
 
       <Reveal delay={80}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "var(--sp-4)", marginBottom: "var(--sp-6)" }}>
-          <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
-            <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วนสถานะ</h4>
-            <ResponsiveContainer width="100%" height={220}>
+          <ChartCard title="สัดส่วนสถานะ">
+            <ResponsiveContainer width="100%" height={240}>
               <PieChart>
-                <Pie data={colorChartData} dataKey="value" nameKey="name" outerRadius={80} label={(e) => `${e.name}: ${e.value}`}>
+                <Pie
+                  data={colorChartData} dataKey="value" nameKey="name"
+                  innerRadius={48} outerRadius={78} paddingAngle={2} cornerRadius={4}
+                  isAnimationActive animationDuration={600}
+                  label={PIE_LABEL} labelLine={false} fontSize={11}
+                >
                   {colorChartData.map((d) => (
-                    <Cell key={d.name} fill={COLOR_STATUS_HEX[d.name as ColorStatus]} />
+                    <Cell key={d.name} fill={COLOR_STATUS_HEX[d.name as ColorStatus]} stroke="var(--surface)" strokeWidth={2} />
                   ))}
                 </Pie>
                 <Tooltip />
-                <Legend />
+                <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: 11 }} />
               </PieChart>
             </ResponsiveContainer>
-          </div>
-          <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
-            <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วนประเภทสัญญา</h4>
-            <ResponsiveContainer width="100%" height={220}>
+          </ChartCard>
+          <ChartCard title="สัดส่วนประเภทสัญญา">
+            <ResponsiveContainer width="100%" height={240}>
               <BarChart data={typeChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="name" fontSize={12} />
                 <YAxis allowDecimals={false} fontSize={12} />
-                <Tooltip />
-                <Bar dataKey="count" fill="var(--primary)" radius={[4, 4, 0, 0]} />
+                <Tooltip cursor={{ fill: "color-mix(in srgb, var(--primary) 8%, transparent)" }} />
+                <Bar dataKey="count" fill="var(--primary)" radius={[6, 6, 0, 0]} isAnimationActive animationDuration={600} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
-          <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
-            <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วนประเภทหลังคา</h4>
-            <ResponsiveContainer width="100%" height={220}>
+          </ChartCard>
+          <ChartCard title="สัดส่วนประเภทหลังคา">
+            <ResponsiveContainer width="100%" height={240}>
               <BarChart data={roofChartData} layout="vertical" margin={{ left: 24 }}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                 <XAxis type="number" allowDecimals={false} fontSize={12} />
                 <YAxis type="category" dataKey="name" fontSize={11} width={100} />
-                <Tooltip />
-                <Bar dataKey="count" fill="var(--accent)" radius={[0, 4, 4, 0]} />
+                <Tooltip cursor={{ fill: "color-mix(in srgb, var(--accent) 8%, transparent)" }} />
+                <Bar dataKey="count" fill="var(--accent)" radius={[0, 6, 6, 0]} isAnimationActive animationDuration={600} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
+          </ChartCard>
+          {subconChartData.length > 0 && (
+            <ChartCard title="สัดส่วน Subcon ที่ใช้งาน">
+              <ResponsiveContainer width="100%" height={240}>
+                <PieChart>
+                  <Pie
+                    data={subconChartData} dataKey="value" nameKey="name"
+                    innerRadius={48} outerRadius={78} paddingAngle={2} cornerRadius={4}
+                    isAnimationActive animationDuration={600}
+                    label={PIE_LABEL} labelLine={false} fontSize={11}
+                  >
+                    {subconChartData.map((d, i) => (
+                      <Cell key={d.name} fill={SOFT_PALETTE[i % SOFT_PALETTE.length]} stroke="var(--surface)" strokeWidth={2} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend verticalAlign="bottom" height={48} iconType="circle" wrapperStyle={{ fontSize: 11 }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartCard>
+          )}
           {pvBrandChartData.length > 0 && (
-            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
-              <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วน PV Brand</h4>
-              <ResponsiveContainer width="100%" height={220}>
+            <ChartCard title="สัดส่วน PV Brand">
+              <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={pvBrandChartData} layout="vertical" margin={{ left: 80 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                   <XAxis type="number" allowDecimals={false} fontSize={11} />
                   <YAxis type="category" dataKey="name" fontSize={10} width={75} />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#5B9BD5" radius={[0, 4, 4, 0]} />
+                  <Tooltip cursor={{ fill: "color-mix(in srgb, #5B9BD5 8%, transparent)" }} />
+                  <Bar dataKey="count" fill="#5B9BD5" radius={[0, 6, 6, 0]} isAnimationActive animationDuration={600} />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
+            </ChartCard>
           )}
           {capacityChartData.length > 0 && (
-            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
-              <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วนขนาดโครงการ</h4>
-              <ResponsiveContainer width="100%" height={220}>
+            <ChartCard title="สัดส่วนขนาดโครงการ">
+              <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={capacityChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis dataKey="name" fontSize={11} />
                   <YAxis allowDecimals={false} fontSize={11} />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#70AD47" radius={[4, 4, 0, 0]} />
+                  <Tooltip cursor={{ fill: "color-mix(in srgb, #70AD47 8%, transparent)" }} />
+                  <Bar dataKey="count" fill="#70AD47" radius={[6, 6, 0, 0]} isAnimationActive animationDuration={600} />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
+            </ChartCard>
           )}
           {inverterBrandChartData.length > 0 && (
-            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
-              <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วน Inverter Brand</h4>
-              <ResponsiveContainer width="100%" height={220}>
+            <ChartCard title="สัดส่วน Inverter Brand">
+              <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={inverterBrandChartData} layout="vertical" margin={{ left: 80 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                   <XAxis type="number" allowDecimals={false} fontSize={11} />
                   <YAxis type="category" dataKey="name" fontSize={10} width={75} />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#FFC000" radius={[0, 4, 4, 0]} />
+                  <Tooltip cursor={{ fill: "color-mix(in srgb, #FFC000 8%, transparent)" }} />
+                  <Bar dataKey="count" fill="#FFC000" radius={[0, 6, 6, 0]} isAnimationActive animationDuration={600} />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
+            </ChartCard>
           )}
           {bessBrandChartData.length > 0 && (
-            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
-              <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วน BESS Brand</h4>
-              <ResponsiveContainer width="100%" height={220}>
+            <ChartCard title="สัดส่วน BESS Brand">
+              <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={bessBrandChartData} layout="vertical" margin={{ left: 80 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                   <XAxis type="number" allowDecimals={false} fontSize={11} />
                   <YAxis type="category" dataKey="name" fontSize={10} width={75} />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#A349A4" radius={[0, 4, 4, 0]} />
+                  <Tooltip cursor={{ fill: "color-mix(in srgb, #A349A4 8%, transparent)" }} />
+                  <Bar dataKey="count" fill="#A349A4" radius={[0, 6, 6, 0]} isAnimationActive animationDuration={600} />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
+            </ChartCard>
           )}
         </div>
       </Reveal>
