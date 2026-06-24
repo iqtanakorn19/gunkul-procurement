@@ -567,7 +567,7 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
         {/* 3. Current projects */}
         <Section
           eyebrow="พอร์ตงานปัจจุบัน"
-          title="โครงการที่ดำเนินอยู่"
+          title="Project Farm ที่ดำเนินอยู่"
           right={
             <button
               type="button"
