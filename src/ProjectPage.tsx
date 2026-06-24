@@ -557,9 +557,14 @@ export default function ProjectPage() {
   const subconChartData = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of projects) {
-      if (p.subconName) counts[p.subconName] = (counts[p.subconName] ?? 0) + 1;
+      if (p.subconName && p.subconName !== "-") counts[p.subconName] = (counts[p.subconName] ?? 0) + 1;
     }
-    return Object.entries(counts).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value).slice(0, 8);
+    const sorted = Object.entries(counts).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
+    const TOP_N = 5;
+    const top = sorted.slice(0, TOP_N);
+    const rest = sorted.slice(TOP_N);
+    const restTotal = rest.reduce((sum, d) => sum + d.value, 0);
+    return restTotal > 0 ? [...top, { name: "อื่นๆ", value: restTotal }] : top;
   }, [projects]);
 
   const roofChartData = useMemo(() => {
@@ -635,11 +640,11 @@ export default function ProjectPage() {
       <Reveal delay={80}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "var(--sp-4)", marginBottom: "var(--sp-6)" }}>
           <ChartCard title="สัดส่วนสถานะ">
-            <ResponsiveContainer width="100%" height={240}>
-              <PieChart>
+            <ResponsiveContainer width="100%" height={280}>
+              <PieChart margin={{ top: 8, bottom: 8 }}>
                 <Pie
                   data={colorChartData} dataKey="value" nameKey="name"
-                  innerRadius={48} outerRadius={78} paddingAngle={2} cornerRadius={4}
+                  innerRadius={52} outerRadius={88} paddingAngle={2} cornerRadius={4}
                   isAnimationActive animationDuration={600}
                   label={PIE_LABEL} labelLine={false} fontSize={11}
                 >
@@ -676,11 +681,11 @@ export default function ProjectPage() {
           </ChartCard>
           {subconChartData.length > 0 && (
             <ChartCard title="สัดส่วน Subcon ที่ใช้งาน">
-              <ResponsiveContainer width="100%" height={240}>
-                <PieChart>
+              <ResponsiveContainer width="100%" height={280}>
+                <PieChart margin={{ top: 8, bottom: 8 }}>
                   <Pie
                     data={subconChartData} dataKey="value" nameKey="name"
-                    innerRadius={48} outerRadius={78} paddingAngle={2} cornerRadius={4}
+                    innerRadius={52} outerRadius={88} paddingAngle={2} cornerRadius={4}
                     isAnimationActive animationDuration={600}
                     label={PIE_LABEL} labelLine={false} fontSize={11}
                   >
@@ -689,7 +694,7 @@ export default function ProjectPage() {
                     ))}
                   </Pie>
                   <Tooltip />
-                  <Legend verticalAlign="bottom" height={48} iconType="circle" wrapperStyle={{ fontSize: 11 }} />
+                  <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: 11 }} />
                 </PieChart>
               </ResponsiveContainer>
             </ChartCard>
