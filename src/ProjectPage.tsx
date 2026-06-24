@@ -337,6 +337,7 @@ export default function ProjectPage() {
   const [addingProject, setAddingProject] = useState(false);
   const [sortBy, setSortBy] = useState<"name" | "jobNo" | "kWp" | "status">("jobNo");
   const [sortAsc, setSortAsc] = useState(true);
+  const [editingCell, setEditingCell] = useState<{ projectId: string; field: keyof Project; value: string } | null>(null);
 
   useEffect(() => {
     let seeded = false;
@@ -376,6 +377,15 @@ export default function ProjectPage() {
   const deleteProject = async (id: string) => {
     if (!window.confirm("ยืนยันการลบโครงการนี้?")) return;
     await deleteDoc(doc(db, "kickoffProjects", id));
+  };
+
+  const saveInlineEdit = async (projectId: string, field: keyof Project, value: any) => {
+    try {
+      await updateDoc(doc(db, "kickoffProjects", projectId), { [field]: value });
+      setEditingCell(null);
+    } catch (err) {
+      console.error("Failed to save inline edit:", err);
+    }
   };
 
   const filtered = useMemo(() => {
@@ -429,6 +439,44 @@ export default function ProjectPage() {
     return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
   }, [projects]);
 
+  const pvBrandChartData = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const p of projects) {
+      if (p.pvBrand) counts[p.pvBrand] = (counts[p.pvBrand] ?? 0) + 1;
+    }
+    return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 8);
+  }, [projects]);
+
+  const capacityChartData = useMemo(() => {
+    const ranges: Record<string, number> = { "0-5": 0, "5-10": 0, "10-20": 0, "20-50": 0, "50+": 0 };
+    for (const p of projects) {
+      if (p.capacityKwp) {
+        if (p.capacityKwp < 5) ranges["0-5"]++;
+        else if (p.capacityKwp < 10) ranges["5-10"]++;
+        else if (p.capacityKwp < 20) ranges["10-20"]++;
+        else if (p.capacityKwp < 50) ranges["20-50"]++;
+        else ranges["50+"]++;
+      }
+    }
+    return Object.entries(ranges).map(([name, count]) => ({ name: `${name} kWp`, count })).filter((d) => d.count > 0);
+  }, [projects]);
+
+  const inverterBrandChartData = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const p of projects) {
+      if (p.inverterBrand) counts[p.inverterBrand] = (counts[p.inverterBrand] ?? 0) + 1;
+    }
+    return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 8);
+  }, [projects]);
+
+  const bessBrandChartData = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const p of projects) {
+      if (p.bessBrand) counts[p.bessBrand] = (counts[p.bessBrand] ?? 0) + 1;
+    }
+    return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 8);
+  }, [projects]);
+
   return (
     <div style={{ maxWidth: "1440px", margin: "0 auto", padding: "var(--sp-7) var(--sp-5)" }}>
       <Reveal>
@@ -452,7 +500,7 @@ export default function ProjectPage() {
       <Reveal delay={80}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "var(--sp-4)", marginBottom: "var(--sp-6)" }}>
           <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
-            <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วนสถานะ (สีไฮไลท์)</h4>
+            <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วนสถานะ</h4>
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
                 <Pie data={colorChartData} dataKey="value" nameKey="name" outerRadius={80} label={(e) => `${e.name}: ${e.value}`}>
@@ -489,6 +537,62 @@ export default function ProjectPage() {
               </BarChart>
             </ResponsiveContainer>
           </div>
+          {pvBrandChartData.length > 0 && (
+            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
+              <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วน PV Brand</h4>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={pvBrandChartData} layout="vertical" margin={{ left: 80 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="number" allowDecimals={false} fontSize={11} />
+                  <YAxis type="category" dataKey="name" fontSize={10} width={75} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#5B9BD5" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+          {capacityChartData.length > 0 && (
+            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
+              <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วนขนาดโครงการ</h4>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={capacityChartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" fontSize={11} />
+                  <YAxis allowDecimals={false} fontSize={11} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#70AD47" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+          {inverterBrandChartData.length > 0 && (
+            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
+              <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วน Inverter Brand</h4>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={inverterBrandChartData} layout="vertical" margin={{ left: 80 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="number" allowDecimals={false} fontSize={11} />
+                  <YAxis type="category" dataKey="name" fontSize={10} width={75} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#FFC000" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+          {bessBrandChartData.length > 0 && (
+            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)" }}>
+              <h4 style={{ margin: "0 0 var(--sp-2)", fontSize: "var(--fs-sm)" }}>สัดส่วน BESS Brand</h4>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={bessBrandChartData} layout="vertical" margin={{ left: 80 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="number" allowDecimals={false} fontSize={11} />
+                  <YAxis type="category" dataKey="name" fontSize={10} width={75} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#A349A4" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </div>
       </Reveal>
 
@@ -536,81 +640,78 @@ export default function ProjectPage() {
                   {([
                     { label: "Job", key: "jobNo" as const },
                     { label: "ชื่อโครงการ", key: "name" as const },
-                  ] as { label: string; key: "jobNo" | "name" }[]).map(({ label, key }, i) => (
+                    { label: "Status", key: undefined },
+                  ] as { label: string; key?: "jobNo" | "name" }[]).map(({ label, key }, i) => (
                     <th
-                      key={key}
-                      onClick={() => { if (sortBy === key) setSortAsc(!sortAsc); else { setSortBy(key); setSortAsc(true); } }}
+                      key={label}
+                      onClick={key ? () => { if (sortBy === key) setSortAsc(!sortAsc); else { setSortBy(key); setSortAsc(true); } } : undefined}
                       style={{
-                        position: "sticky", top: 0, left: stickyLeft(i), zIndex: 3, padding: "8px 10px",
-                        minWidth: STICKY_WIDTHS[i], width: STICKY_WIDTHS[i],
+                        position: "sticky", top: 0, left: i < 2 ? stickyLeft(i) : "auto", zIndex: i < 2 ? 3 : 1, padding: "8px 10px",
+                        minWidth: i < 2 ? STICKY_WIDTHS[i] : "auto", width: i < 2 ? STICKY_WIDTHS[i] : "auto",
                         borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)",
-                        cursor: "pointer", userSelect: "none",
-                        fontWeight: sortBy === key ? 700 : 600, color: sortBy === key ? "var(--accent)" : "var(--text-strong)",
+                        cursor: key ? "pointer" : "default", userSelect: "none",
+                        fontWeight: (key && sortBy === key) ? 700 : 600, color: (key && sortBy === key) ? "var(--accent)" : "var(--text-strong)",
                       }}
                     >
-                      {label} {sortBy === key && (sortAsc ? "↑" : "↓")}
+                      {label} {key && sortBy === key && (sortAsc ? "↑" : "↓")}
                     </th>
                   ))}
                   {[
-                    { label: "ประเภทหลังคา", key: undefined },
-                    { label: "ประเภทสัญญา", key: undefined },
-                    { label: "kWp", key: "kWp" as const },
-                    { label: "จำนวนหลังคา", key: undefined },
-                    { label: "จำนวน Meter", key: undefined },
-                    { label: "จุดเชื่อมต่อ", key: undefined },
-                    { label: "Safety Level", key: undefined },
-                    { label: "Workmanship", key: undefined },
-                    { label: "คู่สัญญา", key: undefined },
-                    { label: "Location", key: undefined },
-                    { label: "ราคาตามสัญญา", key: undefined },
-                    { label: "Award Subcon", key: undefined },
-                    { label: "Material THB/W", key: undefined },
-                    { label: "Labour THB/W", key: undefined },
-                    { label: "Subcon Name", key: undefined },
-                    { label: "Award Date", key: undefined },
-                    { label: "PV Brand", key: undefined },
-                    { label: "Power Class", key: undefined },
-                    { label: "Inverter Brand", key: undefined },
-                    { label: "Inverter Model", key: undefined },
-                    { label: "Optimizer", key: undefined },
-                    { label: "BESS Brand", key: undefined },
-                    { label: "BESS Size", key: undefined },
-                    { label: "OM", key: undefined },
-                    { label: "Kick off Date", key: undefined },
-                    { label: "PU PIC", key: undefined },
-                    { label: "PM PIC", key: undefined },
-                    { label: "ENG PIC", key: undefined },
-                    { label: "สถานะ", key: undefined },
-                    { label: "BOI", key: undefined },
-                    { label: "Remark", key: undefined },
-                    { label: "Est. Site Mob", key: undefined },
-                    { label: "Forecast Site Mob 1", key: undefined },
-                    { label: "Forecast Site Mob 2", key: undefined },
-                    { label: "สีไฮไลท์", key: "status" as const },
-                    { label: "", key: undefined },
-                  ].map(({ label, key }, idx) => {
-                    const active = key && key === sortBy;
-                    return (
-                      <th
-                        key={label || `c${idx}`}
-                        onClick={key ? () => { if (sortBy === key) setSortAsc(!sortAsc); else { setSortBy(key); setSortAsc(true); } } : undefined}
-                        style={{
-                          position: "sticky", top: 0, zIndex: 1, padding: "8px 10px",
-                          borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)",
-                          cursor: key ? "pointer" : "default", userSelect: "none",
-                          fontWeight: active ? 700 : 600, color: active ? "var(--accent)" : "var(--text-strong)",
-                        }}
-                      >
-                        {label} {active && (sortAsc ? "↑" : "↓")}
-                      </th>
-                    );
-                  })}
+                    { label: "ประเภทหลังคา" },
+                    { label: "ประเภทสัญญา" },
+                    { label: "kWp" },
+                    { label: "จำนวนหลังคา" },
+                    { label: "จำนวน Meter" },
+                    { label: "จุดเชื่อมต่อ" },
+                    { label: "Safety Level" },
+                    { label: "Workmanship" },
+                    { label: "คู่สัญญา" },
+                    { label: "Location" },
+                    { label: "ราคาตามสัญญา" },
+                    { label: "Award Subcon" },
+                    { label: "Material THB/W" },
+                    { label: "Labour THB/W" },
+                    { label: "Subcon Name" },
+                    { label: "Award Date" },
+                    { label: "PV Brand" },
+                    { label: "Power Class" },
+                    { label: "Inverter Brand" },
+                    { label: "Inverter Model" },
+                    { label: "Optimizer" },
+                    { label: "BESS Brand" },
+                    { label: "BESS Size" },
+                    { label: "OM" },
+                    { label: "Kick off Date" },
+                    { label: "PU PIC" },
+                    { label: "PM PIC" },
+                    { label: "ENG PIC" },
+                    { label: "สถานะ" },
+                    { label: "BOI" },
+                    { label: "Remark" },
+                    { label: "Est. Site Mob" },
+                    { label: "Forecast Site Mob 1" },
+                    { label: "Forecast Site Mob 2" },
+                    { label: "" },
+                  ].map(({ label }, idx) => (
+                    <th
+                      key={label || `col${idx}`}
+                      style={{
+                        position: "sticky", top: 0, zIndex: 1, padding: "8px 10px",
+                        borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)",
+                        cursor: "default", userSelect: "none",
+                        fontWeight: 600, color: "var(--text-strong)",
+                      }}
+                    >
+                      {label}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((p) => {
                   const stickyTd = (i: number): React.CSSProperties =>
                     i < STICKY_WIDTHS.length ? { position: "sticky", left: stickyLeft(i), zIndex: 1, background: "var(--surface)" } : {};
+                  const isEditingStatus = editingCell?.projectId === p.id && editingCell.field === "colorStatus";
                   return (
                     <tr key={p.id} style={{ borderBottom: "1px solid var(--border)", background: "var(--surface)" }}>
                       <td style={{ padding: "8px 10px", fontWeight: 600, ...stickyTd(0) }}>{p.jobNo ?? "-"}</td>
@@ -618,6 +719,37 @@ export default function ProjectPage() {
                         <div>{p.name}</div>
                         {p.phases.length > 0 && (
                           <div style={{ fontSize: "10px", color: "var(--text-faint)" }}>+{p.phases.length} phase</div>
+                        )}
+                      </td>
+                      <td style={{ padding: "8px 10px", cursor: "pointer" }} onClick={() => setEditingCell({ projectId: p.id, field: "colorStatus", value: p.colorStatus })}>
+                        {isEditingStatus ? (
+                          <select
+                            autoFocus
+                            value={editingCell.value}
+                            onChange={(e) => setEditingCell({ ...editingCell, value: e.target.value })}
+                            onBlur={() => {
+                              if (editingCell.value !== p.colorStatus) {
+                                saveInlineEdit(p.id, "colorStatus", editingCell.value as ColorStatus);
+                              } else {
+                                setEditingCell(null);
+                              }
+                            }}
+                            style={{ ...inputStyle, padding: "2px 4px", fontSize: "11px" }}
+                          >
+                            {COLOR_STATUS_OPTIONS.map((o) => (
+                              <option key={o} value={o}>{o}</option>
+                            ))}
+                          </select>
+                        ) : (
+                          <span style={{
+                            display: "inline-flex", alignItems: "center", gap: "0.35rem",
+                            padding: "0.2rem 0.55rem", borderRadius: "999px", fontSize: "10px",
+                            background: `color-mix(in srgb, ${COLOR_STATUS_HEX[p.colorStatus]} 16%, transparent)`,
+                            color: COLOR_STATUS_HEX[p.colorStatus],
+                          }}>
+                            <span style={{ width: 6, height: 6, borderRadius: "50%", background: COLOR_STATUS_HEX[p.colorStatus] }} />
+                            {p.colorStatus}
+                          </span>
                         )}
                       </td>
                       <td style={{ padding: "8px 10px" }}>{p.roofType || "-"}</td>
@@ -654,17 +786,6 @@ export default function ProjectPage() {
                       <td style={{ padding: "8px 10px" }}>{p.estimateSiteMob || "-"}</td>
                       <td style={{ padding: "8px 10px" }}>{p.forecastSiteMob1 || "-"}</td>
                       <td style={{ padding: "8px 10px" }}>{p.forecastSiteMob2 || "-"}</td>
-                      <td style={{ padding: "8px 10px" }}>
-                        <span style={{
-                          display: "inline-flex", alignItems: "center", gap: "0.35rem",
-                          padding: "0.2rem 0.55rem", borderRadius: "999px", fontSize: "10px",
-                          background: `color-mix(in srgb, ${COLOR_STATUS_HEX[p.colorStatus]} 16%, transparent)`,
-                          color: COLOR_STATUS_HEX[p.colorStatus],
-                        }}>
-                          <span style={{ width: 6, height: 6, borderRadius: "50%", background: COLOR_STATUS_HEX[p.colorStatus] }} />
-                          {p.colorStatus}
-                        </span>
-                      </td>
                       <td style={{ padding: "8px 10px" }}>
                         <button onClick={() => setEditingProject(p)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-muted)", marginRight: "0.4rem" }}>
                           <IconPencil size={16} />
