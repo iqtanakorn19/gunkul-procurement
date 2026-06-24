@@ -9,6 +9,7 @@ import {
   IconClipboardList,
   IconBook2,
   IconSitemap,
+  IconLeaf,
   IconChevronLeft,
   IconChevronRight,
   IconLogout,
@@ -22,7 +23,8 @@ export type Page =
   | "vendor"
   | "tracking"
   | "team"
-  | "knowledge";
+  | "knowledge"
+  | "esg";
 
 const NAV_ITEMS: { page: Page; label: string; icon: typeof IconHome2 }[] = [
   { page: "home", label: "Home", icon: IconHome2 },
@@ -32,6 +34,7 @@ const NAV_ITEMS: { page: Page; label: string; icon: typeof IconHome2 }[] = [
   { page: "vendor", label: "Vendor Directory", icon: IconBuildingWarehouse },
   { page: "tracking", label: "PR/PO Tracking", icon: IconClipboardList },
   { page: "knowledge", label: "Knowledge Base", icon: IconBook2 },
+  { page: "esg", label: "ESG & Sustainability", icon: IconLeaf },
   { page: "team", label: "Organization Chart", icon: IconSitemap },
 ];
 

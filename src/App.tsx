@@ -8,6 +8,7 @@ import DashboardPage from "./Dashboard";
 import UpdatePage from "./UpdatePage";
 import TaskPage from "./TaskPage";
 import KnowledgePage from "./KnowledgePage";
+import ESGPage from "./ESGPage";
 import OrgChartPage from "./OrgChartPage";
 import LoginPage from "./LoginPage";
 import HomePage from "./HomePage";
@@ -53,6 +54,7 @@ export default function App() {
           {currentPage === "tracking" && <TrackingPage />}
           {currentPage === "team" && <OrgChartPage />}
           {currentPage === "knowledge" && <KnowledgePage />}
+          {currentPage === "esg" && <ESGPage />}
         </div>
         <footer
           style={{
