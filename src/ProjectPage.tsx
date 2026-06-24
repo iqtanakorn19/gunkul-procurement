@@ -46,6 +46,14 @@ export const PV_BRAND_BASE = [
 export const INVERTER_BRAND_BASE = ["Huawei", "ABB", "SMA", "SolarEdge", "Sungrow", "-"];
 export const BESS_BRAND_BASE = ["Huawei", "Sungrow", "-"];
 
+export type CustomOptionKey = "pv" | "inverter" | "bess" | "powerClass" | "inverterModel" | "optimizer" | "bessSize" | "om";
+
+export const POWER_CLASS_BASE = ["540W", "545W", "550W", "555", "580", "610", "620", "630", "640", "710", "715", "720"];
+export const INVERTER_MODEL_BASE = ["50KTL", "100KTL", "100K", "150KTL", "SE90K", "SE100K", "330KTL"];
+export const OPTIMIZER_BASE = ["P1300", "P1100", "S1400", "S1200", "-"];
+export const BESS_SIZE_BASE = ["241", "257"];
+export const OM_BASE = ["4 ปี ปีละ 3 ครั้ง"];
+
 const PV_BRAND_NORMALIZE: Record<string, string> = {
   "JA": "JA Solar", "JA SOLAR": "JA Solar", "JA Solar": "JA Solar",
   "JINKO": "Jinko", "Jinko": "Jinko",
@@ -202,8 +210,8 @@ function ProjectEditModal({
   project: Project | null;
   onSave: (data: ProjectSeed) => Promise<void>;
   onClose: () => void;
-  customBrandOptions: { pv: string[]; inverter: string[]; bess: string[] };
-  onAddCustomBrand: (type: "pv" | "inverter" | "bess", value: string) => Promise<void>;
+  customBrandOptions: Record<CustomOptionKey, string[]>;
+  onAddCustomBrand: (type: CustomOptionKey, value: string) => Promise<void>;
 }) {
   const [data, setData] = useState<ProjectSeed>(project ? { ...project } : { ...EMPTY_PROJECT });
   const [saving, setSaving] = useState(false);
@@ -291,13 +299,13 @@ function ProjectEditModal({
             <strong style={{ fontSize: "var(--fs-sm)" }}>สเปคอุปกรณ์</strong>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "var(--sp-3)", marginTop: "var(--sp-2)" }}>
               <BrandSelect label="PV Brand" value={data.pvBrand} onChange={(v) => set("pvBrand", v)} baseOptions={PV_BRAND_BASE} customOptions={customBrandOptions.pv} onAddCustom={(v) => onAddCustomBrand("pv", v)} />
-              <Field label="Power Class"><input style={inputStyle} value={data.powerClass} onChange={(e) => set("powerClass", e.target.value)} /></Field>
+              <BrandSelect label="Power Class" value={data.powerClass} onChange={(v) => set("powerClass", v)} baseOptions={POWER_CLASS_BASE} customOptions={customBrandOptions.powerClass} onAddCustom={(v) => onAddCustomBrand("powerClass", v)} />
               <BrandSelect label="Inverter Brand" value={data.inverterBrand} onChange={(v) => set("inverterBrand", v)} baseOptions={INVERTER_BRAND_BASE} customOptions={customBrandOptions.inverter} onAddCustom={(v) => onAddCustomBrand("inverter", v)} />
-              <Field label="Inverter Model"><input style={inputStyle} value={data.inverterModel} onChange={(e) => set("inverterModel", e.target.value)} /></Field>
-              <Field label="Optimizer"><input style={inputStyle} value={data.optimizer} onChange={(e) => set("optimizer", e.target.value)} /></Field>
+              <BrandSelect label="Inverter Model" value={data.inverterModel} onChange={(v) => set("inverterModel", v)} baseOptions={INVERTER_MODEL_BASE} customOptions={customBrandOptions.inverterModel} onAddCustom={(v) => onAddCustomBrand("inverterModel", v)} />
+              <BrandSelect label="Optimizer" value={data.optimizer} onChange={(v) => set("optimizer", v)} baseOptions={OPTIMIZER_BASE} customOptions={customBrandOptions.optimizer} onAddCustom={(v) => onAddCustomBrand("optimizer", v)} />
               <BrandSelect label="BESS Brand" value={data.bessBrand} onChange={(v) => set("bessBrand", v)} baseOptions={BESS_BRAND_BASE} customOptions={customBrandOptions.bess} onAddCustom={(v) => onAddCustomBrand("bess", v)} />
-              <Field label="BESS Size (kWh)"><input style={inputStyle} value={data.bessSize} onChange={(e) => set("bessSize", e.target.value)} /></Field>
-              <Field label="OM"><input style={inputStyle} value={data.om} onChange={(e) => set("om", e.target.value)} /></Field>
+              <BrandSelect label="BESS Size (kWh)" value={data.bessSize} onChange={(v) => set("bessSize", v)} baseOptions={BESS_SIZE_BASE} customOptions={customBrandOptions.bessSize} onAddCustom={(v) => onAddCustomBrand("bessSize", v)} />
+              <BrandSelect label="OM" value={data.om} onChange={(v) => set("om", v)} baseOptions={OM_BASE} customOptions={customBrandOptions.om} onAddCustom={(v) => onAddCustomBrand("om", v)} />
             </div>
           </div>
 
@@ -407,7 +415,9 @@ export default function ProjectPage() {
   const [sortBy, setSortBy] = useState<"name" | "jobNo" | "kWp" | "status">("jobNo");
   const [sortAsc, setSortAsc] = useState(true);
   const [editingCell, setEditingCell] = useState<{ projectId: string; field: keyof Project; value: string } | null>(null);
-  const [customBrandOptions, setCustomBrandOptions] = useState<{ pv: string[]; inverter: string[]; bess: string[] }>({ pv: [], inverter: [], bess: [] });
+  const [customBrandOptions, setCustomBrandOptions] = useState<Record<CustomOptionKey, string[]>>({
+    pv: [], inverter: [], bess: [], powerClass: [], inverterModel: [], optimizer: [], bessSize: [], om: [],
+  });
 
   useEffect(() => {
     const ref = doc(db, "settings", "brandOptions");
@@ -417,12 +427,17 @@ export default function ProjectPage() {
         pv: (d?.pv as string[]) ?? [],
         inverter: (d?.inverter as string[]) ?? [],
         bess: (d?.bess as string[]) ?? [],
+        powerClass: (d?.powerClass as string[]) ?? [],
+        inverterModel: (d?.inverterModel as string[]) ?? [],
+        optimizer: (d?.optimizer as string[]) ?? [],
+        bessSize: (d?.bessSize as string[]) ?? [],
+        om: (d?.om as string[]) ?? [],
       });
     });
     return unsub;
   }, []);
 
-  const addCustomBrand = async (type: "pv" | "inverter" | "bess", value: string) => {
+  const addCustomBrand = async (type: CustomOptionKey, value: string) => {
     const v = value.trim();
     if (!v) return;
     await setDoc(doc(db, "settings", "brandOptions"), { [type]: arrayUnion(v) }, { merge: true });
@@ -753,11 +768,6 @@ export default function ProjectPage() {
                     { label: "ประเภทหลังคา" },
                     { label: "ประเภทสัญญา" },
                     { label: "kWp" },
-                    { label: "จำนวนหลังคา" },
-                    { label: "จำนวน Meter" },
-                    { label: "จุดเชื่อมต่อ" },
-                    { label: "Safety Level" },
-                    { label: "Workmanship" },
                     { label: "คู่สัญญา" },
                     { label: "Location" },
                     { label: "ราคาตามสัญญา" },
@@ -875,11 +885,6 @@ export default function ProjectPage() {
                       <td style={{ padding: "8px 10px" }}>{p.roofType || "-"}</td>
                       <td style={{ padding: "8px 10px" }}>{p.contractType}</td>
                       <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.capacityKwp ?? "-"}</td>
-                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.roofCount ?? "-"}</td>
-                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.meterCount ?? "-"}</td>
-                      <td style={{ padding: "8px 10px" }}>{p.connectionPoint || "-"}</td>
-                      <td style={{ padding: "8px 10px" }}>{p.safetyLevel || "-"}</td>
-                      <td style={{ padding: "8px 10px" }}>{p.workmanship || "-"}</td>
                       <td style={{ padding: "8px 10px", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis" }}>{p.counterparty || "-"}</td>
                       <td style={{ padding: "8px 10px", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis" }}>{p.location || "-"}</td>
                       <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.contractPrice ?? "-"}</td>
