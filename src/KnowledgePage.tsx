@@ -212,20 +212,30 @@ export default function KnowledgePage() {
   const [docs, setDocs] = useState<Doc[]>([]);
   const [editingDoc, setEditingDoc] = useState<Doc | null>(null);
   const [addingDoc, setAddingDoc] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     let seeded = false;
     const colRef = collection(db, "knowledgeDocs");
-    const unsub = onSnapshot(colRef, async (snap) => {
-      if (snap.empty && !seeded) {
-        seeded = true;
-        const batch = writeBatch(db);
-        SEED_DOCS.forEach((d) => batch.set(doc(colRef), d));
-        await batch.commit();
-        return;
-      }
-      setDocs(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Doc, "id">) })));
-    });
+    const unsub = onSnapshot(
+      colRef,
+      async (snap) => {
+        setLoadError(null);
+        if (snap.empty && !seeded) {
+          seeded = true;
+          try {
+            const batch = writeBatch(db);
+            SEED_DOCS.forEach((d) => batch.set(doc(colRef), d));
+            await batch.commit();
+          } catch (err) {
+            setLoadError(err instanceof Error ? err.message : String(err));
+          }
+          return;
+        }
+        setDocs(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Doc, "id">) })));
+      },
+      (err) => setLoadError(err.message)
+    );
     return unsub;
   }, []);
 
@@ -550,9 +560,13 @@ export default function KnowledgePage() {
             />
           </div>
 
-          {filtered.length === 0 ? (
+          {loadError ? (
+            <div style={{ textAlign: "center", padding: "var(--sp-8)", color: "var(--danger)" }}>
+              โหลดเอกสารไม่สำเร็จ: {loadError}
+            </div>
+          ) : filtered.length === 0 ? (
             <div style={{ textAlign: "center", padding: "var(--sp-8)", color: "var(--text-faint)" }}>
-              ไม่พบเอกสารที่ตรงกับการค้นหา
+              {docs.length === 0 ? "ยังไม่มีเอกสาร กดปุ่ม “เพิ่มเอกสาร” เพื่อเริ่มต้น" : "ไม่พบเอกสารที่ตรงกับการค้นหา"}
             </div>
           ) : (
             <div style={grid(280)}>
