@@ -90,12 +90,14 @@ function riskCellStyle(score: number) {
   };
 }
 
+// Ordered ascending by score threshold (F lowest → A highest) so the
+// scale bar and the detail row beneath it line up left-to-right.
 const GRADES = [
-  { grade: "A", label: "ดีมาก", score: "> 80%", result: "คงสถานะคู่ค้าใน AVL", color: "var(--success)" },
-  { grade: "B", label: "ดี", score: "70–79%", result: "คงสถานะคู่ค้าใน AVL", color: "var(--success)" },
-  { grade: "C", label: "พอใช้", score: "60–69%", result: "เกณฑ์ผ่านขั้นต่ำ", color: "var(--info)" },
-  { grade: "D", label: "ต้องปรับปรุง", score: "50–59%", result: "ต้องประเมินความเสี่ยง + On-site Audit / ติดกัน 2 ครั้ง = ตัดออกจาก AVL", color: "var(--warning)" },
-  { grade: "F", label: "ตัดออก", score: "< 50%", result: "ตัดออกจากรายชื่อคู่ค้าทันที", color: "var(--danger)" },
+  { grade: "F", label: "ตัดออก", score: "< 50%", width: 50, result: "ตัดออกจากรายชื่อคู่ค้าทันที", color: "var(--danger)" },
+  { grade: "D", label: "ต้องปรับปรุง", score: "50–59%", width: 10, result: "ต้องประเมินความเสี่ยง + On-site Audit / ติดกัน 2 ครั้ง = ตัดออกจาก AVL", color: "var(--warning)" },
+  { grade: "C", label: "พอใช้", score: "60–69%", width: 10, result: "เกณฑ์ผ่านขั้นต่ำ", color: "var(--info)" },
+  { grade: "B", label: "ดี", score: "70–79%", width: 10, result: "คงสถานะคู่ค้าใน AVL", color: "var(--success)" },
+  { grade: "A", label: "ดีมาก", score: "> 80%", width: 20, result: "คงสถานะคู่ค้าใน AVL", color: "var(--success)" },
 ];
 
 const RESPONSIBILITY: { task: string; owner: string; due: string }[] = [
@@ -326,7 +328,7 @@ export default function ESGPage() {
           intro="คะแนนความเสี่ยง = โอกาสที่จะเกิด (Likelihood) × ผลกระทบ (Impact) ครอบคลุม 4 ด้าน: สินค้า&บริการ / ดำเนินธุรกิจ / สิ่งแวดล้อม / สังคม"
         >
           <HoverCard interactive={false}>
-            <div style={{ display: "flex", gap: "var(--sp-4)" }}>
+            <div style={{ display: "flex", gap: "var(--sp-3)", maxWidth: 280, margin: "0 auto" }}>
               <div
                 style={{
                   display: "flex",
@@ -342,8 +344,8 @@ export default function ESGPage() {
                 โอกาสเกิด (Likelihood)
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ display: "flex", gap: "var(--sp-2)" }}>
-                  <div style={{ width: 22, flexShrink: 0 }} />
+                <div style={{ display: "flex", gap: "var(--sp-1)" }}>
+                  <div style={{ width: 16, flexShrink: 0 }} />
                   {[1, 2, 3, 4].map((i) => (
                     <span key={i} style={{ flex: 1, textAlign: "center", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)" }}>
                       {i}
@@ -351,8 +353,8 @@ export default function ESGPage() {
                   ))}
                 </div>
                 {[4, 3, 2, 1].map((l) => (
-                  <div key={l} style={{ display: "flex", gap: "var(--sp-2)", marginTop: "var(--sp-2)" }}>
-                    <span style={{ width: 22, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)" }}>
+                  <div key={l} style={{ display: "flex", gap: "var(--sp-1)", marginTop: "var(--sp-1)" }}>
+                    <span style={{ width: 16, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)" }}>
                       {l}
                     </span>
                     {[1, 2, 3, 4].map((i) => {
@@ -369,7 +371,7 @@ export default function ESGPage() {
                             justifyContent: "center",
                             borderRadius: "var(--radius-sm)",
                             fontWeight: 800,
-                            fontSize: "var(--fs-sm)",
+                            fontSize: "var(--fs-xs)",
                             ...riskCellStyle(score),
                           }}
                         >
@@ -379,7 +381,7 @@ export default function ESGPage() {
                     })}
                   </div>
                 ))}
-                <p style={{ margin: "var(--sp-3) 0 0", textAlign: "center", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)" }}>
+                <p style={{ margin: "var(--sp-2) 0 0", textAlign: "center", fontSize: "var(--fs-xs)", fontWeight: 700, color: "var(--text-faint)" }}>
                   ผลกระทบ (Impact)
                 </p>
               </div>
@@ -405,14 +407,8 @@ export default function ESGPage() {
         >
           <HoverCard interactive={false}>
             <div style={{ display: "flex", height: 10, borderRadius: "var(--radius-full)", overflow: "hidden", marginBottom: "var(--sp-6)" }}>
-              {[
-                { width: 50, color: "var(--danger)" },
-                { width: 10, color: "var(--warning)" },
-                { width: 10, color: "var(--info)" },
-                { width: 10, color: "var(--success)" },
-                { width: 20, color: "var(--success)" },
-              ].map((s, i) => (
-                <div key={i} style={{ width: `${s.width}%`, background: s.color }} />
+              {GRADES.map((g) => (
+                <div key={g.grade} style={{ width: `${g.width}%`, background: g.color }} />
               ))}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "var(--sp-3)" }}>
