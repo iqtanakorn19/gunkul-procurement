@@ -13,6 +13,7 @@ import {
   IconSquare,
   IconCheck,
   IconAlertTriangle,
+  IconPencil,
 } from "@tabler/icons-react";
 import { Reveal, IconBadge, Section, HoverCard, grid, tint } from "./components/PageKit";
 
@@ -94,13 +95,91 @@ const TYPE_BADGE: Record<string, { color: string; label: string }> = {
   scope: { color: "var(--warning)", label: "Scope Guide" },
 };
 
+const EDITS_STORAGE_KEY = "gunkul-knowledge-doc-edits";
+type DocEdits = Record<string, { title?: string; description?: string }>;
+
+function loadDocEdits(): DocEdits {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(window.localStorage.getItem(EDITS_STORAGE_KEY) ?? "{}");
+  } catch {
+    return {};
+  }
+}
+
+function DocEditModal({
+  doc,
+  onSave,
+  onClose,
+}: {
+  doc: Doc;
+  onSave: (title: string, description: string) => void;
+  onClose: () => void;
+}) {
+  const [title, setTitle] = useState(doc.title);
+  const [description, setDescription] = useState(doc.description);
+  const inputStyle: React.CSSProperties = {
+    font: "inherit", fontSize: "var(--fs-sm)", color: "var(--text)", background: "var(--surface)",
+    border: "1px solid var(--border-strong)", borderRadius: "var(--radius-sm)", padding: "8px 10px", width: "100%",
+  };
+
+  return (
+    <div
+      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 320, padding: "var(--sp-4)" }}
+    >
+      <div style={{ background: "var(--surface)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", width: "min(480px, 100%)", padding: "var(--sp-5)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--sp-4)" }}>
+          <h3 style={{ margin: 0, color: "var(--text-strong)" }}>แก้ไขข้อมูลเอกสาร</h3>
+          <button type="button" onClick={onClose} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-faint)" }}>
+            <IconX size={20} stroke={1.75} />
+          </button>
+        </div>
+        <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)", marginBottom: "var(--sp-3)" }}>
+          ชื่อเอกสาร
+          <input style={inputStyle} value={title} onChange={(e) => setTitle(e.target.value)} />
+        </label>
+        <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
+          คำอธิบาย
+          <textarea style={{ ...inputStyle, minHeight: 80, resize: "vertical" }} value={description} onChange={(e) => setDescription(e.target.value)} />
+        </label>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "var(--sp-2)", marginTop: "var(--sp-4)" }}>
+          <button type="button" onClick={onClose} style={{ border: "1px solid var(--border-strong)", background: "var(--surface)", color: "var(--text)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", cursor: "pointer" }}>
+            ยกเลิก
+          </button>
+          <button
+            type="button"
+            onClick={() => onSave(title.trim() || doc.title, description.trim())}
+            style={{ border: "none", background: "var(--primary)", color: "var(--primary-contrast)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", fontWeight: 600, cursor: "pointer" }}
+          >
+            บันทึก
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function KnowledgePage() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "wi" | "manual" | "scope">("all");
   const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null);
   const [doneSteps, setDoneSteps] = useState<boolean[]>(Array(9).fill(false));
+  const [docEdits, setDocEdits] = useState<DocEdits>(loadDocEdits);
+  const [editingDoc, setEditingDoc] = useState<Doc | null>(null);
 
-  const filtered = DOCS.filter((d) => {
+  const docs = DOCS.map((d) => ({ ...d, ...docEdits[d.id] }));
+
+  const saveDocEdit = (id: string, title: string, description: string) => {
+    setDocEdits((prev) => {
+      const next = { ...prev, [id]: { title, description } };
+      window.localStorage.setItem(EDITS_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+    setEditingDoc(null);
+  };
+
+  const filtered = docs.filter((d) => {
     const matchSearch =
       search === "" ||
       d.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -122,6 +201,14 @@ export default function KnowledgePage() {
 
   return (
     <div>
+      {editingDoc && (
+        <DocEditModal
+          doc={editingDoc}
+          onClose={() => setEditingDoc(null)}
+          onSave={(title, description) => saveDocEdit(editingDoc.id, title, description)}
+        />
+      )}
+
       {/* PDF Viewer Modal */}
       {selectedDoc && (
         <div
@@ -349,7 +436,17 @@ export default function KnowledgePage() {
                 const badge = TYPE_BADGE[doc.type];
                 return (
                   <HoverCard key={doc.id} onClick={() => setSelectedDoc(doc)}>
-                    <IconBadge icon={doc.icon} color="var(--primary)" />
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                      <IconBadge icon={doc.icon} color="var(--primary)" />
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setEditingDoc(doc); }}
+                        title="แก้ไขข้อมูลเอกสาร"
+                        style={{ border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-muted)", borderRadius: "var(--radius-sm)", padding: 5, cursor: "pointer", display: "inline-flex" }}
+                      >
+                        <IconPencil size={14} stroke={1.75} />
+                      </button>
+                    </div>
                     <div style={{ fontWeight: 600, color: "var(--text-strong)", marginTop: "var(--sp-3)" }}>{doc.title}</div>
                     <p style={{ margin: "var(--sp-1) 0 var(--sp-3)", color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.55 }}>
                       {doc.description}
