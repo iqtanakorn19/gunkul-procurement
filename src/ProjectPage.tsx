@@ -1,3 +1,4 @@
+import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import {
   collection, onSnapshot, doc, addDoc, updateDoc, deleteDoc, writeBatch,
@@ -111,6 +112,9 @@ const EMPTY_PROJECT: ProjectSeed = {
   colorStatus: "On going", boi: "", note: "", estimateSiteMob: "", forecastSiteMob1: "",
   forecastSiteMob2: "", phases: [],
 };
+
+const STICKY_WIDTHS = [60, 200];
+const stickyLeft = (i: number) => STICKY_WIDTHS.slice(0, i).reduce((a, b) => a + b, 0);
 
 const inputStyle: React.CSSProperties = {
   width: "100%", padding: "0.5rem 0.65rem", borderRadius: "var(--radius-sm)",
@@ -525,124 +529,153 @@ export default function ProjectPage() {
             {projects.length === 0 ? "ยังไม่มีโครงการ" : "ไม่พบโครงการที่ตรงกับการค้นหา"}
           </div>
         ) : (
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--fs-sm)" }}>
+          <div style={{ overflow: "auto", maxHeight: "min(70vh, 760px)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--fs-xs)", whiteSpace: "nowrap" }}>
               <thead>
-                <tr style={{ textAlign: "left", borderBottom: "1px solid var(--border-strong)" }}>
-                  <th style={{ padding: 0 }}>
-                    <button
-                      onClick={() => {
-                        if (sortBy === "jobNo") setSortAsc(!sortAsc);
-                        else { setSortBy("jobNo"); setSortAsc(true); }
-                      }}
+                <tr style={{ background: "var(--bg-elevated)", textAlign: "left", color: "var(--text-muted)" }}>
+                  {([
+                    { label: "Job", key: "jobNo" as const },
+                    { label: "ชื่อโครงการ", key: "name" as const },
+                  ] as { label: string; key: "jobNo" | "name" }[]).map(({ label, key }, i) => (
+                    <th
+                      key={key}
+                      onClick={() => { if (sortBy === key) setSortAsc(!sortAsc); else { setSortBy(key); setSortAsc(true); } }}
                       style={{
-                        width: "100%", textAlign: "left", padding: "0.5rem", border: "none", background: "transparent",
-                        cursor: "pointer", fontWeight: sortBy === "jobNo" ? 600 : 500, color: sortBy === "jobNo" ? "var(--accent)" : "var(--text-strong)",
+                        position: "sticky", top: 0, left: stickyLeft(i), zIndex: 3, padding: "8px 10px",
+                        minWidth: STICKY_WIDTHS[i], width: STICKY_WIDTHS[i],
+                        borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)",
+                        cursor: "pointer", userSelect: "none",
+                        fontWeight: sortBy === key ? 700 : 600, color: sortBy === key ? "var(--accent)" : "var(--text-strong)",
                       }}
                     >
-                      Job {sortBy === "jobNo" && (sortAsc ? "↑" : "↓")}
-                    </button>
-                  </th>
-                  <th style={{ padding: 0 }}>
-                    <button
-                      onClick={() => {
-                        if (sortBy === "name") setSortAsc(!sortAsc);
-                        else { setSortBy("name"); setSortAsc(true); }
-                      }}
-                      style={{
-                        width: "100%", textAlign: "left", padding: "0.5rem", border: "none", background: "transparent",
-                        cursor: "pointer", fontWeight: sortBy === "name" ? 600 : 500, color: sortBy === "name" ? "var(--accent)" : "var(--text-strong)",
-                      }}
-                    >
-                      ชื่อโครงการ {sortBy === "name" && (sortAsc ? "↑" : "↓")}
-                    </button>
-                  </th>
-                  <th style={{ padding: "0.5rem" }}>ประเภท</th>
-                  <th style={{ padding: 0 }}>
-                    <button
-                      onClick={() => {
-                        if (sortBy === "kWp") setSortAsc(!sortAsc);
-                        else { setSortBy("kWp"); setSortAsc(true); }
-                      }}
-                      style={{
-                        width: "100%", textAlign: "left", padding: "0.5rem", border: "none", background: "transparent",
-                        cursor: "pointer", fontWeight: sortBy === "kWp" ? 600 : 500, color: sortBy === "kWp" ? "var(--accent)" : "var(--text-strong)",
-                      }}
-                    >
-                      kWp {sortBy === "kWp" && (sortAsc ? "↑" : "↓")}
-                    </button>
-                  </th>
-                  <th style={{ padding: "0.5rem" }}>PV</th>
-                  <th style={{ padding: "0.5rem" }}>Inverter</th>
-                  <th style={{ padding: "0.5rem" }}>Optimizer</th>
-                  <th style={{ padding: "0.5rem" }}>BESS</th>
-                  <th style={{ padding: "0.5rem" }}>PM PIC</th>
-                  <th style={{ padding: 0 }}>
-                    <button
-                      onClick={() => {
-                        if (sortBy === "status") setSortAsc(!sortAsc);
-                        else { setSortBy("status"); setSortAsc(true); }
-                      }}
-                      style={{
-                        width: "100%", textAlign: "left", padding: "0.5rem", border: "none", background: "transparent",
-                        cursor: "pointer", fontWeight: sortBy === "status" ? 600 : 500, color: sortBy === "status" ? "var(--accent)" : "var(--text-strong)",
-                      }}
-                    >
-                      สถานะ {sortBy === "status" && (sortAsc ? "↑" : "↓")}
-                    </button>
-                  </th>
-                  <th style={{ padding: "0.5rem" }} />
+                      {label} {sortBy === key && (sortAsc ? "↑" : "↓")}
+                    </th>
+                  ))}
+                  {[
+                    { label: "ประเภทหลังคา", key: undefined },
+                    { label: "ประเภทสัญญา", key: undefined },
+                    { label: "kWp", key: "kWp" as const },
+                    { label: "จำนวนหลังคา", key: undefined },
+                    { label: "จำนวน Meter", key: undefined },
+                    { label: "จุดเชื่อมต่อ", key: undefined },
+                    { label: "Safety Level", key: undefined },
+                    { label: "Workmanship", key: undefined },
+                    { label: "คู่สัญญา", key: undefined },
+                    { label: "Location", key: undefined },
+                    { label: "ราคาตามสัญญา", key: undefined },
+                    { label: "Award Subcon", key: undefined },
+                    { label: "Material THB/W", key: undefined },
+                    { label: "Labour THB/W", key: undefined },
+                    { label: "Subcon Name", key: undefined },
+                    { label: "Award Date", key: undefined },
+                    { label: "PV Brand", key: undefined },
+                    { label: "Power Class", key: undefined },
+                    { label: "Inverter Brand", key: undefined },
+                    { label: "Inverter Model", key: undefined },
+                    { label: "Optimizer", key: undefined },
+                    { label: "BESS Brand", key: undefined },
+                    { label: "BESS Size", key: undefined },
+                    { label: "OM", key: undefined },
+                    { label: "Kick off Date", key: undefined },
+                    { label: "PU PIC", key: undefined },
+                    { label: "PM PIC", key: undefined },
+                    { label: "ENG PIC", key: undefined },
+                    { label: "สถานะ", key: undefined },
+                    { label: "BOI", key: undefined },
+                    { label: "Remark", key: undefined },
+                    { label: "Est. Site Mob", key: undefined },
+                    { label: "Forecast Site Mob 1", key: undefined },
+                    { label: "Forecast Site Mob 2", key: undefined },
+                    { label: "สีไฮไลท์", key: "status" as const },
+                    { label: "", key: undefined },
+                  ].map(({ label, key }, idx) => {
+                    const active = key && key === sortBy;
+                    return (
+                      <th
+                        key={label || `c${idx}`}
+                        onClick={key ? () => { if (sortBy === key) setSortAsc(!sortAsc); else { setSortBy(key); setSortAsc(true); } } : undefined}
+                        style={{
+                          position: "sticky", top: 0, zIndex: 1, padding: "8px 10px",
+                          borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)",
+                          cursor: key ? "pointer" : "default", userSelect: "none",
+                          fontWeight: active ? 700 : 600, color: active ? "var(--accent)" : "var(--text-strong)",
+                        }}
+                      >
+                        {label} {active && (sortAsc ? "↑" : "↓")}
+                      </th>
+                    );
+                  })}
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((p) => (
-                  <tr key={p.id} style={{ borderBottom: "1px solid var(--border)" }}>
-                    <td style={{ padding: "0.5rem", fontWeight: 600 }}>{p.jobNo ?? "-"}</td>
-                    <td style={{ padding: "0.5rem", maxWidth: 180 }}>
-                      <div>{p.name}</div>
-                      {p.phases.length > 0 && (
-                        <div style={{ fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>+{p.phases.length} phase</div>
-                      )}
-                    </td>
-                    <td style={{ padding: "0.5rem" }}>{p.contractType}</td>
-                    <td style={{ padding: "0.5rem", textAlign: "right" }}>{p.capacityKwp ?? "-"}</td>
-                    <td style={{ padding: "0.5rem" }}>
-                      {p.pvBrand && <div>{p.pvBrand} {p.powerClass}</div>}
-                      {!p.pvBrand && <span style={{ color: "var(--text-faint)" }}>-</span>}
-                    </td>
-                    <td style={{ padding: "0.5rem" }}>
-                      {p.inverterBrand && <div>{p.inverterBrand}</div>}
-                      {p.inverterModel && <div style={{ fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>{p.inverterModel}</div>}
-                      {!p.inverterBrand && <span style={{ color: "var(--text-faint)" }}>-</span>}
-                    </td>
-                    <td style={{ padding: "0.5rem" }}>{p.optimizer || "-"}</td>
-                    <td style={{ padding: "0.5rem" }}>
-                      {p.bessBrand && <div>{p.bessBrand}</div>}
-                      {p.bessSize && <div style={{ fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>{p.bessSize}</div>}
-                      {!p.bessBrand && <span style={{ color: "var(--text-faint)" }}>-</span>}
-                    </td>
-                    <td style={{ padding: "0.5rem" }}>{p.pmPic || "-"}</td>
-                    <td style={{ padding: "0.5rem" }}>
-                      <span style={{
-                        display: "inline-flex", alignItems: "center", gap: "0.35rem",
-                        padding: "0.2rem 0.55rem", borderRadius: "999px", fontSize: "var(--fs-xs)",
-                        background: `color-mix(in srgb, ${COLOR_STATUS_HEX[p.colorStatus]} 16%, transparent)`,
-                        color: COLOR_STATUS_HEX[p.colorStatus],
-                      }}>
-                        <span style={{ width: 6, height: 6, borderRadius: "50%", background: COLOR_STATUS_HEX[p.colorStatus] }} />
-                        {p.colorStatus}
-                      </span>
-                    </td>
-                    <td style={{ padding: "0.5rem", whiteSpace: "nowrap" }}>
-                      <button onClick={() => setEditingProject(p)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-muted)", marginRight: "0.4rem" }}>
-                        <IconPencil size={16} />
-                      </button>
-                      <button onClick={() => deleteProject(p.id)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--danger)" }}>
-                        <IconTrash size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {filtered.map((p) => {
+                  const stickyTd = (i: number): React.CSSProperties =>
+                    i < STICKY_WIDTHS.length ? { position: "sticky", left: stickyLeft(i), zIndex: 1, background: "var(--surface)" } : {};
+                  return (
+                    <tr key={p.id} style={{ borderBottom: "1px solid var(--border)", background: "var(--surface)" }}>
+                      <td style={{ padding: "8px 10px", fontWeight: 600, ...stickyTd(0) }}>{p.jobNo ?? "-"}</td>
+                      <td style={{ padding: "8px 10px", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", ...stickyTd(1) }}>
+                        <div>{p.name}</div>
+                        {p.phases.length > 0 && (
+                          <div style={{ fontSize: "10px", color: "var(--text-faint)" }}>+{p.phases.length} phase</div>
+                        )}
+                      </td>
+                      <td style={{ padding: "8px 10px" }}>{p.roofType || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.contractType}</td>
+                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.capacityKwp ?? "-"}</td>
+                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.roofCount ?? "-"}</td>
+                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.meterCount ?? "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.connectionPoint || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.safetyLevel || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.workmanship || "-"}</td>
+                      <td style={{ padding: "8px 10px", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis" }}>{p.counterparty || "-"}</td>
+                      <td style={{ padding: "8px 10px", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis" }}>{p.location || "-"}</td>
+                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.contractPrice ?? "-"}</td>
+                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.subconAwardAmount ?? "-"}</td>
+                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.materialThbWatt ?? "-"}</td>
+                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.labourThbWatt ?? "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.subconName || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.awardDate || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.pvBrand || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.powerClass || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.inverterBrand || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.inverterModel || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.optimizer || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.bessBrand || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.bessSize || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.om || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.kickoffDate || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.puPic || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.pmPic || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.engPic || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.status}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.boi || "-"}</td>
+                      <td style={{ padding: "8px 10px", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", color: "var(--text-muted)" }}>{p.note || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.estimateSiteMob || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.forecastSiteMob1 || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>{p.forecastSiteMob2 || "-"}</td>
+                      <td style={{ padding: "8px 10px" }}>
+                        <span style={{
+                          display: "inline-flex", alignItems: "center", gap: "0.35rem",
+                          padding: "0.2rem 0.55rem", borderRadius: "999px", fontSize: "10px",
+                          background: `color-mix(in srgb, ${COLOR_STATUS_HEX[p.colorStatus]} 16%, transparent)`,
+                          color: COLOR_STATUS_HEX[p.colorStatus],
+                        }}>
+                          <span style={{ width: 6, height: 6, borderRadius: "50%", background: COLOR_STATUS_HEX[p.colorStatus] }} />
+                          {p.colorStatus}
+                        </span>
+                      </td>
+                      <td style={{ padding: "8px 10px" }}>
+                        <button onClick={() => setEditingProject(p)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-muted)", marginRight: "0.4rem" }}>
+                          <IconPencil size={16} />
+                        </button>
+                        <button onClick={() => deleteProject(p.id)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--danger)" }}>
+                          <IconTrash size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
