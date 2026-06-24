@@ -8,6 +8,7 @@ import {
   IconBook2,
   IconSitemap,
   IconLeaf,
+  IconBuildingFactory2,
   IconChevronLeft,
   IconChevronRight,
   IconLogout,
@@ -20,11 +21,13 @@ export type Page =
   | "tracking"
   | "team"
   | "knowledge"
-  | "esg";
+  | "esg"
+  | "project";
 
 const NAV_ITEMS: { page: Page; label: string; icon: typeof IconHome2 }[] = [
   { page: "home", label: "Home", icon: IconHome2 },
   { page: "dashboard", label: "Dashboard", icon: IconLayoutDashboard },
+  { page: "project", label: "Project", icon: IconBuildingFactory2 },
   { page: "vendor", label: "Vendor Directory", icon: IconBuildingWarehouse },
   { page: "tracking", label: "Tracking Sheet", icon: IconClipboardList },
   { page: "knowledge", label: "Knowledge Base", icon: IconBook2 },

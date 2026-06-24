@@ -10,6 +10,7 @@ import ESGPage from "./ESGPage";
 import OrgChartPage from "./OrgChartPage";
 import LoginPage from "./LoginPage";
 import HomePage from "./HomePage";
+import ProjectPage from "./ProjectPage";
 import Sidebar from "./Sidebar";
 import type { Page } from "./Sidebar";
 
@@ -46,6 +47,7 @@ export default function App() {
         <div style={{ flex: 1 }}>
           {currentPage === "home" && <HomePage setPage={setCurrentPage} />}
           {currentPage === "dashboard" && <DashboardPage />}
+          {currentPage === "project" && <ProjectPage />}
           {currentPage === "vendor" && <VendorPage />}
           {currentPage === "tracking" && <TrackingPage />}
           {currentPage === "team" && <OrgChartPage />}
