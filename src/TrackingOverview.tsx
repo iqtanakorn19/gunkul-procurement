@@ -15,15 +15,18 @@ const cardStyle: React.CSSProperties = {
   padding: "var(--sp-4)",
 };
 
-function countByDistinctPo(rows: TrackingRow[]): number {
-  const seenPo = new Set<string>();
+// Count distinct jobs by PR No.: rows sharing a PR No. (the same request split
+// into multiple item/PO lines) count once; rows without a PR No. yet count
+// individually so nothing in the pipeline is hidden.
+function countByDistinctPr(rows: TrackingRow[]): number {
+  const seenPr = new Set<string>();
   let count = 0;
   for (const r of rows) {
-    const po = r.poNo?.trim();
-    if (!po) {
+    const pr = r.prNo?.trim();
+    if (!pr) {
       count += 1;
-    } else if (!seenPo.has(po)) {
-      seenPo.add(po);
+    } else if (!seenPr.has(pr)) {
+      seenPr.add(pr);
       count += 1;
     }
   }
@@ -58,7 +61,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     const urgentCount = rows.filter((r) => r.urgent).length;
     const completedCount = rows.filter((r) => r.status === "Completed").length;
     return {
-      count: countByDistinctPo(rows),
+      count: countByDistinctPr(rows),
       urgentCount,
       completedPct: rows.length ? Math.round((completedCount / rows.length) * 100) : 0,
     };
@@ -75,7 +78,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
 
   const workloadData = useMemo(() => {
     if (scope !== "all") return [];
-    return tabs.map((t) => ({ name: t.name, count: countByDistinctPo(rowsByTab[t.id] ?? []) }));
+    return tabs.map((t) => ({ name: t.name, count: countByDistinctPr(rowsByTab[t.id] ?? []) }));
   }, [tabs, rowsByTab, scope]);
 
   const urgentRows = useMemo(
