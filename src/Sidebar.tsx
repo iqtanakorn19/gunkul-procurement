@@ -123,13 +123,12 @@ export default function Sidebar({
         {!collapsed && (
           <span
             style={{
-              fontFamily: "var(--font-serif)",
+              fontFamily: '"Cormorant Garamond", Georgia, serif',
               fontWeight: 600,
               fontSize: "1.05rem",
               color: "var(--text-strong)",
               whiteSpace: "nowrap",
-              overflow: "visible",
-              minWidth: 0,
+              overflow: "hidden",
             }}
           >
             Procurement
