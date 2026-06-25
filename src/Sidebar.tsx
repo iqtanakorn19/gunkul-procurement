@@ -30,8 +30,8 @@ const NAV_ITEMS: { page: Page; label: string; icon: typeof IconHome2 }[] = [
   { page: "home", label: "Home", icon: IconHome2 },
   { page: "dashboard", label: "Dashboard", icon: IconLayoutDashboard },
   { page: "project", label: "Project", icon: IconBuildingFactory2 },
-  { page: "vendor", label: "Vendor Directory", icon: IconBuildingWarehouse },
   { page: "itemmaster", label: "Item Master", icon: IconPackage },
+  { page: "vendor", label: "Vendor Directory", icon: IconBuildingWarehouse },
   { page: "tracking", label: "Tracking Sheet", icon: IconClipboardList },
   { page: "knowledge", label: "Knowledge Base", icon: IconBook2 },
   { page: "esg", label: "ESG & Sustainability", icon: IconLeaf },
@@ -123,9 +123,9 @@ export default function Sidebar({
         {!collapsed && (
           <span
             style={{
-              fontFamily: "var(--font-serif)",
+              fontFamily: '"Cormorant Garamond", Georgia, serif',
               fontWeight: 600,
-              fontSize: "var(--fs-h3)",
+              fontSize: "1.2rem",
               color: "var(--text-strong)",
               whiteSpace: "nowrap",
               overflow: "hidden",
