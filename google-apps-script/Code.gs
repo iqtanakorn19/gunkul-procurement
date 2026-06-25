@@ -212,13 +212,16 @@ function writeFirestoreRow(tabId, rowId, data) {
   });
   var mask = Object.keys(fields).map(function (k) { return "updateMask.fieldPaths=" + encodeURIComponent(k); }).join("&");
   var url = firestoreBaseUrl() + "/trackingTabs/" + tabId + "/rows/" + rowId + "?" + mask;
-  UrlFetchApp.fetch(url, {
+  var resp = UrlFetchApp.fetch(url, {
     method: "patch",
     contentType: "application/json",
     headers: { Authorization: "Bearer " + ScriptApp.getOAuthToken() },
     payload: JSON.stringify({ fields: fields }),
     muteHttpExceptions: true,
   });
+  if (resp.getResponseCode() >= 300) {
+    Logger.log("writeFirestoreRow FAILED (" + resp.getResponseCode() + "): " + resp.getContentText());
+  }
 }
 
 function deleteFirestoreRow(tabId, rowId) {
@@ -263,13 +266,16 @@ function getOrCreateTabId(sheetName) {
 function createFirestoreTabDoc(tabId, name, order) {
   var url = firestoreBaseUrl() + "/trackingTabs/" + tabId
     + "?updateMask.fieldPaths=name&updateMask.fieldPaths=order";
-  UrlFetchApp.fetch(url, {
+  var resp = UrlFetchApp.fetch(url, {
     method: "patch",
     contentType: "application/json",
     headers: { Authorization: "Bearer " + ScriptApp.getOAuthToken() },
     payload: JSON.stringify({ fields: { name: fsValue(name), order: fsValue(order) } }),
     muteHttpExceptions: true,
   });
+  if (resp.getResponseCode() >= 300) {
+    Logger.log("createFirestoreTabDoc FAILED (" + resp.getResponseCode() + "): " + resp.getContentText());
+  }
 }
 
 function getConfigSheet() {
