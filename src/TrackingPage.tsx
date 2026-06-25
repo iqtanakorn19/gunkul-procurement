@@ -1,24 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  collection,
-  onSnapshot,
-  doc,
-  setDoc,
-  deleteDoc,
-  addDoc,
-  getDocs,
-  writeBatch,
-  serverTimestamp,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import { useEffect, useMemo, useState } from "react";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "./firebase";
 import * as XLSX from "xlsx";
 import {
-  IconPlus,
   IconX,
-  IconTrash,
-  IconPencil,
   IconFileSpreadsheet,
   IconFlag,
   IconFlagFilled,
@@ -36,6 +21,10 @@ import {
    into a single field, and the working-day diff columns dropped per
    user decision (not needed). N/U was Urgent/Not-urgent — kept on as
    a manual highlight flag instead of a column.
+
+   Data entry now happens in the master Google Sheet (one subsheet per
+   person); this page only mirrors that data in real time for
+   monitoring — see google-apps-script/ for the sync setup.
    ============================================================ */
 
 export const STATUS_OPTIONS = [
@@ -116,53 +105,6 @@ export interface Tab {
 }
 
 /* ============================================================
-   Header aliases for importing the legacy per-person Excel files —
-   every variant header text we found across the 4 trackers maps to
-   one unified field.
-   ============================================================ */
-const HEADER_ALIASES: Record<string, keyof TrackingRow> = {
-  "no": "no", "no.": "no",
-  "company": "company",
-  "dept": "dept", "department": "dept", "ฝ่าย": "dept",
-  "project": "project",
-  "description": "description", "descriptions": "description",
-  "เลขที่เอกสาร pr": "prNo", "pr no.": "prNo", "pr no": "prNo",
-  "date pr": "prDate", "date pr received": "prDate",
-  "เลขที่เอกสาร pa": "paNo", "pa no.": "paNo", "pa no": "paNo", "create-pa": "paNo",
-  "date pa submitted": "paSubmittedDate", "date pa": "paSubmittedDate",
-  "date pa approved": "paApprovedDate", "date pa \n approved": "paApprovedDate",
-  "เลขที่เอกสาร po": "poNo", "po no.": "poNo", "po no": "poNo",
-  "date po submitted": "poSubmittedDate", "date po \n submitted": "poSubmittedDate",
-  "date po approved": "poApprovedDate", "date po\n approved": "poApprovedDate",
-  "vendor": "vendor",
-  "id vendor": "vendorId", "vendor code": "vendorId",
-  "qty": "qty", "จำนวนซื้อ": "qty",
-  "หน่วย": "unit",
-  "ราคา/หน่วย": "unitPrice",
-  "dis.": "discount",
-  "budget": "budget",
-  "รวม save cost": "saveCost",
-  "payment": "payment",
-  "วันต้องการสินค้า": "neededDate",
-  "ทำรับ": "deliveredDate", "sent to supplier": "deliveredDate", "d'ly date": "deliveredDate",
-  "status": "status", "po status": "status",
-  "remark": "remark", "remarks": "remark", "หมายเหตุ": "remark",
-};
-
-function normalizeHeader(h: string) {
-  return h.toLowerCase().replace(/\s+/g, " ").trim();
-}
-
-function excelDateToISO(v: unknown): string | undefined {
-  if (v instanceof Date) return v.toISOString().slice(0, 10);
-  if (typeof v === "string" && v.trim() && v.trim() !== "-") return v.trim();
-  return undefined;
-}
-
-const uid = () =>
-  typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `id-${Date.now()}-${Math.random()}`;
-
-/* ============================================================
    Money / vat helpers — qty, unitPrice, discount drive the rest
    ============================================================ */
 export function computeMoney(row: TrackingRow) {
@@ -210,7 +152,6 @@ const COLUMNS: { label: string; key?: SortKey }[] = [
   { label: "Status", key: "status" },
   { label: "ทำรับ", key: "deliveredDate" },
   { label: "Remark", key: "remark" },
-  { label: "" },
 ];
 
 /* First 4 columns (flag, No., Company, PR No.) stay pinned to the left while
@@ -219,37 +160,17 @@ const STICKY_WIDTHS = [40, 60, 110, 170];
 const stickyLeft = (i: number) => STICKY_WIDTHS.slice(0, i).reduce((a, b) => a + b, 0);
 
 /* ============================================================
-   Row edit modal
+   Read-only row detail modal
    ============================================================ */
-function RowEditModal({
-  initial,
-  onSave,
-  onClose,
-}: {
-  initial: TrackingRow;
-  onSave: (row: TrackingRow) => void;
-  onClose: () => void;
-}) {
-  const [row, setRow] = useState<TrackingRow>(initial);
-  const set = <K extends keyof TrackingRow>(k: K, v: TrackingRow[K]) => setRow((r) => ({ ...r, [k]: v }));
+function RowDetailModal({ row, onClose }: { row: TrackingRow; onClose: () => void }) {
   const { subtotal, vat, total } = computeMoney(row);
 
-  const field = (label: string, node: React.ReactNode) => (
-    <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
-      {label}
-      {node}
-    </label>
+  const field = (label: string, value: React.ReactNode) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <span style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>{label}</span>
+      <span style={{ fontSize: "var(--fs-sm)", color: "var(--text)" }}>{value || "—"}</span>
+    </div>
   );
-
-  const inputStyle: React.CSSProperties = {
-    font: "inherit",
-    fontSize: "var(--fs-sm)",
-    color: "var(--text)",
-    background: "var(--surface)",
-    border: "1px solid var(--border-strong)",
-    borderRadius: "var(--radius-sm)",
-    padding: "6px 9px",
-  };
 
   return (
     <div
@@ -266,79 +187,49 @@ function RowEditModal({
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--sp-4)" }}>
-          <h3 style={{ margin: 0, color: "var(--text-strong)" }}>แก้ไขรายการ PR/PO</h3>
+          <h3 style={{ margin: 0, color: "var(--text-strong)" }}>รายละเอียด PR/PO {row.urgent && <span style={{ color: "var(--danger)", fontSize: "var(--fs-xs)" }}>● เร่งด่วน</span>}</h3>
           <button type="button" onClick={onClose} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-faint)" }}>
             <IconX size={20} stroke={1.75} />
           </button>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "var(--sp-3)" }}>
-          {field("Company", <input style={inputStyle} value={row.company ?? ""} onChange={(e) => set("company", e.target.value)} />)}
-          {field("Dept", <input style={inputStyle} value={row.dept ?? ""} onChange={(e) => set("dept", e.target.value)} />)}
-          {field("Project", <input style={inputStyle} value={row.project ?? ""} onChange={(e) => set("project", e.target.value)} />)}
-          {field("Description", <input style={inputStyle} value={row.description ?? ""} onChange={(e) => set("description", e.target.value)} />)}
-
-          {field("PR No.", <input style={inputStyle} value={row.prNo ?? ""} onChange={(e) => set("prNo", e.target.value)} />)}
-          {field("Date PR", <input type="date" style={inputStyle} value={row.prDate ?? ""} onChange={(e) => set("prDate", e.target.value)} />)}
-
-          {field("PA No.", <input style={inputStyle} value={row.paNo ?? ""} onChange={(e) => set("paNo", e.target.value)} />)}
-          {field("Date PA Submitted", <input type="date" style={inputStyle} value={row.paSubmittedDate ?? ""} onChange={(e) => set("paSubmittedDate", e.target.value)} />)}
-          {field("Date PA Approved", <input type="date" style={inputStyle} value={row.paApprovedDate ?? ""} onChange={(e) => set("paApprovedDate", e.target.value)} />)}
-
-          {field("PO No.", <input style={inputStyle} value={row.poNo ?? ""} onChange={(e) => set("poNo", e.target.value)} />)}
-          {field("Date PO Submitted", <input type="date" style={inputStyle} value={row.poSubmittedDate ?? ""} onChange={(e) => set("poSubmittedDate", e.target.value)} />)}
-          {field("Date PO Approved", <input type="date" style={inputStyle} value={row.poApprovedDate ?? ""} onChange={(e) => set("poApprovedDate", e.target.value)} />)}
-
-          {field("Vendor", <input style={inputStyle} value={row.vendor ?? ""} onChange={(e) => set("vendor", e.target.value)} />)}
-          {field("Vendor ID", <input style={inputStyle} value={row.vendorId ?? ""} onChange={(e) => set("vendorId", e.target.value)} />)}
-
-          {field("Qty", <input type="number" style={inputStyle} value={row.qty ?? ""} onChange={(e) => set("qty", e.target.value === "" ? undefined : Number(e.target.value))} />)}
-          {field("Unit", <input style={inputStyle} value={row.unit ?? ""} onChange={(e) => set("unit", e.target.value)} />)}
-          {field("ราคา/หน่วย", <input type="number" style={inputStyle} value={row.unitPrice ?? ""} onChange={(e) => set("unitPrice", e.target.value === "" ? undefined : Number(e.target.value))} />)}
-          {field("Dis.", <input type="number" style={inputStyle} value={row.discount ?? ""} onChange={(e) => set("discount", e.target.value === "" ? undefined : Number(e.target.value))} />)}
-          {field("Budget", <input type="number" style={inputStyle} value={row.budget ?? ""} onChange={(e) => set("budget", e.target.value === "" ? undefined : Number(e.target.value))} />)}
-          {field("รวม Save Cost", <input type="number" style={inputStyle} value={row.saveCost ?? ""} onChange={(e) => set("saveCost", e.target.value === "" ? undefined : Number(e.target.value))} />)}
-
-          {field("Payment", <input style={inputStyle} value={row.payment ?? ""} onChange={(e) => set("payment", e.target.value)} />)}
-          {field("วันต้องการสินค้า", <input type="date" style={inputStyle} value={row.neededDate ?? ""} onChange={(e) => set("neededDate", e.target.value)} />)}
-          {field("ทำรับ/ส่งมอบ", <input type="date" style={inputStyle} value={row.deliveredDate ?? ""} onChange={(e) => set("deliveredDate", e.target.value)} />)}
-
-          {field("Status", (
-            <select style={inputStyle} value={row.status ?? ""} onChange={(e) => set("status", e.target.value)}>
-              <option value="">—</option>
-              {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
-            </select>
-          ))}
+          {field("Company", row.company)}
+          {field("Dept", row.dept)}
+          {field("Project", row.project)}
+          {field("Description", row.description)}
+          {field("PR No.", row.prNo)}
+          {field("Date PR", row.prDate)}
+          {field("PA No.", row.paNo)}
+          {field("Date PA Submitted", row.paSubmittedDate)}
+          {field("Date PA Approved", row.paApprovedDate)}
+          {field("PO No.", row.poNo)}
+          {field("Date PO Submitted", row.poSubmittedDate)}
+          {field("Date PO Approved", row.poApprovedDate)}
+          {field("Vendor", row.vendor)}
+          {field("Vendor ID", row.vendorId)}
+          {field("Qty", row.qty !== undefined ? `${row.qty}${row.unit ? ` ${row.unit}` : ""}` : "")}
+          {field("ราคา/หน่วย", row.unitPrice !== undefined ? baht(row.unitPrice) : "")}
+          {field("Dis.", row.discount !== undefined ? baht(row.discount) : "")}
+          {field("Budget", row.budget !== undefined ? baht(row.budget) : "")}
+          {field("รวม Save Cost", row.saveCost !== undefined ? baht(row.saveCost) : "")}
+          {field("Payment", row.payment)}
+          {field("วันต้องการสินค้า", row.neededDate)}
+          {field("ทำรับ/ส่งมอบ", row.deliveredDate)}
+          {field("Status", row.status)}
         </div>
 
-        <div style={{ marginTop: "var(--sp-3)" }}>
-          {field("Supplier เทียบราคา (สูงสุด 3 ราย)", (
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {[0, 1, 2].map((i) => (
-                <input
-                  key={i}
-                  style={{ ...inputStyle, flex: 1, minWidth: 140 }}
-                  placeholder={`Supplier ${i + 1}`}
-                  value={row.compareSuppliers?.[i] ?? ""}
-                  onChange={(e) => {
-                    const arr = [...(row.compareSuppliers ?? ["", "", ""])];
-                    arr[i] = e.target.value;
-                    set("compareSuppliers", arr.filter((v, idx) => v || idx < (row.compareSuppliers?.length ?? 0)));
-                  }}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
+        {row.compareSuppliers && row.compareSuppliers.length > 0 && (
+          <div style={{ marginTop: "var(--sp-3)" }}>
+            {field("Supplier เทียบราคา", row.compareSuppliers.join(", "))}
+          </div>
+        )}
 
-        <div style={{ marginTop: "var(--sp-3)" }}>
-          {field("Remark", <textarea style={{ ...inputStyle, minHeight: 60, resize: "vertical" }} value={row.remark ?? ""} onChange={(e) => set("remark", e.target.value)} />)}
-        </div>
-
-        <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: "var(--sp-3)", fontSize: "var(--fs-sm)", color: "var(--text)", cursor: "pointer" }}>
-          <input type="checkbox" checked={row.urgent ?? false} onChange={(e) => set("urgent", e.target.checked)} />
-          ตั้งเป็นงานเร่งด่วน (highlight แถวนี้)
-        </label>
+        {row.remark && (
+          <div style={{ marginTop: "var(--sp-3)" }}>
+            {field("Remark", row.remark)}
+          </div>
+        )}
 
         <div
           style={{
@@ -352,37 +243,36 @@ function RowEditModal({
           <span style={{ color: "var(--text-faint)" }}>(คำนวณอัตโนมัติจาก Qty × ราคา/หน่วย − Dis.)</span>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "var(--sp-2)", marginTop: "var(--sp-4)" }}>
-          <button type="button" onClick={onClose} style={secondaryBtnStyle}>ยกเลิก</button>
-          <button type="button" onClick={() => onSave(row)} style={primaryBtnStyle}>บันทึก</button>
+        <div style={{ marginTop: "var(--sp-4)", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>
+          แก้ไขข้อมูลนี้ได้ที่ Google Sheet กลางเท่านั้น — หน้านี้แสดงผลแบบ real-time เพื่อ monitor อย่างเดียว
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "var(--sp-4)" }}>
+          <button type="button" onClick={onClose} style={secondaryBtnStyle}>ปิด</button>
         </div>
       </div>
     </div>
   );
 }
 
-const primaryBtnStyle: React.CSSProperties = {
-  border: "none", background: "var(--primary)", color: "var(--primary-contrast)",
-  borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", fontWeight: 600, cursor: "pointer",
-};
 const secondaryBtnStyle: React.CSSProperties = {
   border: "1px solid var(--border-strong)", background: "var(--surface)", color: "var(--text)",
   borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", cursor: "pointer",
 };
 
 /* ============================================================
-   Main page
+   Main page — read-only monitoring view. Data entry happens in the
+   master Google Sheet; see google-apps-script/SETUP.md.
    ============================================================ */
 export default function TrackingPage() {
   const [tabs, setTabs] = useState<Tab[]>([]);
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [rows, setRows] = useState<TrackingRow[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [editingRow, setEditingRow] = useState<TrackingRow | "new" | null>(null);
+  const [viewingRow, setViewingRow] = useState<TrackingRow | null>(null);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [urgentOnly, setUrgentOnly] = useState(false);
-  const [renamingTab, setRenamingTab] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("no");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
@@ -390,7 +280,6 @@ export default function TrackingPage() {
     if (key === sortKey) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     else { setSortKey(key); setSortDir("desc"); }
   };
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const q = query(collection(db, "trackingTabs"), orderBy("order"));
@@ -420,95 +309,6 @@ export default function TrackingPage() {
     );
     return unsub;
   }, [activeTab]);
-
-  const addTab = async () => {
-    const name = prompt("ชื่อแท็ปใหม่ (เช่น ชื่อพี่ที่ดูแล)");
-    if (!name?.trim()) return;
-    const order = tabs.length ? Math.max(...tabs.map((t) => t.order)) + 1 : 0;
-    const ref = await addDoc(collection(db, "trackingTabs"), { name: name.trim(), order });
-    setActiveTab(ref.id);
-  };
-
-  const removeTab = async (tab: Tab) => {
-    if (!confirm(`ลบแท็ป "${tab.name}" และข้อมูลทั้งหมดในแท็ปนี้?`)) return;
-    const rowsSnap = await getDocs(collection(db, "trackingTabs", tab.id, "rows"));
-    const batch = writeBatch(db);
-    rowsSnap.docs.forEach((d) => batch.delete(d.ref));
-    batch.delete(doc(db, "trackingTabs", tab.id));
-    await batch.commit();
-  };
-
-  const renameTab = async (tab: Tab, name: string) => {
-    if (!name.trim()) return;
-    await setDoc(doc(db, "trackingTabs", tab.id), { name: name.trim(), order: tab.order }, { merge: true });
-  };
-
-  const saveRow = async (row: TrackingRow) => {
-    if (!activeTab) return;
-    const { id, ...data } = row;
-    const cleaned = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== undefined)) as Omit<TrackingRow, "id">;
-    if (editingRow === "new") {
-      const nextNo = rows.length ? Math.max(...rows.map((r) => r.no ?? 0)) + 1 : 1;
-      await addDoc(collection(db, "trackingTabs", activeTab, "rows"), { ...cleaned, no: cleaned.no ?? nextNo, createdAt: serverTimestamp() });
-    } else {
-      await setDoc(doc(db, "trackingTabs", activeTab, "rows", id), { ...cleaned, updatedAt: serverTimestamp() }, { merge: true });
-    }
-    setEditingRow(null);
-  };
-
-  const deleteRow = async (row: TrackingRow) => {
-    if (!activeTab) return;
-    if (!confirm("ลบรายการนี้?")) return;
-    await deleteDoc(doc(db, "trackingTabs", activeTab, "rows", row.id));
-  };
-
-  const onImportFile = async (file: File) => {
-    if (!activeTab) return;
-    const buf = await file.arrayBuffer();
-    const wb = XLSX.read(buf, { type: "array", cellDates: true });
-    const sheetName = wb.SheetNames[0];
-    const sheet = wb.Sheets[sheetName];
-    const raw: Record<string, unknown>[] = XLSX.utils.sheet_to_json(sheet, { defval: undefined });
-    if (!raw.length) { alert("ไม่พบข้อมูลในไฟล์นี้"); return; }
-
-    const imported: Omit<TrackingRow, "id">[] = raw.map((line, i) => {
-      const out: Record<string, unknown> = {};
-      for (const [header, value] of Object.entries(line)) {
-        const key = HEADER_ALIASES[normalizeHeader(header)];
-        if (!key || value === undefined || value === "" || value === "-") continue;
-        let parsed: unknown;
-        if (key.toLowerCase().includes("date")) parsed = excelDateToISO(value);
-        else if (["qty", "unitPrice", "discount", "budget", "saveCost", "no"].includes(key)) {
-          parsed = typeof value === "number" ? value : Number(value);
-          if (typeof parsed === "number" && Number.isNaN(parsed)) parsed = undefined;
-        } else if (key === "status") parsed = normalizeStatus(String(value));
-        else parsed = String(value).trim();
-        if (parsed !== undefined) out[key] = parsed;
-      }
-      if (out.no === undefined) out.no = (rows.length || 0) + i + 1;
-      return out as Omit<TrackingRow, "id">;
-    }).filter((r) => Object.keys(r).length > 1);
-
-    if (!imported.length) { alert("ไม่พบคอลัมน์ที่รู้จักในไฟล์นี้ — ตรวจชื่อหัวตารางอีกครั้ง"); return; }
-    if (!confirm(`พบ ${imported.length} แถว นำเข้าไปยังแท็ปนี้เลยหรือไม่?`)) return;
-
-    const chunks: (typeof imported)[] = [];
-    for (let i = 0; i < imported.length; i += 400) chunks.push(imported.slice(i, i + 400));
-    try {
-      for (const chunk of chunks) {
-        const batch = writeBatch(db);
-        for (const r of chunk) {
-          const ref = doc(collection(db, "trackingTabs", activeTab, "rows"));
-          batch.set(ref, { ...r, createdAt: serverTimestamp() });
-        }
-        await batch.commit();
-      }
-      alert(`นำเข้าสำเร็จ ${imported.length} แถว`);
-    } catch (err) {
-      console.error("Import failed:", err);
-      alert(`นำเข้าไม่สำเร็จ: ${err instanceof Error ? err.message : String(err)}`);
-    }
-  };
 
   const exportToExcel = () => {
     if (!activeTab) return;
@@ -557,7 +357,7 @@ export default function TrackingPage() {
         }}>
           โหลดข้อมูลไม่สำเร็จ: {loadError}
           <br />
-          (ส่วนใหญ่เกิดจาก Firestore security rules ยังไม่อนุญาตให้อ่าน/เขียน collection "trackingTabs")
+          (ส่วนใหญ่เกิดจาก Firestore security rules ยังไม่อนุญาตให้อ่าน collection "trackingTabs")
         </div>
       </div>
     );
@@ -569,56 +369,37 @@ export default function TrackingPage() {
         <IconClipboardList size={16} stroke={1.75} />
         PR / PA / PO Tracking
       </div>
-      <h1 style={{ margin: "0 0 var(--sp-5)", color: "var(--text-strong)" }}>Tracking Sheet</h1>
+      <h1 style={{ margin: "0 0 var(--sp-2)", color: "var(--text-strong)" }}>Tracking Sheet</h1>
+      <p style={{ margin: "0 0 var(--sp-5)", fontSize: "var(--fs-sm)", color: "var(--text-muted)" }}>
+        ข้อมูลแบบ real-time จาก Google Sheet กลาง — แก้ไขข้อมูลได้ที่ Sheet เท่านั้น หน้านี้สำหรับ monitor
+      </p>
 
       {/* Tabs bar */}
       <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)", flexWrap: "wrap", borderBottom: "1px solid var(--border)", marginBottom: "var(--sp-4)", paddingBottom: "var(--sp-2)" }}>
         {tabs.map((tab) => {
           const active = tab.id === activeTab;
           return (
-            <div
+            <button
               key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
               style={{
-                display: "flex", alignItems: "center", gap: 6,
                 background: active ? "var(--accent-bg)" : "transparent",
                 border: `1px solid ${active ? "var(--accent)" : "var(--border)"}`,
-                borderRadius: "var(--radius-full)", padding: "5px 6px 5px 12px",
+                borderRadius: "var(--radius-full)", padding: "6px 14px",
                 cursor: "pointer", fontSize: "var(--fs-sm)",
                 color: active ? "var(--text-strong)" : "var(--text-muted)",
                 fontWeight: active ? 700 : 500,
               }}
-              onClick={() => setActiveTab(tab.id)}
             >
-              {renamingTab === tab.id ? (
-                <input
-                  autoFocus
-                  defaultValue={tab.name}
-                  onClick={(e) => e.stopPropagation()}
-                  onBlur={(e) => { renameTab(tab, e.target.value); setRenamingTab(null); }}
-                  onKeyDown={(e) => { if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-                  style={{ font: "inherit", border: "1px solid var(--primary)", borderRadius: 4, padding: "1px 4px", width: 100 }}
-                />
-              ) : (
-                <span onDoubleClick={(e) => { e.stopPropagation(); setRenamingTab(tab.id); }} title="ดับเบิลคลิกเพื่อเปลี่ยนชื่อ">
-                  {tab.name}
-                </span>
-              )}
-              <IconX
-                size={13}
-                stroke={2}
-                style={{ color: "var(--text-faint)", flexShrink: 0 }}
-                onClick={(e) => { e.stopPropagation(); removeTab(tab); }}
-              />
-            </div>
+              {tab.name}
+            </button>
           );
         })}
-        <button type="button" onClick={addTab} style={{ ...secondaryBtnStyle, display: "inline-flex", alignItems: "center", gap: 4, padding: "6px 12px", borderRadius: "var(--radius-full)" }}>
-          <IconPlus size={14} stroke={2} /> เพิ่มแท็ป
-        </button>
       </div>
 
       {!activeTab ? (
-        <div style={{ color: "var(--text-muted)", fontSize: "var(--fs-sm)" }}>ยังไม่มีแท็ป — กด "เพิ่มแท็ป" เพื่อเริ่มต้น</div>
+        <div style={{ color: "var(--text-muted)", fontSize: "var(--fs-sm)" }}>ยังไม่มีแท็ปข้อมูล — เริ่มกรอกใน Google Sheet กลาง แท็ปจะปรากฏที่นี่อัตโนมัติ</div>
       ) : (
         <>
           {/* Toolbar */}
@@ -641,15 +422,8 @@ export default function TrackingPage() {
               เฉพาะงานเร่งด่วน
             </label>
             <div style={{ flex: 1 }} />
-            <input ref={fileInputRef} type="file" accept=".xlsx,.xls,.csv" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) onImportFile(f); e.target.value = ""; }} />
-            <button type="button" onClick={() => fileInputRef.current?.click()} style={{ ...secondaryBtnStyle, display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <IconFileSpreadsheet size={15} stroke={1.75} /> นำเข้าจาก Excel
-            </button>
             <button type="button" onClick={exportToExcel} style={{ ...secondaryBtnStyle, display: "inline-flex", alignItems: "center", gap: 6 }}>
               <IconFileSpreadsheet size={15} stroke={1.75} /> Export Excel
-            </button>
-            <button type="button" onClick={() => setEditingRow("new")} style={{ ...primaryBtnStyle, display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <IconPlus size={15} stroke={2} /> เพิ่มแถว
             </button>
           </div>
 
@@ -705,7 +479,7 @@ export default function TrackingPage() {
                         background: rowBg,
                         cursor: "pointer",
                       }}
-                      onClick={() => setEditingRow(r)}
+                      onClick={() => setViewingRow(r)}
                     >
                       <td style={{ padding: "8px 12px", ...stickyTd(0) }}>
                         {r.urgent ? <IconFlagFilled size={14} stroke={1.75} style={{ color: "var(--danger)" }} /> : <IconFlag size={14} stroke={1.75} style={{ color: "var(--text-faint)" }} />}
@@ -736,23 +510,13 @@ export default function TrackingPage() {
                       </td>
                       <td style={{ padding: "8px 12px", color: "var(--text-muted)" }}>{r.deliveredDate}</td>
                       <td style={{ padding: "8px 12px", maxWidth: 180, overflow: "hidden", textOverflow: "ellipsis", color: "var(--text-muted)" }}>{r.remark}</td>
-                      <td style={{ padding: "8px 12px" }}>
-                        <div style={{ display: "flex", gap: 6 }}>
-                          <button type="button" onClick={(e) => { e.stopPropagation(); setEditingRow(r); }} style={iconBtnStyle} title="แก้ไข">
-                            <IconPencil size={14} stroke={1.75} />
-                          </button>
-                          <button type="button" onClick={(e) => { e.stopPropagation(); deleteRow(r); }} style={iconBtnStyle} title="ลบ">
-                            <IconTrash size={14} stroke={1.75} />
-                          </button>
-                        </div>
-                      </td>
                     </tr>
                   );
                 })}
                 {filteredRows.length === 0 && (
                   <tr>
                     <td colSpan={COLUMNS.length} style={{ padding: "var(--sp-5)", textAlign: "center", color: "var(--text-faint)" }}>
-                      ไม่มีข้อมูล — กด "เพิ่มแถว" หรือ "นำเข้าจาก Excel"
+                      ไม่มีข้อมูล — กรอกข้อมูลใน Google Sheet กลางเพื่อให้แสดงที่นี่
                     </td>
                   </tr>
                 )}
@@ -762,18 +526,7 @@ export default function TrackingPage() {
         </>
       )}
 
-      {editingRow && (
-        <RowEditModal
-          initial={editingRow === "new" ? { id: uid() } : editingRow}
-          onClose={() => setEditingRow(null)}
-          onSave={saveRow}
-        />
-      )}
+      {viewingRow && <RowDetailModal row={viewingRow} onClose={() => setViewingRow(null)} />}
     </div>
   );
 }
-
-const iconBtnStyle: React.CSSProperties = {
-  border: "1px solid var(--border)", background: "var(--bg-elevated)", color: "var(--text-muted)",
-  borderRadius: "var(--radius-sm)", padding: 5, cursor: "pointer", display: "inline-flex",
-};
