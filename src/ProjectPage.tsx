@@ -13,6 +13,12 @@ import {
 } from "@tabler/icons-react";
 import { Reveal, Section } from "./components/PageKit";
 
+function formatNumber(v: number | string | null | undefined): string {
+  if (v === null || v === undefined || v === "") return "-";
+  const n = typeof v === "number" ? v : Number(v);
+  return Number.isFinite(n) ? n.toLocaleString("en-US") : String(v);
+}
+
 export const CONTRACT_TYPE_OPTIONS = ["EPC", "PPA", "PEAESCO", "-"] as const;
 export type ContractType = (typeof CONTRACT_TYPE_OPTIONS)[number];
 
@@ -938,8 +944,8 @@ export default function ProjectPage() {
                       <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.capacityKwp ?? "-"}</td>
                       <td style={{ padding: "8px 10px", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis" }}>{p.counterparty || "-"}</td>
                       <td style={{ padding: "8px 10px", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis" }}>{p.location || "-"}</td>
-                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.contractPrice ?? "-"}</td>
-                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.subconAwardAmount ?? "-"}</td>
+                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{formatNumber(p.contractPrice)}</td>
+                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{formatNumber(p.subconAwardAmount)}</td>
                       <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.materialThbWatt ?? "-"}</td>
                       <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.labourThbWatt ?? "-"}</td>
                       <td style={{ padding: "8px 10px" }}>{p.subconName || "-"}</td>
