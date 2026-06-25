@@ -12,8 +12,8 @@
   --sand-dark: #c9a84c;
 
   /* ---- Typography ---- */
-  --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Sarabun", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "IBM Plex Sans Thai", "IBM Plex Sans", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "IBM Plex Sans Thai", "IBM Plex Sans", system-ui, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
 
   /* Fluid type scale */

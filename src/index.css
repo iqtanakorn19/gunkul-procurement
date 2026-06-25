@@ -60,8 +60,6 @@ h4 {
   font-weight: 600;
 }
 
-/* English headings use the serif display face; Thai falls back to Sarabun
-   automatically via the font stack (Cormorant has no Thai glyphs). */
 h1 {
   font-family: var(--font-serif);
   font-size: var(--fs-h1);
