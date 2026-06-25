@@ -125,10 +125,11 @@ export default function Sidebar({
             style={{
               fontFamily: "var(--font-serif)",
               fontWeight: 600,
-              fontSize: "var(--fs-h3)",
+              fontSize: "1.05rem",
               color: "var(--text-strong)",
               whiteSpace: "nowrap",
-              overflow: "hidden",
+              overflow: "visible",
+              minWidth: 0,
             }}
           >
             Procurement
