@@ -9,7 +9,7 @@
  */
 import * as XLSX from "xlsx";
 import {
-  collection, getDocs, doc, writeBatch, setDoc, getDoc,
+  collection, getDocs, doc, writeBatch, setDoc, getDoc, query, where,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -463,6 +463,36 @@ export async function importPurchaseOrders(
     vendorsUpserted: vendorEntries.length,
     itemsUpserted: itemEntries.length,
   };
+}
+
+/** One unit-price observation for an item from a single PO line. */
+export interface PricePoint {
+  date: string;       // YYYY-MM-DD
+  price: number;      // unit price (THB)
+  qty: number;
+  poNumber: string;
+}
+
+/**
+ * Fetch unit-price history for one item, grouped by vendorCode, each list
+ * sorted by date ascending. Only THB, non-Canceled lines with a real
+ * unit price + date are kept (same filters as the item aggregation), so
+ * the timeline matches the comparison numbers shown in the table.
+ */
+export async function fetchItemPriceHistory(itemNumber: string): Promise<Map<string, PricePoint[]>> {
+  const snap = await getDocs(query(collection(db, "poLines"), where("itemNumber", "==", itemNumber)));
+  const byVendor = new Map<string, PricePoint[]>();
+  for (const d of snap.docs) {
+    const l = d.data() as POLine;
+    if (!countsAsSpend(l.status)) continue;
+    if (l.currency && l.currency !== "THB") continue;
+    if (!(l.unitPrice > 0) || !l.poDate) continue;
+    const arr = byVendor.get(l.vendorCode) ?? [];
+    arr.push({ date: l.poDate, price: l.unitPrice, qty: l.qty, poNumber: l.poNumber });
+    byVendor.set(l.vendorCode, arr);
+  }
+  for (const arr of byVendor.values()) arr.sort((a, b) => (a.date < b.date ? -1 : 1));
+  return byVendor;
 }
 
 /** Fetch all PO lines for one vendor (for the vendor PO drill-down). */

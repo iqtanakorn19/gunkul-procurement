@@ -1,7 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Fragment } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+} from "recharts";
 import { db } from "./firebase";
-import type { ItemAgg, ItemVendorStat } from "./data/procurement";
+import { fetchItemPriceHistory } from "./data/procurement";
+import type { ItemAgg, ItemVendorStat, PricePoint } from "./data/procurement";
 import ImportModal from "./components/ImportModal";
 
 type SortKey = "spend" | "vendors" | "name" | "qty";
@@ -26,15 +30,65 @@ function spread(it: ItemAgg): number {
   return it.minPrice > 0 ? (it.maxPrice - it.minPrice) / it.minPrice : 0;
 }
 
+function PriceHistoryChart({ points, unit }: { points: PricePoint[]; unit: string }) {
+  const perUnit = unit ? `บาท/${unit}` : "บาท/หน่วย";
+  if (points.length < 2) {
+    return (
+      <p style={{ margin: "8px 0 0", fontSize: "12px", color: "#94a3b8" }}>
+        ℹ️ มีประวัติการซื้อเพียง {points.length} ครั้ง — ยังไม่พอวาดกราฟแนวโน้มราคา
+      </p>
+    );
+  }
+  return (
+    <div style={{ marginTop: "8px" }}>
+      <p style={{ margin: "0 0 6px", fontSize: "11px", color: "#64748b", fontWeight: 700 }}>
+        แนวโน้มราคาซื้อ ({perUnit}) — แกนX: วันที่ซื้อ
+      </p>
+      <ResponsiveContainer width="100%" height={220}>
+        <LineChart data={points} margin={{ top: 8, right: 18, bottom: 4, left: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#eef2ff" />
+          <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#94a3b8" }} />
+          <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} width={58} tickFormatter={(v) => bahtShort(Number(v))} />
+          <Tooltip
+            formatter={(v) => [baht(Number(v)), "ราคา/หน่วย"]}
+            labelFormatter={(d) => `วันที่ ${d}`}
+            contentStyle={{ borderRadius: "10px", border: "1px solid #e2e8f0", fontSize: "12px" }}
+          />
+          <Line type="monotone" dataKey="price" stroke="#2d5a9e" strokeWidth={2}
+            dot={{ r: 3, fill: "#2d5a9e" }} activeDot={{ r: 5 }} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
 function ItemDetailModal({ item, onClose }: { item: ItemAgg; onClose: () => void }) {
   const vendors: ItemVendorStat[] = [...item.vendors].sort((a, b) => a.lastPrice - b.lastPrice);
   const cheapest = vendors[0]?.vendorCode;
+  const unitLabel = item.unit ? `บาท/${item.unit}` : "บาท/หน่วย";
+
+  const [history, setHistory] = useState<Map<string, PricePoint[]> | null>(null);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+  const [openVendor, setOpenVendor] = useState<string | null>(null);
+
+  function toggleHistory(vendorCode: string) {
+    if (openVendor === vendorCode) { setOpenVendor(null); return; }
+    setOpenVendor(vendorCode);
+    if (!history && !loadingHistory) {
+      setLoadingHistory(true);
+      fetchItemPriceHistory(item.itemNumber)
+        .then((h) => setHistory(h))
+        .catch((e) => { console.error("price history error:", e); setHistory(new Map()); })
+        .finally(() => setLoadingHistory(false));
+    }
+  }
+
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.7)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(4px)" }}>
       <div onClick={(e) => e.stopPropagation()} style={{ background: "white", borderRadius: "22px", width: "720px", maxWidth: "95vw", maxHeight: "92vh", overflowY: "auto", boxShadow: "0 32px 80px rgba(26,60,110,0.3)" }}>
         <div style={{ background: "linear-gradient(135deg, #1a3c6e, #2d5a9e)", padding: "26px 30px", borderRadius: "22px 22px 0 0", position: "relative" }}>
           <button onClick={onClose} style={{ position: "absolute", top: "20px", right: "22px", background: "rgba(255,255,255,0.15)", border: "none", borderRadius: "50%", width: "34px", height: "34px", cursor: "pointer", color: "white", fontSize: "17px" }}>✕</button>
-          <p style={{ margin: "0 0 4px", color: "rgba(226,201,126,0.9)", fontSize: "12px", fontWeight: 700 }}>{item.itemNumber} · {item.category || "ไม่ระบุหมวด"}</p>
+          <p style={{ margin: "0 0 4px", color: "rgba(226,201,126,0.9)", fontSize: "12px", fontWeight: 700 }}>{item.itemNumber} · {item.category || "ไม่ระบุหมวด"}{item.unit ? ` · หน่วย: ${item.unit}` : ""}</p>
           <h2 style={{ margin: 0, color: "white", fontSize: "19px", fontWeight: 700, lineHeight: 1.35, marginRight: "40px" }}>{item.productName || item.itemNumber}</h2>
         </div>
 
@@ -42,9 +96,9 @@ function ItemDetailModal({ item, onClose }: { item: ItemAgg; onClose: () => void
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px", marginBottom: "22px" }}>
             {[
               { label: "Vendor ที่ขาย", value: item.numVendors.toLocaleString() },
-              { label: "ราคาต่ำสุด", value: baht(item.minPrice) },
-              { label: "ราคาเฉลี่ย", value: baht(item.avgPrice) },
-              { label: "ราคาสูงสุด", value: baht(item.maxPrice) },
+              { label: `ราคาต่ำสุด (${unitLabel})`, value: baht(item.minPrice) },
+              { label: `ราคาเฉลี่ย (${unitLabel})`, value: baht(item.avgPrice) },
+              { label: `ราคาสูงสุด (${unitLabel})`, value: baht(item.maxPrice) },
             ].map((s) => (
               <div key={s.label} style={{ background: "linear-gradient(135deg, #f8faff, #eef2ff)", borderRadius: "12px", padding: "13px", textAlign: "center", border: "1px solid #e0e7ff" }}>
                 <p style={{ margin: "0 0 4px", fontSize: "10px", color: "#94a3b8", fontWeight: 700 }}>{s.label}</p>
@@ -60,33 +114,52 @@ function ItemDetailModal({ item, onClose }: { item: ItemAgg; onClose: () => void
             </p>
           )}
 
-          <p style={{ margin: "0 0 10px", fontSize: "12px", fontWeight: 800, color: "#1a3c6e" }}>เปรียบเทียบราคาแต่ละ Vendor (เรียงจากถูกสุด)</p>
+          <p style={{ margin: "0 0 10px", fontSize: "12px", fontWeight: 800, color: "#1a3c6e" }}>เปรียบเทียบราคาต่อหน่วยแต่ละ Vendor ({unitLabel} · เรียงจากถูกสุด)</p>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
             <thead>
               <tr style={{ background: "#f8faff" }}>
-                {["Vendor", "ราคาล่าสุด", "ซื้อล่าสุด", "เฉลี่ย", "ช่วงราคา", "จำนวนซื้อ"].map((h, i) => (
-                  <th key={h} style={{ padding: "10px 12px", textAlign: i === 0 ? "left" : "right", fontSize: "11px", color: "#64748b", fontWeight: 700, borderBottom: "2px solid #e2e8f0" }}>{h}</th>
+                {["Vendor", "ราคาล่าสุด", "ซื้อล่าสุด", "เฉลี่ย", "ช่วงราคา", "จำนวนซื้อ", ""].map((h, i) => (
+                  <th key={h || i} style={{ padding: "10px 12px", textAlign: i === 0 ? "left" : "right", fontSize: "11px", color: "#64748b", fontWeight: 700, borderBottom: "2px solid #e2e8f0" }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {vendors.map((v) => {
                 const best = v.vendorCode === cheapest;
+                const open = openVendor === v.vendorCode;
+                const points = history?.get(v.vendorCode) ?? [];
                 return (
-                  <tr key={v.vendorCode} style={{ background: best ? "#f0fdf4" : "white", borderBottom: "1px solid #f1f5f9" }}>
-                    <td style={{ padding: "10px 12px" }}>
-                      {best && <span style={{ background: "#16a34a", color: "white", fontSize: "9px", fontWeight: 800, padding: "1px 6px", borderRadius: "6px", marginRight: "6px" }}>ถูกสุด</span>}
-                      <span style={{ fontWeight: 700, color: "#1a3c6e" }}>{v.vendorName || v.vendorCode}</span>
-                      <span style={{ display: "block", fontSize: "10px", color: "#94a3b8" }}>{v.vendorCode}</span>
-                    </td>
-                    <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 800, color: best ? "#16a34a" : "#1a3c6e" }}>{baht(v.lastPrice)}</td>
-                    <td style={{ padding: "10px 12px", textAlign: "right", color: "#94a3b8", fontSize: "12px" }}>{v.lastDate || "-"}</td>
-                    <td style={{ padding: "10px 12px", textAlign: "right", color: "#475569" }}>{baht(v.avgPrice)}</td>
-                    <td style={{ padding: "10px 12px", textAlign: "right", color: "#94a3b8", fontSize: "12px" }}>
-                      {v.minPrice === v.maxPrice ? "-" : `${bahtShort(v.minPrice)}–${bahtShort(v.maxPrice)}`}
-                    </td>
-                    <td style={{ padding: "10px 12px", textAlign: "right", color: "#475569" }}>{v.count}×</td>
-                  </tr>
+                  <Fragment key={v.vendorCode}>
+                    <tr style={{ background: best ? "#f0fdf4" : "white", borderBottom: open ? "none" : "1px solid #f1f5f9" }}>
+                      <td style={{ padding: "10px 12px" }}>
+                        {best && <span style={{ background: "#16a34a", color: "white", fontSize: "9px", fontWeight: 800, padding: "1px 6px", borderRadius: "6px", marginRight: "6px" }}>ถูกสุด</span>}
+                        <span style={{ fontWeight: 700, color: "#1a3c6e" }}>{v.vendorName || v.vendorCode}</span>
+                        <span style={{ display: "block", fontSize: "10px", color: "#94a3b8" }}>{v.vendorCode}</span>
+                      </td>
+                      <td style={{ padding: "10px 12px", textAlign: "right", fontWeight: 800, color: best ? "#16a34a" : "#1a3c6e" }}>{baht(v.lastPrice)}</td>
+                      <td style={{ padding: "10px 12px", textAlign: "right", color: "#94a3b8", fontSize: "12px" }}>{v.lastDate || "-"}</td>
+                      <td style={{ padding: "10px 12px", textAlign: "right", color: "#475569" }}>{baht(v.avgPrice)}</td>
+                      <td style={{ padding: "10px 12px", textAlign: "right", color: "#94a3b8", fontSize: "12px" }}>
+                        {v.minPrice === v.maxPrice ? "-" : `${bahtShort(v.minPrice)}–${bahtShort(v.maxPrice)}`}
+                      </td>
+                      <td style={{ padding: "10px 12px", textAlign: "right", color: "#475569" }}>{v.count}×</td>
+                      <td style={{ padding: "10px 12px", textAlign: "right" }}>
+                        <button onClick={() => toggleHistory(v.vendorCode)}
+                          style={{ background: open ? "#1a3c6e" : "#eef2ff", color: open ? "white" : "#1a3c6e", border: "none", borderRadius: "8px", padding: "5px 10px", fontSize: "11px", fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
+                          📈 ประวัติ {open ? "▲" : "▼"}
+                        </button>
+                      </td>
+                    </tr>
+                    {open && (
+                      <tr style={{ background: best ? "#f0fdf4" : "#fafbff", borderBottom: "1px solid #f1f5f9" }}>
+                        <td colSpan={7} style={{ padding: "4px 16px 16px" }}>
+                          {loadingHistory && !history
+                            ? <p style={{ margin: "8px 0 0", fontSize: "12px", color: "#94a3b8" }}>กำลังโหลดประวัติราคา...</p>
+                            : <PriceHistoryChart points={points} unit={item.unit} />}
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
                 );
               })}
             </tbody>
