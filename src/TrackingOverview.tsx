@@ -15,6 +15,21 @@ const cardStyle: React.CSSProperties = {
   padding: "var(--sp-4)",
 };
 
+function countByDistinctPo(rows: TrackingRow[]): number {
+  const seenPo = new Set<string>();
+  let count = 0;
+  for (const r of rows) {
+    const po = r.poNo?.trim();
+    if (!po) {
+      count += 1;
+    } else if (!seenPo.has(po)) {
+      seenPo.add(po);
+      count += 1;
+    }
+  }
+  return count;
+}
+
 export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
   const [rowsByTab, setRowsByTab] = useState<Record<string, TrackingRow[]>>({});
   const [scope, setScope] = useState<string>("all");
@@ -43,7 +58,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     const urgentCount = rows.filter((r) => r.urgent).length;
     const completedCount = rows.filter((r) => r.status === "Completed").length;
     return {
-      count: rows.length,
+      count: countByDistinctPo(rows),
       urgentCount,
       completedPct: rows.length ? Math.round((completedCount / rows.length) * 100) : 0,
     };
@@ -60,7 +75,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
 
   const workloadData = useMemo(() => {
     if (scope !== "all") return [];
-    return tabs.map((t) => ({ name: t.name, count: (rowsByTab[t.id] ?? []).length }));
+    return tabs.map((t) => ({ name: t.name, count: countByDistinctPo(rowsByTab[t.id] ?? []) }));
   }, [tabs, rowsByTab, scope]);
 
   const urgentRows = useMemo(
