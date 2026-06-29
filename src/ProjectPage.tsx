@@ -908,7 +908,7 @@ export default function ProjectPage() {
                               else setEditingCell(null);
                             }}
                             onBlur={() => setEditingCell(null)}
-                            style={{ ...inputStyle, padding: "2px 4px", fontSize: "11px" }}
+                            style={{ ...inputStyle, width: "auto", minWidth: "100px", padding: "2px 4px", fontSize: "11px" }}
                           >
                             {COLOR_STATUS_OPTIONS.map((o) => (
                               <option key={o} value={o}>{o}</option>
@@ -937,7 +937,7 @@ export default function ProjectPage() {
                               else setEditingCell(null);
                             }}
                             onBlur={() => setEditingCell(null)}
-                            style={{ ...inputStyle, padding: "2px 4px", fontSize: "11px" }}
+                            style={{ ...inputStyle, width: "auto", minWidth: "84px", padding: "2px 4px", fontSize: "11px" }}
                           >
                             {TOC_OPTIONS.map((o) => (
                               <option key={o} value={o}>{o}</option>
