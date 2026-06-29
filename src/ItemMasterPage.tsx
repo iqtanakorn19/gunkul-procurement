@@ -245,7 +245,7 @@ export default function ItemMasterPage() {
               📥 นำเข้าข้อมูล
             </button>
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", marginTop: "24px", alignItems: "stretch" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", marginTop: "24px", alignItems: "flex-start" }}>
             {[
               { label: "สินค้าทั้งหมด", count: items.length.toLocaleString(), icon: "📦" },
               { label: "เทียบราคาได้ (>1 Vendor)", count: comparableCount.toLocaleString(), icon: "⚖️" },
