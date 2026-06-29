@@ -10,6 +10,7 @@
 import * as XLSX from "xlsx";
 import {
   collection, getDocs, doc, writeBatch, setDoc, getDoc, query, where,
+  updateDoc, deleteField,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -23,6 +24,7 @@ export interface POLine {
   id: string;            // `${poNumber}__${seq}` — deterministic within a PO
   poNumber: string;
   poDate: string;        // YYYY-MM-DD (Accounting date, fallback Created date)
+  company: string;       // Company code (GKE / GUE / ...) — one per import file
   status: PurchaseStatus;
   vendorCode: string;    // Vendor account
   vendorName: string;    // Name
@@ -129,6 +131,7 @@ const PO_HEADERS: Record<string, keyof POLine | "createdDate"> = {
   "purchase order": "poNumber",
   "accounting date": "poDate",
   "created date and time": "createdDate",
+  "company": "company",
   "purchase order status": "status",
   "vendor account": "vendorCode",
   "name": "vendorName",
@@ -183,6 +186,7 @@ export function parsePurchaseOrders(buf: ArrayBuffer, startDate: string): Parsed
     lines.push({
       poNumber,
       poDate,
+      company: clean(rec.company).toUpperCase(),
       status: clean(rec.status),
       vendorCode,
       vendorName: clean(rec.vendorName),
@@ -493,6 +497,16 @@ export async function importPurchaseOrders(
     .map((id) => doc(db, "items", id));
   await chunkedDelete(staleItemRefs);
 
+  // Stamp every company present in this file with today's date, so the UI can
+  // show "last updated per company" (refreshes even on a re-import with 0 new POs).
+  const companies = [...new Set(parsed.lines.map((l) => l.company).filter(Boolean))];
+  if (companies.length) {
+    const today = new Date().toISOString().slice(0, 10);
+    const updates: Record<string, string> = {};
+    for (const c of companies) updates[c] = today;
+    await setDoc(doc(db, "meta", "companyUpdates"), { updates }, { merge: true });
+  }
+
   return {
     newPOs: newPONumbers.length,
     newLines: newLineEntries.length,
@@ -502,6 +516,27 @@ export async function importPurchaseOrders(
     vendorsUpserted: vendorEntries.length,
     itemsUpserted: itemEntries.length,
   };
+}
+
+/* ============================================================
+   Per-company "last updated" dates (meta/companyUpdates). Auto-stamped on
+   import, manually editable in the UI for companies imported before this
+   tracking existed (the original import date was never recorded).
+   ============================================================ */
+const COMPANY_UPDATES_DOC = ["meta", "companyUpdates"] as const;
+
+/** Upsert one company's last-updated date (YYYY-MM-DD). */
+export async function setCompanyUpdate(company: string, date: string): Promise<void> {
+  const code = clean(company).toUpperCase();
+  if (!code) return;
+  await setDoc(doc(db, COMPANY_UPDATES_DOC[0], COMPANY_UPDATES_DOC[1]),
+    { updates: { [code]: date } }, { merge: true });
+}
+
+/** Remove a company row entirely. */
+export async function removeCompanyUpdate(company: string): Promise<void> {
+  await updateDoc(doc(db, COMPANY_UPDATES_DOC[0], COMPANY_UPDATES_DOC[1]),
+    { ["updates." + clean(company).toUpperCase()]: deleteField() });
 }
 
 /** One unit-price observation for an item from a single PO line. */

@@ -7,6 +7,7 @@ import { db } from "./firebase";
 import { fetchItemPriceHistory } from "./data/procurement";
 import type { ItemAgg, ItemVendorStat, PricePoint } from "./data/procurement";
 import ImportModal from "./components/ImportModal";
+import CompanyUpdates from "./components/CompanyUpdates";
 
 type SortKey = "spend" | "vendors" | "name" | "qty";
 
@@ -240,9 +241,12 @@ export default function ItemMasterPage() {
               <h1 style={{ margin: "10px 0 8px", color: "white", fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 800 }}>📦 Item Master</h1>
               <p style={{ margin: 0, color: "rgba(255,255,255,0.55)", fontSize: "15px" }}>เปรียบเทียบราคาสินค้าระหว่าง Vendor จากประวัติการสั่งซื้อจริง</p>
             </div>
-            <button onClick={() => setShowImport(true)} style={{ background: "rgba(226,201,126,0.2)", border: "1px solid rgba(226,201,126,0.5)", color: "#e2c97e", padding: "10px 20px", borderRadius: "12px", cursor: "pointer", fontWeight: 700, fontSize: "14px" }}>
-              📥 นำเข้าข้อมูล
-            </button>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "12px" }}>
+              <button onClick={() => setShowImport(true)} style={{ background: "rgba(226,201,126,0.2)", border: "1px solid rgba(226,201,126,0.5)", color: "#e2c97e", padding: "10px 20px", borderRadius: "12px", cursor: "pointer", fontWeight: 700, fontSize: "14px" }}>
+                📥 นำเข้าข้อมูล
+              </button>
+              <CompanyUpdates />
+            </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginTop: "28px", maxWidth: "600px" }}>
             {[
