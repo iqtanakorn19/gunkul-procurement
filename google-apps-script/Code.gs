@@ -137,9 +137,29 @@ function fullResync() {
    Firestore row doc id (creating + writing back a hidden _RowID
    on the sheet the first time it's touched).
    ============================================================ */
+/* Maps each header NAME -> its 0-based column index from row 1, so the data
+   columns can be reordered freely (now or later) without breaking the sync —
+   we look up values by header text, not by fixed position. Memoized per run.
+   The two hidden helper columns (_RowID, _Hash) stay appended after the data
+   columns, so don't insert/delete columns — reordering the data columns is fine. */
+var _headerMapCache = {};
+function getHeaderMap(sheet) {
+  var key = sheet.getSheetId();
+  if (_headerMapCache[key]) return _headerMapCache[key];
+  var hdr = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
+  var map = {};
+  for (var i = 0; i < hdr.length; i++) {
+    var name = String(hdr[i] === null ? "" : hdr[i]).trim();
+    if (name && !map.hasOwnProperty(name)) map[name] = i;
+  }
+  _headerMapCache[key] = map;
+  return map;
+}
+
 function syncRow(sheet, tabId, rowIndex) {
-  var rowIdCol = HEADERS.length + 1;   // hidden _RowID
+  var rowIdCol = HEADERS.length + 1;   // hidden _RowID (kept at a fixed position)
   var hashCol = HEADERS.length + 2;    // hidden _Hash — lets us skip unchanged rows
+  var colIndex = getHeaderMap(sheet);
   var values = sheet.getRange(rowIndex, 1, 1, HEADERS.length).getValues()[0];
   var isBlank = values.every(function (v) { return v === "" || v === null; });
   var helpers = sheet.getRange(rowIndex, rowIdCol, 1, 2).getValues()[0];
@@ -157,18 +177,22 @@ function syncRow(sheet, tabId, rowIndex) {
     sheet.getRange(rowIndex, rowIdCol).setValue(rowId);
   }
 
+  // Pull each cell by header NAME; fall back to the template position if the
+  // header text is missing, so a cleared header never silently drops data.
+  function cellFor(header, fallbackIndex) {
+    var idx = colIndex.hasOwnProperty(header) ? colIndex[header] : fallbackIndex;
+    return values[idx];
+  }
+
   var data = {};
   for (var i = 0; i < HEADERS.length; i++) {
     var header = HEADERS[i];
-    var raw = values[i];
     if (FIELD_MAP[header]) {
-      var field = FIELD_MAP[header];
-      data[field.key] = coerce(raw, field.type);
+      data[FIELD_MAP[header].key] = coerce(cellFor(header, i), FIELD_MAP[header].type);
     }
   }
   var suppliers = SUPPLIER_COLS.map(function (label) {
-    var idx = HEADERS.indexOf(label);
-    return idx >= 0 ? values[idx] : "";
+    return cellFor(label, HEADERS.indexOf(label));
   }).filter(function (v) { return v !== "" && v !== null; });
   if (suppliers.length) data.compareSuppliers = suppliers;
 
