@@ -3,10 +3,9 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebase";
 import ThemeToggle from "./ThemeToggle";
 
-type Role = "manager" | "employee";
 type Lang = "en" | "th";
 
-export default function LoginPage({ onLogin }: { onLogin: (role: Role) => void }) {
+export default function LoginPage({ onLogin }: { onLogin: () => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -79,7 +78,7 @@ export default function LoginPage({ onLogin }: { onLogin: (role: Role) => void }
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      onLogin("employee");
+      onLogin();
     } catch {
       setError(t.error_invalid);
     }

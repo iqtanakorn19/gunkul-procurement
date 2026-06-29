@@ -15,11 +15,8 @@ import ItemMasterPage from "./ItemMasterPage";
 import Sidebar from "./Sidebar";
 import type { Page } from "./Sidebar";
 
-type Role = "manager" | "employee";
-
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [role, setRole] = useState<Role>("employee");
   const [currentPage, setCurrentPage] = useState<Page>("home");
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -31,10 +28,10 @@ export default function App() {
   });
 
   if (!loggedIn) {
-    return <LoginPage onLogin={(r) => { setRole(r); setLoggedIn(true); }} />;
+    return <LoginPage onLogin={() => setLoggedIn(true)} />;
   }
 
-  const userLabel = `${currentUser?.email?.split("@")[0] ?? ""} (${role === "manager" ? "หัวหน้า" : "พนักงาน"})`;
+  const userLabel = currentUser?.email?.split("@")[0] ?? "";
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)" }}>
