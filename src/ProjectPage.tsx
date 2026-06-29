@@ -169,8 +169,27 @@ function ChartCard({ title, children }: { title: string; children: React.ReactNo
   );
 }
 
-const PIE_LABEL = (e: { name?: string; value?: number; percent?: number }) =>
-  `${e.name ?? ""} (${e.percent ? Math.round(e.percent * 100) : 0}%)`;
+// Percentage drawn INSIDE each donut slice — category names live in the legend
+// below, so labels never overflow the card and get clipped. Very thin slices
+// (<5%) are left unlabelled to avoid cramped text.
+const PIE_LABEL = (e: {
+  cx?: number; cy?: number; midAngle?: number;
+  innerRadius?: number; outerRadius?: number; percent?: number;
+}) => {
+  const { cx, cy, midAngle, innerRadius, outerRadius, percent } = e;
+  if (cx == null || cy == null || midAngle == null || innerRadius == null
+    || outerRadius == null || !percent || percent < 0.05) return null;
+  const RAD = Math.PI / 180;
+  const r = innerRadius + (outerRadius - innerRadius) / 2;
+  const x = cx + r * Math.cos(-midAngle * RAD);
+  const y = cy + r * Math.sin(-midAngle * RAD);
+  return (
+    <text x={x} y={y} fill="#fff" fontSize={11} fontWeight={700}
+      textAnchor="middle" dominantBaseline="central">
+      {Math.round(percent * 100)}%
+    </text>
+  );
+};
 
 const STICKY_WIDTHS = [60, 200];
 const stickyLeft = (i: number) => STICKY_WIDTHS.slice(0, i).reduce((a, b) => a + b, 0);
