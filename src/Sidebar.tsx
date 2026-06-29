@@ -97,7 +97,7 @@ export default function Sidebar({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "var(--sp-2)",
+          gap: "var(--sp-1)",
           height: "var(--header-h)",
           padding: collapsed ? "0" : "0 var(--sp-3)",
           justifyContent: collapsed ? "center" : "flex-start",
@@ -125,7 +125,7 @@ export default function Sidebar({
             style={{
               fontFamily: '"Cormorant Garamond", Georgia, serif',
               fontWeight: 600,
-              fontSize: "1.15rem",
+              fontSize: "1.45rem",
               color: "var(--text-strong)",
               whiteSpace: "nowrap",
               overflow: "hidden",
