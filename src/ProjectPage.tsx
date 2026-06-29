@@ -598,7 +598,7 @@ export default function ProjectPage() {
       const key = p.roofType || "ไม่ระบุ";
       counts[key] = (counts[key] ?? 0) + 1;
     }
-    return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
+    return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 8);
   }, [projects]);
 
   const pvBrandChartData = useMemo(() => {
