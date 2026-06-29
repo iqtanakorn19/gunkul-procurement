@@ -125,7 +125,7 @@ export default function Sidebar({
             style={{
               fontFamily: '"Cormorant Garamond", Georgia, serif',
               fontWeight: 600,
-              fontSize: "1.2rem",
+              fontSize: "1.5rem",
               color: "var(--text-strong)",
               whiteSpace: "nowrap",
               overflow: "hidden",
