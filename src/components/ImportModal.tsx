@@ -39,17 +39,35 @@ export default function ImportModal({ onClose }: { onClose: () => void }) {
     }
   };
 
-  const fileRow = (
-    label: string, hint: string, file: File | null,
-    set: (f: File | null) => void,
+  const Badge = ({ required }: { required: boolean }) => (
+    <span style={{
+      fontSize: "10px", fontWeight: 800, padding: "2px 8px", borderRadius: "999px",
+      background: required ? "#fee2e2" : "#f1f5f9",
+      color: required ? "#dc2626" : "#64748b",
+    }}>
+      {required ? "จำเป็น" : "ไม่บังคับ"}
+    </span>
+  );
+
+  const fileField = (
+    step: number, title: string, fileName: string, hint: string,
+    required: boolean, file: File | null, set: (f: File | null) => void,
   ) => (
-    <div style={{ marginBottom: "16px" }}>
-      <p style={{ margin: "0 0 4px", fontSize: "13px", fontWeight: 700, color: "#1a3c6e" }}>{label}</p>
-      <p style={{ margin: "0 0 8px", fontSize: "11px", color: "#94a3b8" }}>{hint}</p>
-      <input type="file" accept=".xlsx,.xls,.csv" disabled={busy}
-        onChange={(e) => set(e.target.files?.[0] ?? null)}
-        style={{ fontSize: "13px" }} />
-      {file && <span style={{ marginLeft: "8px", fontSize: "12px", color: "#0f766e", fontWeight: 700 }}>✓ {file.name}</span>}
+    <div style={{ marginBottom: "14px", padding: "14px", borderRadius: "12px", border: "1.5px solid #e2e8f0", background: "#fbfcff" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "3px" }}>
+        <span style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#1a3c6e", color: "white", fontSize: "11px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{step}</span>
+        <span style={{ fontSize: "14px", fontWeight: 700, color: "#1a3c6e" }}>{title}</span>
+        <Badge required={required} />
+      </div>
+      <p style={{ margin: "0 0 10px 28px", fontSize: "12px", color: "#94a3b8" }}>
+        <code style={{ background: "#eef2ff", color: "#475569", padding: "1px 6px", borderRadius: "5px", fontSize: "11px" }}>{fileName}</code> · {hint}
+      </p>
+      <div style={{ marginLeft: "28px" }}>
+        <input type="file" accept=".xlsx,.xls,.csv" disabled={busy}
+          onChange={(e) => set(e.target.files?.[0] ?? null)}
+          style={{ fontSize: "13px" }} />
+        {file && <span style={{ marginLeft: "8px", fontSize: "12px", color: "#0f766e", fontWeight: 700 }}>✓ {file.name}</span>}
+      </div>
     </div>
   );
 
@@ -66,14 +84,23 @@ export default function ImportModal({ onClose }: { onClose: () => void }) {
         <div style={{ padding: "24px 26px" }}>
           {!result && (
             <>
-              {fileRow("ไฟล์ใบสั่งซื้อ (All_Purchase orders) *", "ระบบจะเพิ่มเฉพาะ PO ใหม่ — PO เดิมที่มีอยู่แล้วจะไม่ถูกแก้", poFile, setPoFile)}
-              {fileRow("ไฟล์สินค้า (All_Products) — ไม่บังคับ", "ใช้เสริมชื่อสินค้าให้สวยขึ้นเท่านั้น", productFile, setProductFile)}
-              <div style={{ marginBottom: "18px" }}>
-                <p style={{ margin: "0 0 4px", fontSize: "13px", fontWeight: 700, color: "#1a3c6e" }}>วันเริ่มต้น (ไม่บังคับ)</p>
-                <p style={{ margin: "0 0 8px", fontSize: "11px", color: "#94a3b8" }}>ข้าม PO ที่เก่ากว่าวันนี้ เว้นว่างไว้ = นำเข้าทั้งหมด</p>
+              <p style={{ margin: "0 0 18px", fontSize: "12px", color: "#475569", background: "#eff6ff", border: "1px solid #dbeafe", borderRadius: "10px", padding: "11px 14px", lineHeight: 1.6 }}>
+                💡 อัปโหลดไฟล์ Export จากระบบจัดซื้อ ระบบจะ<strong style={{ color: "#1a3c6e" }}>สร้างและอัปเดตรายการสินค้า ราคา และ Vendor ให้อัตโนมัติ</strong> ไม่ต้องเพิ่มสินค้าทีละชิ้นเอง
+              </p>
+
+              {fileField(1, "ไฟล์ใบสั่งซื้อ", "All_Purchase orders", "เพิ่มเฉพาะ PO ใหม่ ของเดิมไม่ถูกแก้", true, poFile, setPoFile)}
+              {fileField(2, "ไฟล์รายชื่อสินค้า", "All_Products", "ช่วยเสริมชื่อสินค้าให้อ่านง่ายขึ้นเท่านั้น", false, productFile, setProductFile)}
+
+              <div style={{ marginBottom: "18px", padding: "14px", borderRadius: "12px", border: "1.5px solid #e2e8f0", background: "#fbfcff" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "3px" }}>
+                  <span style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#1a3c6e", color: "white", fontSize: "11px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>3</span>
+                  <span style={{ fontSize: "14px", fontWeight: 700, color: "#1a3c6e" }}>วันเริ่มต้น</span>
+                  <Badge required={false} />
+                </div>
+                <p style={{ margin: "0 0 10px 28px", fontSize: "12px", color: "#94a3b8" }}>นำเข้าเฉพาะ PO ตั้งแต่วันนี้เป็นต้นไป เว้นว่าง = นำเข้าทั้งหมด</p>
                 <input type="date" value={startDate} disabled={busy}
                   onChange={(e) => setStartDate(e.target.value)}
-                  style={{ padding: "8px 12px", borderRadius: "8px", border: "1.5px solid #e2e8f0", fontSize: "13px" }} />
+                  style={{ marginLeft: "28px", padding: "8px 12px", borderRadius: "8px", border: "1.5px solid #e2e8f0", fontSize: "13px" }} />
               </div>
 
               {error && <p style={{ color: "#dc2626", fontSize: "13px", fontWeight: 700, margin: "0 0 12px" }}>⚠️ {error}</p>}
