@@ -97,9 +97,9 @@ export default function Sidebar({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "var(--sp-3)",
+          gap: "var(--sp-2)",
           height: "var(--header-h)",
-          padding: collapsed ? "0" : "0 var(--sp-4)",
+          padding: collapsed ? "0" : "0 var(--sp-3)",
           justifyContent: collapsed ? "center" : "flex-start",
           border: "none",
           borderBottom: "1px solid var(--border)",
@@ -114,7 +114,7 @@ export default function Sidebar({
           src={collapsed ? "/favicon.svg" : "/logo-default.svg"}
           alt="Gunkul"
           style={{
-            height: 26,
+            height: 22,
             width: "auto",
             flexShrink: 0,
             filter: !collapsed && theme === "dark" ? "brightness(0) invert(1)" : undefined,
@@ -129,6 +129,7 @@ export default function Sidebar({
               color: "var(--text-strong)",
               whiteSpace: "nowrap",
               overflow: "hidden",
+              flexShrink: 0,
             }}
           >
             Procurement
@@ -152,7 +153,7 @@ export default function Sidebar({
                 alignItems: "center",
                 gap: "var(--sp-3)",
                 width: "100%",
-                padding: collapsed ? "0.7rem 0" : "0.7rem var(--sp-4)",
+                padding: collapsed ? "0.7rem 0" : "0.7rem var(--sp-3)",
                 justifyContent: collapsed ? "center" : "flex-start",
                 border: "none",
                 cursor: "pointer",
@@ -170,7 +171,7 @@ export default function Sidebar({
               }}
             >
               <Icon size={20} stroke={1.75} style={{ flexShrink: 0 }} />
-              {!collapsed && <span>{label}</span>}
+              {!collapsed && <span style={{ whiteSpace: "nowrap" }}>{label}</span>}
             </button>
           );
         })}

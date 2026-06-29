@@ -902,14 +902,12 @@ export default function ProjectPage() {
                           <select
                             autoFocus
                             value={editingCell.value}
-                            onChange={(e) => setEditingCell({ ...editingCell, value: e.target.value })}
-                            onBlur={() => {
-                              if (editingCell.value !== p.colorStatus) {
-                                saveInlineEdit(p.id, "colorStatus", editingCell.value as ColorStatus);
-                              } else {
-                                setEditingCell(null);
-                              }
+                            onChange={(e) => {
+                              const v = e.target.value;
+                              if (v !== p.colorStatus) saveInlineEdit(p.id, "colorStatus", v as ColorStatus);
+                              else setEditingCell(null);
                             }}
+                            onBlur={() => setEditingCell(null)}
                             style={{ ...inputStyle, padding: "2px 4px", fontSize: "11px" }}
                           >
                             {COLOR_STATUS_OPTIONS.map((o) => (
@@ -933,14 +931,12 @@ export default function ProjectPage() {
                           <select
                             autoFocus
                             value={editingCell.value}
-                            onChange={(e) => setEditingCell({ ...editingCell, value: e.target.value })}
-                            onBlur={() => {
-                              if (editingCell.value !== p.toc) {
-                                saveInlineEdit(p.id, "toc", editingCell.value as TocStatus);
-                              } else {
-                                setEditingCell(null);
-                              }
+                            onChange={(e) => {
+                              const v = e.target.value;
+                              if (v !== p.toc) saveInlineEdit(p.id, "toc", v as TocStatus);
+                              else setEditingCell(null);
                             }}
+                            onBlur={() => setEditingCell(null)}
                             style={{ ...inputStyle, padding: "2px 4px", fontSize: "11px" }}
                           >
                             {TOC_OPTIONS.map((o) => (
