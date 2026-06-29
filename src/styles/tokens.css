@@ -46,7 +46,7 @@
   --radius-full: 999px;
 
   /* ---- Layout ---- */
-  --sidebar-w: 210px;
+  --sidebar-w: 232px;
   --sidebar-w-collapsed: 72px;
   --header-h: 64px;
   --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
