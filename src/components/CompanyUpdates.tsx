@@ -33,8 +33,9 @@ export default function CompanyUpdates() {
   };
 
   const add = () => {
-    if (!newCode.trim() || !newDate) return;
-    setCompanyUpdate(newCode, newDate);
+    const codes = newCode.split(/[\s,]+/).map((c) => c.trim()).filter(Boolean);
+    if (!codes.length || !newDate) return;
+    for (const c of codes) setCompanyUpdate(c, newDate);
     setNewCode(""); setNewDate("");
   };
 
@@ -66,12 +67,15 @@ export default function CompanyUpdates() {
             ))}
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "10px", paddingTop: "10px", borderTop: "1px solid rgba(255,255,255,0.12)" }}>
-            <input value={newCode} onChange={(e) => setNewCode(e.target.value.toUpperCase())} placeholder="โค้ด"
-              style={{ ...dateInput, width: "54px", flexShrink: 0 }} />
-            <input type="date" value={newDate} onChange={(e) => setNewDate(e.target.value)} style={{ ...dateInput, flex: 1 }} />
-            <button onClick={add} title="เพิ่ม"
-              style={{ background: "rgba(226,201,126,0.25)", border: "1px solid rgba(226,201,126,0.5)", color: "#e2c97e", borderRadius: "8px", cursor: "pointer", fontSize: "13px", fontWeight: 700, padding: "3px 8px" }}>+</button>
+          <div style={{ marginTop: "10px", paddingTop: "10px", borderTop: "1px solid rgba(255,255,255,0.12)" }}>
+            <input value={newCode} onChange={(e) => setNewCode(e.target.value.toUpperCase())} placeholder="โค้ด เช่น GSC, GSP1, GKE"
+              style={{ ...dateInput, width: "100%", boxSizing: "border-box", marginBottom: "6px" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <input type="date" value={newDate} onChange={(e) => setNewDate(e.target.value)} style={{ ...dateInput, flex: 1 }} />
+              <button onClick={add} title="เพิ่มทั้งหมด"
+                style={{ background: "rgba(226,201,126,0.25)", border: "1px solid rgba(226,201,126,0.5)", color: "#e2c97e", borderRadius: "8px", cursor: "pointer", fontSize: "12px", fontWeight: 700, padding: "4px 12px", whiteSpace: "nowrap" }}>+ เพิ่ม</button>
+            </div>
+            <p style={{ margin: "6px 0 0", color: "rgba(255,255,255,0.45)", fontSize: "10px" }}>ใส่หลายบริษัทคั่นด้วย , ได้ (ใช้วันที่เดียวกัน)</p>
           </div>
         </>
       )}
