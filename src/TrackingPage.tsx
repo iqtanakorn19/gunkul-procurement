@@ -12,7 +12,11 @@ import {
   IconChevronUp,
   IconChevronDown,
   IconSelector,
+  IconExternalLink,
 } from "@tabler/icons-react";
+
+const MASTER_SHEET_URL =
+  "https://docs.google.com/spreadsheets/d/1Ly5d83iQ2xLDHC0tyuBFNMtbC1ZQ9mB0Dnx1NH68pro/edit";
 
 /* ============================================================
    Unified PR/PA/PO tracking schema — union of every column found
@@ -422,6 +426,14 @@ export default function TrackingPage() {
               เฉพาะงานเร่งด่วน
             </label>
             <div style={{ flex: 1 }} />
+            <a
+              href={MASTER_SHEET_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ ...secondaryBtnStyle, display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none", color: "var(--primary)", borderColor: "var(--primary)" }}
+            >
+              <IconExternalLink size={15} stroke={1.75} /> แก้ไขใน Google Sheet
+            </a>
             <button type="button" onClick={exportToExcel} style={{ ...secondaryBtnStyle, display: "inline-flex", alignItems: "center", gap: 6 }}>
               <IconFileSpreadsheet size={15} stroke={1.75} /> Export Excel
             </button>
