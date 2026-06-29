@@ -14,16 +14,20 @@ var FIREBASE_PROJECT_ID = "gunkul-internship";
 var CONFIG_SHEET_NAME = "_Config";
 var ROWID_COL_NAME = "_RowID"; // hidden helper column, last column
 
-// Header order must match TrackingRow fields in src/TrackingPage.tsx
+// HEADERS order MUST match the physical column order (left->right) of every
+// subsheet, because rows are read by position. FIELD_MAP (keyed by name) maps
+// each header to its Firestore field, so the web/dashboard are unaffected by
+// the order — only the sheet column layout has to match this list.
 var HEADERS = [
-  "No.", "Company", "Dept", "Project", "Description",
+  "No.", "Company", "Dept",
+  "Urgent", "Status",
   "PR No.", "Date PR",
   "PA No.", "Date PA Submitted", "Date PA Approved",
   "PO No.", "Date PO Submitted", "Date PO Approved",
+  "Project", "Description",
   "Vendor", "Vendor ID",
   "Qty", "Unit", "ราคา/หน่วย", "Dis.", "Budget", "รวม Save Cost",
   "Payment", "วันต้องการสินค้า", "ทำรับ",
-  "Status", "Urgent",
   "Supplier 1", "Supplier 2", "Supplier 3",
   "Remark",
 ];
@@ -137,29 +141,9 @@ function fullResync() {
    Firestore row doc id (creating + writing back a hidden _RowID
    on the sheet the first time it's touched).
    ============================================================ */
-/* Maps each header NAME -> its 0-based column index from row 1, so the data
-   columns can be reordered freely (now or later) without breaking the sync —
-   we look up values by header text, not by fixed position. Memoized per run.
-   The two hidden helper columns (_RowID, _Hash) stay appended after the data
-   columns, so don't insert/delete columns — reordering the data columns is fine. */
-var _headerMapCache = {};
-function getHeaderMap(sheet) {
-  var key = sheet.getSheetId();
-  if (_headerMapCache[key]) return _headerMapCache[key];
-  var hdr = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
-  var map = {};
-  for (var i = 0; i < hdr.length; i++) {
-    var name = String(hdr[i] === null ? "" : hdr[i]).trim();
-    if (name && !map.hasOwnProperty(name)) map[name] = i;
-  }
-  _headerMapCache[key] = map;
-  return map;
-}
-
 function syncRow(sheet, tabId, rowIndex) {
-  var rowIdCol = HEADERS.length + 1;   // hidden _RowID (kept at a fixed position)
+  var rowIdCol = HEADERS.length + 1;   // hidden _RowID
   var hashCol = HEADERS.length + 2;    // hidden _Hash — lets us skip unchanged rows
-  var colIndex = getHeaderMap(sheet);
   var values = sheet.getRange(rowIndex, 1, 1, HEADERS.length).getValues()[0];
   var isBlank = values.every(function (v) { return v === "" || v === null; });
   var helpers = sheet.getRange(rowIndex, rowIdCol, 1, 2).getValues()[0];
@@ -177,22 +161,17 @@ function syncRow(sheet, tabId, rowIndex) {
     sheet.getRange(rowIndex, rowIdCol).setValue(rowId);
   }
 
-  // Pull each cell by header NAME; fall back to the template position if the
-  // header text is missing, so a cleared header never silently drops data.
-  function cellFor(header, fallbackIndex) {
-    var idx = colIndex.hasOwnProperty(header) ? colIndex[header] : fallbackIndex;
-    return values[idx];
-  }
-
+  // Read by position: each subsheet's column order must match HEADERS exactly.
   var data = {};
   for (var i = 0; i < HEADERS.length; i++) {
     var header = HEADERS[i];
     if (FIELD_MAP[header]) {
-      data[FIELD_MAP[header].key] = coerce(cellFor(header, i), FIELD_MAP[header].type);
+      data[FIELD_MAP[header].key] = coerce(values[i], FIELD_MAP[header].type);
     }
   }
   var suppliers = SUPPLIER_COLS.map(function (label) {
-    return cellFor(label, HEADERS.indexOf(label));
+    var idx = HEADERS.indexOf(label);
+    return idx >= 0 ? values[idx] : "";
   }).filter(function (v) { return v !== "" && v !== null; });
   if (suppliers.length) data.compareSuppliers = suppliers;
 
