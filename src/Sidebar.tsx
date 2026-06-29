@@ -114,7 +114,7 @@ export default function Sidebar({
           src={collapsed ? "/favicon.svg" : "/logo-default.svg"}
           alt="Gunkul"
           style={{
-            height: 24,
+            height: 26,
             width: "auto",
             flexShrink: 0,
             filter: !collapsed && theme === "dark" ? "brightness(0) invert(1)" : undefined,
@@ -125,7 +125,7 @@ export default function Sidebar({
             style={{
               fontFamily: '"Cormorant Garamond", Georgia, serif',
               fontWeight: 600,
-              fontSize: "1.5rem",
+              fontSize: "1.15rem",
               color: "var(--text-strong)",
               whiteSpace: "nowrap",
               overflow: "hidden",
