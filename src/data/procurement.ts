@@ -10,7 +10,6 @@
 import * as XLSX from "xlsx";
 import {
   collection, getDocs, doc, writeBatch, setDoc, getDoc, query, where,
-  updateDoc, deleteField,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -516,27 +515,6 @@ export async function importPurchaseOrders(
     vendorsUpserted: vendorEntries.length,
     itemsUpserted: itemEntries.length,
   };
-}
-
-/* ============================================================
-   Per-company "last updated" dates (meta/companyUpdates). Auto-stamped on
-   import, manually editable in the UI for companies imported before this
-   tracking existed (the original import date was never recorded).
-   ============================================================ */
-const COMPANY_UPDATES_DOC = ["meta", "companyUpdates"] as const;
-
-/** Upsert one company's last-updated date (YYYY-MM-DD). */
-export async function setCompanyUpdate(company: string, date: string): Promise<void> {
-  const code = clean(company).toUpperCase();
-  if (!code) return;
-  await setDoc(doc(db, COMPANY_UPDATES_DOC[0], COMPANY_UPDATES_DOC[1]),
-    { updates: { [code]: date } }, { merge: true });
-}
-
-/** Remove a company row entirely. */
-export async function removeCompanyUpdate(company: string): Promise<void> {
-  await updateDoc(doc(db, COMPANY_UPDATES_DOC[0], COMPANY_UPDATES_DOC[1]),
-    { ["updates." + clean(company).toUpperCase()]: deleteField() });
 }
 
 /** One unit-price observation for an item from a single PO line. */
