@@ -695,10 +695,10 @@ export default function ProjectPage() {
           </ChartCard>
           <ChartCard title="สัดส่วนประเภทหลังคา">
             <ResponsiveContainer width="100%" height={240}>
-              <BarChart data={roofChartData} layout="vertical" margin={{ left: 24 }}>
+              <BarChart data={roofChartData} layout="vertical" margin={{ left: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                 <XAxis type="number" allowDecimals={false} fontSize={12} />
-                <YAxis type="category" dataKey="name" fontSize={11} width={100} />
+                <YAxis type="category" dataKey="name" fontSize={11} width={100} interval={0} />
                 <Tooltip cursor={{ fill: "color-mix(in srgb, var(--accent) 8%, transparent)" }} />
                 <Bar dataKey="count" fill="var(--accent)" radius={[0, 6, 6, 0]} isAnimationActive animationDuration={600} />
               </BarChart>
@@ -727,7 +727,7 @@ export default function ProjectPage() {
           {pvBrandChartData.length > 0 && (
             <ChartCard title="สัดส่วน PV Brand">
               <ResponsiveContainer width="100%" height={240}>
-                <BarChart data={pvBrandChartData} layout="vertical" margin={{ left: 80 }}>
+                <BarChart data={pvBrandChartData} layout="vertical" margin={{ left: 4 }}>
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                   <XAxis type="number" allowDecimals={false} fontSize={11} />
                   <YAxis type="category" dataKey="name" fontSize={10} width={75} />
@@ -753,7 +753,7 @@ export default function ProjectPage() {
           {inverterBrandChartData.length > 0 && (
             <ChartCard title="สัดส่วน Inverter Brand">
               <ResponsiveContainer width="100%" height={240}>
-                <BarChart data={inverterBrandChartData} layout="vertical" margin={{ left: 80 }}>
+                <BarChart data={inverterBrandChartData} layout="vertical" margin={{ left: 4 }}>
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                   <XAxis type="number" allowDecimals={false} fontSize={11} />
                   <YAxis type="category" dataKey="name" fontSize={10} width={75} />
@@ -766,7 +766,7 @@ export default function ProjectPage() {
           {bessBrandChartData.length > 0 && (
             <ChartCard title="สัดส่วน BESS Brand">
               <ResponsiveContainer width="100%" height={240}>
-                <BarChart data={bessBrandChartData} layout="vertical" margin={{ left: 80 }}>
+                <BarChart data={bessBrandChartData} layout="vertical" margin={{ left: 4 }}>
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                   <XAxis type="number" allowDecimals={false} fontSize={11} />
                   <YAxis type="category" dataKey="name" fontSize={10} width={75} />
