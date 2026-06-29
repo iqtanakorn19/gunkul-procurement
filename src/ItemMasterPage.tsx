@@ -236,10 +236,22 @@ export default function ItemMasterPage() {
         <div style={{ position: "absolute", top: "-60px", right: "-60px", width: "240px", height: "240px", borderRadius: "50%", background: "rgba(226,201,126,0.08)" }} />
         <div style={{ maxWidth: "1200px", margin: "0 auto", position: "relative" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "16px" }}>
-            <div>
+            <div style={{ flex: 1, minWidth: "280px" }}>
               <span style={{ background: "rgba(226,201,126,0.2)", border: "1px solid rgba(226,201,126,0.4)", color: "#e2c97e", padding: "4px 14px", borderRadius: "999px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em" }}>PROCUREMENT</span>
               <h1 style={{ margin: "10px 0 8px", color: "white", fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 800 }}>📦 Item Master</h1>
               <p style={{ margin: 0, color: "rgba(255,255,255,0.55)", fontSize: "15px" }}>เปรียบเทียบราคาสินค้าระหว่าง Vendor จากประวัติการสั่งซื้อจริง</p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginTop: "24px", maxWidth: "760px" }}>
+                {[
+                  { label: "สินค้าทั้งหมด", count: items.length.toLocaleString(), icon: "📦" },
+                  { label: "เทียบราคาได้ (>1 Vendor)", count: comparableCount.toLocaleString(), icon: "⚖️" },
+                  { label: "หมวดหมู่", count: (categories.length - 1).toLocaleString(), icon: "🏷️" },
+                ].map((s) => (
+                  <div key={s.label} style={{ background: "rgba(255,255,255,0.08)", backdropFilter: "blur(8px)", borderRadius: "14px", padding: "16px 20px", border: "1px solid rgba(255,255,255,0.12)" }}>
+                    <p style={{ margin: "0 0 4px", color: "rgba(255,255,255,0.6)", fontSize: "12px", fontWeight: 600, whiteSpace: "nowrap" }}>{s.icon} {s.label}</p>
+                    <p style={{ margin: 0, fontSize: "24px", fontWeight: 800, color: "white" }}>{s.count}</p>
+                  </div>
+                ))}
+              </div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "12px" }}>
               <button onClick={() => setShowImport(true)} style={{ background: "rgba(226,201,126,0.2)", border: "1px solid rgba(226,201,126,0.5)", color: "#e2c97e", padding: "10px 20px", borderRadius: "12px", cursor: "pointer", fontWeight: 700, fontSize: "14px" }}>
@@ -247,18 +259,6 @@ export default function ItemMasterPage() {
               </button>
               <CompanyUpdates />
             </div>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginTop: "28px", maxWidth: "600px" }}>
-            {[
-              { label: "สินค้าทั้งหมด", count: items.length.toLocaleString(), icon: "📦" },
-              { label: "เทียบราคาได้ (>1 Vendor)", count: comparableCount.toLocaleString(), icon: "⚖️" },
-              { label: "หมวดหมู่", count: (categories.length - 1).toLocaleString(), icon: "🏷️" },
-            ].map((s) => (
-              <div key={s.label} style={{ background: "rgba(255,255,255,0.08)", backdropFilter: "blur(8px)", borderRadius: "14px", padding: "16px 20px", border: "1px solid rgba(255,255,255,0.12)" }}>
-                <p style={{ margin: "0 0 4px", color: "rgba(255,255,255,0.6)", fontSize: "12px", fontWeight: 600 }}>{s.icon} {s.label}</p>
-                <p style={{ margin: 0, fontSize: "24px", fontWeight: 800, color: "white" }}>{s.count}</p>
-              </div>
-            ))}
           </div>
         </div>
       </div>

@@ -344,7 +344,7 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
                 fontSize: "var(--fs-h3)",
                 fontWeight: 400,
                 opacity: 0.92,
-                maxWidth: "60ch",
+                maxWidth: "820px",
                 lineHeight: 1.5,
                 fontFamily: "var(--font-sans)",
               }}
