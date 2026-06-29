@@ -364,6 +364,30 @@ async function chunkedSet(
   }
 }
 
+async function chunkedDelete(refs: ReturnType<typeof doc>[]) {
+  for (let i = 0; i < refs.length; i += 400) {
+    const batch = writeBatch(db);
+    for (const ref of refs.slice(i, i + 400)) batch.delete(ref);
+    await batch.commit();
+  }
+}
+
+/** Order-independent stable JSON for comparing an aggregate against its stored
+ *  doc, so we only write docs whose derived fields actually changed. */
+function stableStringify(v: unknown): string {
+  if (v === null || typeof v !== "object") return JSON.stringify(v);
+  if (Array.isArray(v)) return "[" + v.map(stableStringify).join(",") + "]";
+  const o = v as Record<string, unknown>;
+  return "{" + Object.keys(o).sort().map((k) => JSON.stringify(k) + ":" + stableStringify(o[k])).join(",") + "}";
+}
+
+/** True when every key in `next` already equals the same key in `prev`
+ *  (prev may carry extra manual fields, which we ignore). */
+function sameSubset(prev: Record<string, unknown> | undefined, next: Record<string, unknown>): boolean {
+  if (!prev) return false;
+  return Object.keys(next).every((k) => stableStringify(prev[k]) === stableStringify(next[k]));
+}
+
 export interface ImportResult {
   newPOs: number;
   newLines: number;
@@ -425,12 +449,17 @@ export async function importPurchaseOrders(
   const vendorAggs = aggregateVendors(allLines);
   const itemAggs = aggregateItems(allLines, productMap);
 
-  // Upsert vendors, preserving manual fields (status/note/categories) by matching vendorCode.
+  // Upsert vendors, preserving manual fields (status/note/categories) by matching
+  // vendorCode. Only write a doc whose derived fields actually changed — this keeps
+  // re-imports from spending thousands of writes (and hitting the daily quota).
   const vendorSnap = await getDocs(collection(db, "vendors"));
   const codeToId = new Map<string, string>();
+  const vendorPrev = new Map<string, Record<string, unknown>>();
   for (const d of vendorSnap.docs) {
-    const code = clean((d.data() as { vendorCode?: string }).vendorCode) || d.id;
+    const data = d.data() as { vendorCode?: string };
+    const code = clean(data.vendorCode) || d.id;
     codeToId.set(code, d.id);
+    vendorPrev.set(d.id, data as Record<string, unknown>);
   }
   const vendorEntries = [...vendorAggs.values()].map((v) => {
     const id = codeToId.get(v.vendorCode) || v.vendorCode;
@@ -443,16 +472,26 @@ export async function importPurchaseOrders(
         categorySpend: v.categorySpend, monthlySpend: v.monthlySpend,
         source: "po-import",
       } as Record<string, unknown>,
+      id,
     };
-  });
+  }).filter((e) => !sameSubset(vendorPrev.get(e.id), e.data));
   await chunkedSet(vendorEntries, true); // merge → keep status/note/categories
 
-  // Replace items collection with the freshly aggregated set.
-  const itemEntries = [...itemAggs.values()].map((it) => ({
-    ref: doc(db, "items", it.itemNumber),
-    data: it as unknown as Record<string, unknown>,
-  }));
-  await chunkedSet(itemEntries, true);
+  // Items collection mirrors the aggregation exactly. Write only changed/new docs
+  // and delete items that no longer appear in any PO line.
+  const itemSnap = await getDocs(collection(db, "items"));
+  const itemPrev = new Map<string, Record<string, unknown>>();
+  for (const d of itemSnap.docs) itemPrev.set(d.id, d.data() as Record<string, unknown>);
+
+  const itemEntries = [...itemAggs.values()]
+    .map((it) => ({ ref: doc(db, "items", it.itemNumber), data: it as unknown as Record<string, unknown>, id: it.itemNumber }))
+    .filter((e) => !sameSubset(itemPrev.get(e.id), e.data));
+  await chunkedSet(itemEntries);
+
+  const staleItemRefs = [...itemPrev.keys()]
+    .filter((id) => !itemAggs.has(id))
+    .map((id) => doc(db, "items", id));
+  await chunkedDelete(staleItemRefs);
 
   return {
     newPOs: newPONumbers.length,
