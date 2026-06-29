@@ -484,7 +484,7 @@ export default function VendorPage() {
               📥 นำเข้าข้อมูล
             </button>
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", marginTop: "24px", alignItems: "stretch" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", marginTop: "24px", alignItems: "flex-start" }}>
             {[
               { label: "Vendor ทั้งหมด", count: vendors.length.toLocaleString(), icon: "🏢" },
               { label: "Active", count: vendors.filter(v => v.status === "active").length.toLocaleString(), icon: "✅" },
