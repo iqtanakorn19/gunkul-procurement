@@ -40,7 +40,7 @@ export default function CompanyUpdates() {
           จะแสดงอัตโนมัติเมื่อ import PO ของบริษัทนั้น
         </p>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: "7px", maxHeight: "200px", overflowY: "auto" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
           {rows.map(([code, date]) => (
             <div key={code} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px" }}>
               <span style={{ color: "white", fontSize: "12px", fontWeight: 700 }}>{code}</span>
