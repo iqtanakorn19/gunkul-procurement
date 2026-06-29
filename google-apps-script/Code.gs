@@ -66,7 +66,10 @@ function setupTriggers() {
   ScriptApp.getProjectTriggers().forEach(function (t) { ScriptApp.deleteTrigger(t); });
   var ss = SpreadsheetApp.getActive();
   ScriptApp.newTrigger("onEditInstallable").forSpreadsheet(ss).onEdit().create();
-  ScriptApp.newTrigger("fullResync").timeBased().everyMinutes(5).create();
+  // Safety-net resync runs a few times a day instead of every 5 minutes —
+  // real-time edits already sync via onEdit, and syncRow now skips unchanged
+  // rows, so a frequent full sweep just burned Firestore quota for nothing.
+  ScriptApp.newTrigger("fullResync").timeBased().everyHours(6).create();
   Logger.log("Triggers installed.");
 }
 
@@ -135,14 +138,17 @@ function fullResync() {
    on the sheet the first time it's touched).
    ============================================================ */
 function syncRow(sheet, tabId, rowIndex) {
-  var rowIdCol = HEADERS.length + 1;
+  var rowIdCol = HEADERS.length + 1;   // hidden _RowID
+  var hashCol = HEADERS.length + 2;    // hidden _Hash — lets us skip unchanged rows
   var values = sheet.getRange(rowIndex, 1, 1, HEADERS.length).getValues()[0];
   var isBlank = values.every(function (v) { return v === "" || v === null; });
-  var rowId = sheet.getRange(rowIndex, rowIdCol).getValue();
+  var helpers = sheet.getRange(rowIndex, rowIdCol, 1, 2).getValues()[0];
+  var rowId = helpers[0];
+  var oldHash = helpers[1];
 
   if (isBlank) {
     if (rowId) deleteFirestoreRow(tabId, rowId);
-    if (rowId) sheet.getRange(rowIndex, rowIdCol).setValue("");
+    if (rowId) sheet.getRange(rowIndex, rowIdCol, 1, 2).setValues([["", ""]]);
     return null;
   }
 
@@ -166,8 +172,26 @@ function syncRow(sheet, tabId, rowIndex) {
   }).filter(function (v) { return v !== "" && v !== null; });
   if (suppliers.length) data.compareSuppliers = suppliers;
 
+  // Only hit Firestore when the row's content actually changed. The hash is a
+  // sheet cell (no Firestore cost), so an idle fullResync writes nothing.
+  var newHash = rowHash(data);
+  if (String(oldHash) === newHash) return rowId;
+
   writeFirestoreRow(tabId, rowId, data);
+  sheet.getRange(rowIndex, hashCol).setValue(newHash);
   return rowId;
+}
+
+/** Stable MD5 of the row payload, used to detect "nothing changed". */
+function rowHash(data) {
+  var s = JSON.stringify(data);
+  var bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, s, Utilities.Charset.UTF_8);
+  var hex = "";
+  for (var i = 0; i < bytes.length; i++) {
+    var b = (bytes[i] + 256) % 256;
+    hex += (b < 16 ? "0" : "") + b.toString(16);
+  }
+  return hex;
 }
 
 function coerce(raw, type) {
