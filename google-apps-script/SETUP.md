@@ -52,8 +52,11 @@ The script writes to Firestore using your own Google account's permissions
 That's it. From now on:
 - Typing/editing any row pushes to the website within a few seconds
   (real-time via the edit trigger).
-- A safety-net sync also runs every 5 minutes in case any edits were
-  missed (e.g. pasting many rows at once).
+- A safety-net sync also runs every 6 hours (4×/day) in case any edits
+  were missed (e.g. pasting many rows at once) and to clean up rows that
+  were deleted. An unchanged row writes nothing to Firestore (the row
+  hash is stored in the sheet), so an idle resync stays well within the
+  Firestore free (Spark) quota.
 - Deleting a row's content in the Sheet removes it from the website too.
 
 ## 5. Adding a new person / subsheet later
