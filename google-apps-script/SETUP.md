@@ -63,6 +63,14 @@ rename it, and clear out the sample rows — keep row 1 (the header) as is.
 The script will register it as a new tab automatically the first time
 someone edits a row in it.
 
+**Important when clearing the duplicated rows:** select the whole data
+area INCLUDING the two hidden helper columns to the right of the
+template (`_RowID` and `_Hash`) and delete their contents too. If you
+leave old `_RowID`/`_Hash` values behind, the new tab inherits the
+source person's row identities and the website can show leftover rows
+that aren't in the sheet. After clearing, run a Full resync once to
+reconcile the website.
+
 ## 6. Migrating existing data
 
 The rows currently in the website (Firestore) were entered directly on
