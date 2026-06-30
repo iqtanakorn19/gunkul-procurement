@@ -821,7 +821,7 @@ export default function ProjectPage() {
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                   <XAxis type="number" fontSize={11} unit=" MW" />
                   <YAxis type="category" dataKey="name" fontSize={10} width={75} />
-                  <Tooltip formatter={(v: number | string) => [`${v} MW`, "กำลังผลิต"]} cursor={{ fill: "color-mix(in srgb, #5B9BD5 8%, transparent)" }} />
+                  <Tooltip formatter={(v) => [`${v} MW`, "กำลังผลิต"]} cursor={{ fill: "color-mix(in srgb, #5B9BD5 8%, transparent)" }} />
                   <Bar dataKey="mw" fill="#5B9BD5" radius={[0, 6, 6, 0]} isAnimationActive animationDuration={600} />
                 </BarChart>
               </ResponsiveContainer>
