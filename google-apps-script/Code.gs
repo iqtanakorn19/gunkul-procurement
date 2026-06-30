@@ -261,16 +261,25 @@ function deleteFirestoreRow(tabId, rowId) {
 }
 
 function pruneDeletedRows(tabId, seenRowIds) {
-  var url = firestoreBaseUrl() + "/trackingTabs/" + tabId + "/rows";
-  var resp = UrlFetchApp.fetch(url, {
-    headers: { Authorization: "Bearer " + ScriptApp.getOAuthToken() },
-    muteHttpExceptions: true,
-  });
-  var json = JSON.parse(resp.getContentText());
-  (json.documents || []).forEach(function (docEntry) {
-    var id = docEntry.name.split("/").pop();
-    if (!seenRowIds[id]) deleteFirestoreRow(tabId, id);
-  });
+  // Firestore's documents.list caps each response at pageSize (max 300) and
+  // returns a nextPageToken for the rest. We MUST follow every page or stale
+  // rows beyond the first page never get deleted (e.g. a tab duplicated from
+  // another person that once held 300+ rows would keep showing the leftovers).
+  var base = firestoreBaseUrl() + "/trackingTabs/" + tabId + "/rows?pageSize=300";
+  var pageToken = "";
+  do {
+    var url = base + (pageToken ? "&pageToken=" + encodeURIComponent(pageToken) : "");
+    var resp = UrlFetchApp.fetch(url, {
+      headers: { Authorization: "Bearer " + ScriptApp.getOAuthToken() },
+      muteHttpExceptions: true,
+    });
+    var json = JSON.parse(resp.getContentText());
+    (json.documents || []).forEach(function (docEntry) {
+      var id = docEntry.name.split("/").pop();
+      if (!seenRowIds[id]) deleteFirestoreRow(tabId, id);
+    });
+    pageToken = json.nextPageToken || "";
+  } while (pageToken);
 }
 
 /* ============================================================
