@@ -13,6 +13,7 @@ import {
   IconDownload,
   IconX,
   IconSquare,
+  IconSquareCheck,
   IconCheck,
   IconAlertTriangle,
   IconPencil,
@@ -71,6 +72,48 @@ const KICKOFF_CHECKLIST = [
   { item: "รายชื่อ Vendor ที่เกี่ยวข้อง", detail: "ตรวจสอบใน Vendor Master ว่ามี Vendor ที่ทำของประเภทนี้แล้วหรือยัง" },
   { item: "ผู้ติดต่อหน้างาน", detail: "PM / Engineer ผู้รับผิดชอบโครงการ เพื่อประสาน Spec และวันส่งมอบ" },
 ];
+
+/* Interactive kick-off checklist — ticks are local UI only (reset on reload),
+   meant as a quick scratch tool, not a saved record. */
+function KickoffChecklist() {
+  const [checked, setChecked] = useState<Set<number>>(new Set());
+  const toggle = (i: number) =>
+    setChecked((prev) => {
+      const next = new Set(prev);
+      next.has(i) ? next.delete(i) : next.add(i);
+      return next;
+    });
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-2)" }}>
+      {KICKOFF_CHECKLIST.map((c, i) => {
+        const on = checked.has(i);
+        return (
+          <button
+            key={c.item}
+            type="button"
+            onClick={() => toggle(i)}
+            aria-pressed={on}
+            style={{
+              display: "flex", gap: "var(--sp-3)", alignItems: "flex-start", textAlign: "left",
+              padding: "var(--sp-3)", borderRadius: "var(--radius)", width: "100%", cursor: "pointer",
+              border: on ? "1px solid var(--accent)" : "1px solid transparent",
+              background: "var(--surface-2)", fontFamily: "inherit",
+              transition: "border-color var(--transition), opacity var(--transition)",
+            }}
+          >
+            {on
+              ? <IconSquareCheck size={18} stroke={1.75} style={{ color: "var(--accent)", flexShrink: 0, marginTop: 2 }} />
+              : <IconSquare size={18} stroke={1.75} style={{ color: "var(--text-faint)", flexShrink: 0, marginTop: 2 }} />}
+            <div>
+              <p style={{ margin: "0 0 2px", fontSize: "var(--fs-sm)", fontWeight: 600, color: "var(--text-strong)", textDecoration: on ? "line-through" : "none", opacity: on ? 0.65 : 1 }}>{c.item}</p>
+              <p style={{ margin: 0, fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>{c.detail}</p>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 const INCOTERM_GROUPS: { group: string; terms: { code: string; name: string; transfer: string }[] }[] = [
   {
@@ -692,17 +735,7 @@ export default function KnowledgePage() {
         {/* Kick-off Checklist */}
         <Section eyebrow="เริ่มโครงการ" title="Kick-off Checklist">
           <HoverCard interactive={false}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-2)" }}>
-              {KICKOFF_CHECKLIST.map((c) => (
-                <div key={c.item} style={{ display: "flex", gap: "var(--sp-3)", alignItems: "flex-start", padding: "var(--sp-3)", borderRadius: "var(--radius)", background: "var(--surface-2)" }}>
-                  <IconSquare size={18} stroke={1.75} style={{ color: "var(--text-faint)", flexShrink: 0, marginTop: 2 }} />
-                  <div>
-                    <p style={{ margin: "0 0 2px", fontSize: "var(--fs-sm)", fontWeight: 600, color: "var(--text-strong)" }}>{c.item}</p>
-                    <p style={{ margin: 0, fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>{c.detail}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <KickoffChecklist />
           </HoverCard>
         </Section>
 
