@@ -642,6 +642,31 @@ export default function ProjectPage() {
     return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 8);
   }, [projects]);
 
+  // Projects per year, counted by Kick off date year.
+  const kickoffYearChartData = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const p of projects) {
+      const m = /^(\d{4})/.exec(p.kickoffDate || "");
+      if (m) counts[m[1]] = (counts[m[1]] ?? 0) + 1;
+    }
+    return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => a.name.localeCompare(b.name));
+  }, [projects]);
+
+  // Installed capacity (MW) per PV brand = sum of each project's kWp / 1000.
+  const pvBrandMwChartData = useMemo(() => {
+    const sums: Record<string, number> = {};
+    for (const p of projects) {
+      if (p.pvBrand && p.capacityKwp) {
+        const b = normalizePvBrand(p.pvBrand);
+        sums[b] = (sums[b] ?? 0) + p.capacityKwp;
+      }
+    }
+    return Object.entries(sums)
+      .map(([name, kwp]) => ({ name, mw: Math.round((kwp / 1000) * 10) / 10 }))
+      .sort((a, b) => b.mw - a.mw)
+      .slice(0, 8);
+  }, [projects]);
+
   return (
     <div style={{ maxWidth: "1440px", margin: "0 auto", padding: "var(--sp-7) var(--sp-5)" }}>
       <Reveal>
@@ -772,6 +797,32 @@ export default function ProjectPage() {
                   <YAxis type="category" dataKey="name" fontSize={10} width={75} />
                   <Tooltip cursor={{ fill: "color-mix(in srgb, #A349A4 8%, transparent)" }} />
                   <Bar dataKey="count" fill="#A349A4" radius={[0, 6, 6, 0]} isAnimationActive animationDuration={600} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCard>
+          )}
+          {kickoffYearChartData.length > 0 && (
+            <ChartCard title="จำนวนโครงการต่อปี (ตาม Kick off)">
+              <ResponsiveContainer width="100%" height={240}>
+                <BarChart data={kickoffYearChartData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="name" fontSize={11} />
+                  <YAxis allowDecimals={false} fontSize={11} />
+                  <Tooltip cursor={{ fill: "color-mix(in srgb, var(--primary) 8%, transparent)" }} />
+                  <Bar dataKey="count" name="โครงการ" fill="var(--primary)" radius={[6, 6, 0, 0]} isAnimationActive animationDuration={600} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCard>
+          )}
+          {pvBrandMwChartData.length > 0 && (
+            <ChartCard title="กำลังการผลิตต่อ PV Brand (MW)">
+              <ResponsiveContainer width="100%" height={240}>
+                <BarChart data={pvBrandMwChartData} layout="vertical" margin={{ left: 4 }}>
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                  <XAxis type="number" fontSize={11} unit=" MW" />
+                  <YAxis type="category" dataKey="name" fontSize={10} width={75} />
+                  <Tooltip formatter={(v) => [`${v} MW`, "กำลังผลิต"]} cursor={{ fill: "color-mix(in srgb, #5B9BD5 8%, transparent)" }} />
+                  <Bar dataKey="mw" fill="#5B9BD5" radius={[0, 6, 6, 0]} isAnimationActive animationDuration={600} />
                 </BarChart>
               </ResponsiveContainer>
             </ChartCard>
