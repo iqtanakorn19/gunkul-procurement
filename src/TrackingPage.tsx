@@ -55,7 +55,7 @@ export const STATUS_COLOR: Record<string, { bg: string; fg: string }> = {
 /* Legacy/Thai status text -> canonical STATUS_OPTIONS value, so old imported
    data (e.g. "รออนุมัติ PA", "OK") reads and filters the same as new rows. */
 const STATUS_ALIASES: Record<string, Status> = {
-  "draft": "Draft", "ร่าง": "Draft",
+  "draft": "Draft", "ร่าง": "Draft", "pa อนุมัติ": "Draft", "pa approved": "Draft",
   "รออนุมัติ pa": "Pending PA Approval", "pending pa approval": "Pending PA Approval", "pending pa": "Pending PA Approval",
   "รออนุมัติ po": "Pending PO Approval", "pending po approval": "Pending PO Approval", "pending po": "Pending PO Approval",
   "in progress": "In Progress", "กำลังดำเนินการ": "In Progress", "ดำเนินการ": "In Progress",
