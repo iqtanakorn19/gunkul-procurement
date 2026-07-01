@@ -77,19 +77,27 @@ function setupTriggers() {
   Logger.log("Triggers installed.");
 }
 
-/* Locks every subsheet's header row + sets data validation widths so
-   the team can only type into the cells, not change the template. */
+/* Guards every subsheet's header row against accidental template edits.
+   Uses WARNING-ONLY protection (not hard restriction): a hard lock blocks
+   the whole team from using the basic filter/sort on those columns, so
+   instead we just show a dismissible warning if someone edits a header
+   cell. The template can still be reset any time via setupProtection(). */
 function setupProtection() {
   var ss = SpreadsheetApp.getActive();
   ss.getSheets().forEach(function (sheet) {
     if (sheet.getName() === CONFIG_SHEET_NAME) return;
     var headerRange = sheet.getRange(1, 1, 1, HEADERS.length);
     headerRange.setValues([HEADERS]);
-    var protection = headerRange.protect().setDescription("Locked header — do not edit");
-    protection.removeEditors(protection.getEditors());
-    if (protection.canDomainEdit()) protection.setDomainEdit(false);
+    // Remove any previous protections on this header range so re-running
+    // doesn't stack a hard lock on top of the warning-only one.
+    sheet.getProtections(SpreadsheetApp.ProtectionType.RANGE).forEach(function (p) {
+      if (p.getRange() && p.getRange().getRow() === 1) p.remove();
+    });
+    headerRange.protect()
+      .setDescription("Header — please don't edit (warning only)")
+      .setWarningOnly(true);
   });
-  Logger.log("Header rows protected.");
+  Logger.log("Header rows protected (warning-only).");
 }
 
 /* ============================================================
