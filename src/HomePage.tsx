@@ -243,7 +243,7 @@ function ProjectEditModal({
         </label>
         <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)", marginBottom: "var(--sp-4)" }}>
           ผู้รับผิดชอบโครงการ (คั่นด้วยจุลภาค หากมีมากกว่า 1 คน)
-          <input style={inputStyle} value={ownersText} onChange={(e) => setOwnersText(e.target.value)} placeholder="เช่น สมชาย ใจดี, สมหญิง รักงาน" />
+          <input style={inputStyle} value={ownersText} onChange={(e) => setOwnersText(e.target.value)} placeholder="เช่น พี่เจมส์, พี่มอส, พี่พลอย" />
         </label>
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "var(--sp-2)" }}>
           <button type="button" onClick={onClose} style={{ border: "1px solid var(--border-strong)", background: "var(--surface)", color: "var(--text)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", cursor: "pointer" }}>
