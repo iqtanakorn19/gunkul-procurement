@@ -465,7 +465,10 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
                     m.tag === "EPC"
                       ? "color-mix(in srgb, var(--primary) 10%, var(--surface))"
                       : "color-mix(in srgb, var(--accent) 12%, var(--surface))",
-                  padding: "var(--sp-6) var(--sp-5)",
+                  padding:
+                    m.tag === "EPC"
+                      ? "var(--sp-6) 5.5rem var(--sp-6) var(--sp-4)"
+                      : "var(--sp-6) var(--sp-4) var(--sp-6) 5.5rem",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: m.tag === "EPC" ? "flex-end" : "flex-start",
