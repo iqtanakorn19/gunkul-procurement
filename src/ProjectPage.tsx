@@ -376,7 +376,6 @@ function ProjectEditModal({
                   {TOC_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
                 </select>
               </Field>
-              <Field label="BOI"><input style={inputStyle} value={data.boi} onChange={(e) => set("boi", e.target.value)} /></Field>
               <Field label="Estimate Site Mob"><input style={inputStyle} value={data.estimateSiteMob} onChange={(e) => set("estimateSiteMob", e.target.value)} /></Field>
               <Field label="Forecast Site Mob 1"><input style={inputStyle} value={data.forecastSiteMob1} onChange={(e) => set("forecastSiteMob1", e.target.value)} /></Field>
               <Field label="Forecast Site Mob 2"><input style={inputStyle} value={data.forecastSiteMob2} onChange={(e) => set("forecastSiteMob2", e.target.value)} /></Field>
@@ -916,7 +915,6 @@ export default function ProjectPage() {
                     { label: "PM PIC" },
                     { label: "ENG PIC" },
                     { label: "สถานะ" },
-                    { label: "BOI" },
                     { label: "Remark" },
                     { label: "" },
                   ].map(({ label }, idx) => (
@@ -1012,8 +1010,8 @@ export default function ProjectPage() {
                       <td style={{ padding: "8px 10px", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis" }}>{p.location || "-"}</td>
                       <td style={{ padding: "8px 10px", textAlign: "right" }}>{formatNumber(p.contractPrice)}</td>
                       <td style={{ padding: "8px 10px", textAlign: "right" }}>{formatNumber(p.subconAwardAmount)}</td>
-                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.materialThbWatt ?? "-"}</td>
-                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.labourThbWatt ?? "-"}</td>
+                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.materialThbWatt != null ? p.materialThbWatt.toFixed(2) : "-"}</td>
+                      <td style={{ padding: "8px 10px", textAlign: "right" }}>{p.labourThbWatt != null ? p.labourThbWatt.toFixed(2) : "-"}</td>
                       <td style={{ padding: "8px 10px" }}>{p.subconName || "-"}</td>
                       <td style={{ padding: "8px 10px" }}>{p.awardDate || "-"}</td>
                       <td style={{ padding: "8px 10px" }}>{p.pvBrand || "-"}</td>
@@ -1029,7 +1027,6 @@ export default function ProjectPage() {
                       <td style={{ padding: "8px 10px" }}>{p.pmPic || "-"}</td>
                       <td style={{ padding: "8px 10px" }}>{p.engPic || "-"}</td>
                       <td style={{ padding: "8px 10px" }}>{p.status}</td>
-                      <td style={{ padding: "8px 10px" }}>{p.boi || "-"}</td>
                       <td style={{ padding: "8px 10px", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", color: "var(--text-muted)" }}>{p.note || "-"}</td>
                       <td style={{ padding: "8px 10px" }}>
                         <button onClick={() => setEditingProject(p)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-muted)", marginRight: "0.4rem" }}>
