@@ -842,6 +842,24 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
                     แขวงลุมพินี เขตปทุมวัน<br />
                     กรุงเทพมหานคร 10330
                   </p>
+                  <a
+                    href="https://maps.app.goo.gl/aGzA72G58n75Wx649"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      marginTop: "var(--sp-2)",
+                      color: "var(--primary)",
+                      fontSize: "var(--fs-sm)",
+                      fontWeight: 600,
+                      textDecoration: "none",
+                    }}
+                  >
+                    <IconMapPin size={16} stroke={1.75} />
+                    เปิดใน Google Maps
+                  </a>
                 </div>
               </div>
             </HoverCard>
