@@ -142,6 +142,41 @@ function fullResync() {
     }
     pruneDeletedRows(tabId, seenRowIds);
   });
+  pruneDeletedTabs();
+}
+
+/* Removes Firestore tab docs (and their rows) for subsheets that were
+   deleted or renamed in the Sheet — otherwise the website keeps showing
+   stale tabs like an old "Sheet4" or a tab's former name after a rename.
+   Driven by the _Config bookkeeping vs the current live sheet tabs. */
+function pruneDeletedTabs() {
+  var ss = SpreadsheetApp.getActive();
+  var current = {};
+  ss.getSheets().forEach(function (s) {
+    if (s.getName() !== CONFIG_SHEET_NAME) current[s.getName()] = true;
+  });
+  var configSheet = getConfigSheet();
+  var data = configSheet.getDataRange().getValues();
+  // Walk bottom-up so deleting _Config rows doesn't shift the indexes above.
+  for (var r = data.length - 1; r >= 1; r--) {
+    var name = data[r][0];
+    var tabId = data[r][1];
+    if (name && !current[name]) {
+      pruneDeletedRows(tabId, {});   // delete every row under the stale tab
+      deleteFirestoreTab(tabId);     // delete the tab doc itself
+      configSheet.deleteRow(r + 1);  // remove its _Config bookkeeping row (1-based)
+      Logger.log("Pruned stale tab: " + name);
+    }
+  }
+}
+
+function deleteFirestoreTab(tabId) {
+  var url = firestoreBaseUrl() + "/trackingTabs/" + tabId;
+  UrlFetchApp.fetch(url, {
+    method: "delete",
+    headers: { Authorization: "Bearer " + ScriptApp.getOAuthToken() },
+    muteHttpExceptions: true,
+  });
 }
 
 /* ============================================================
