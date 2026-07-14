@@ -22,6 +22,8 @@ service cloud.firestore {
       match /rows/{rowId}          { allow read, write: if request.auth != null; }
     }
     match /knowledgeDocs/{docId}   { allow read, write: if request.auth != null; }
+    match /esgDocs/{docId}         { allow read, write: if request.auth != null; }
+    match /esgTemplates/{docId}    { allow read, write: if request.auth != null; }
     match /homeProjects/{docId}    { allow read, write: if request.auth != null; }
     match /kickoffProjects/{docId} { allow read, write: if request.auth != null; }
   }
