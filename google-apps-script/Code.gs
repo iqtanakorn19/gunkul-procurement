@@ -249,7 +249,11 @@ function coerce(raw, type) {
   if (type === "boolean") {
     if (typeof raw === "boolean") return raw;
     var s = String(raw).trim().toLowerCase();
-    return s === "true" || s === "yes" || s === "1" || s === "✓";
+    // Negatives first — "not urgent" contains "urgent", so it must lose.
+    if (s.indexOf("not") === 0 || s === "no" || s === "false" || s === "0"
+      || s === "ไม่ด่วน" || s === "ไม่เร่งด่วน") return false;
+    return s === "true" || s === "yes" || s === "1" || s === "✓"
+      || s === "urgent" || s === "ด่วน" || s === "เร่งด่วน" || s === "งานด่วน";
   }
   if (type === "date") {
     if (raw instanceof Date) return Utilities.formatDate(raw, Session.getScriptTimeZone(), "yyyy-MM-dd");
