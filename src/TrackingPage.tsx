@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { collection, getDocs, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "./firebase";
 import * as XLSX from "xlsx";
 import {
@@ -68,6 +68,14 @@ export function normalizeStatus(raw: string | undefined): string | undefined {
   if (!raw) return raw;
   const trimmed = raw.trim();
   return STATUS_ALIASES[trimmed.toLowerCase()] ?? trimmed;
+}
+
+/** The fields the search box looks through. `q` must already be trimmed + lowercased. */
+type Searchable = Pick<TrackingRow, "prNo" | "paNo" | "poNo" | "project" | "description" | "vendor" | "remark">;
+function rowMatchesSearch(r: Searchable, q: string): boolean {
+  if (!q) return true;
+  return [r.prNo, r.paNo, r.poNo, r.project, r.description, r.vendor, r.remark]
+    .some((v) => v?.toLowerCase().includes(q));
 }
 
 export interface TrackingRow {
@@ -314,6 +322,34 @@ export default function TrackingPage() {
     return unsub;
   }, [activeTab]);
 
+  // Cross-tab search: if the searched number isn't in the current person's tab,
+  // find the tab that DOES contain it and jump there automatically. Only runs
+  // when the active tab has no local match (so normal browsing stays cheap),
+  // debounced, and de-duped per search term to avoid repeat reads.
+  const jumpedForRef = useRef<string>("");
+  useEffect(() => {
+    const q = search.trim().toLowerCase();
+    if (!q || !activeTab || tabs.length <= 1) return;
+    if (rows.some((r) => rowMatchesSearch(r, q))) { jumpedForRef.current = ""; return; }
+    if (jumpedForRef.current === q) return;
+
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      jumpedForRef.current = q;
+      for (const t of tabs) {
+        if (t.id === activeTab) continue;
+        try {
+          const snap = await getDocs(collection(db, "trackingTabs", t.id, "rows"));
+          if (cancelled) return;
+          const hit = snap.docs.some((d) => rowMatchesSearch(d.data() as Searchable, q));
+          if (hit) { setActiveTab(t.id); return; }
+        } catch { /* ignore a failed tab, keep searching the rest */ }
+      }
+    }, 450);
+
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [search, activeTab, rows, tabs]);
+
   const exportToExcel = () => {
     if (!activeTab) return;
     const tabName = tabs.find((t) => t.id === activeTab)?.name ?? "tracking";
@@ -337,9 +373,7 @@ export default function TrackingPage() {
     const filtered = rows.filter((r) => {
       if (statusFilter && r.status !== statusFilter) return false;
       if (urgentOnly && !r.urgent) return false;
-      if (!q) return true;
-      return [r.prNo, r.paNo, r.poNo, r.project, r.description, r.vendor, r.remark]
-        .some((v) => v?.toLowerCase().includes(q));
+      return rowMatchesSearch(r, q);
     });
     const dir = sortDir === "asc" ? 1 : -1;
     return [...filtered].sort((a, b) => {
