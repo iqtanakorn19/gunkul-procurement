@@ -18,6 +18,7 @@ import {
   IconClock,
 } from "@tabler/icons-react";
 import { Reveal, IconBadge, Section, HoverCard, grid, tint, WorkflowTimeline } from "./components/PageKit";
+import FileVault from "./components/FileVault";
 
 /* ---------- data ---------- */
 
@@ -587,6 +588,36 @@ export default function ESGPage() {
             </div>
           </HoverCard>
         </Section>
+
+        {/* ESG document library — original ESG source files */}
+        <FileVault
+          collectionName="esgDocs"
+          eyebrow="คลังเอกสาร"
+          title="เอกสาร ESG"
+          intro="ไฟล์ต้นฉบับที่เกี่ยวกับ ESG — นโยบาย, รายงานความยั่งยืน, คู่มือ SSCM, จรรยาบรรณคู่ค้า และเอกสารอ้างอิงอื่นๆ"
+          color="var(--success)"
+          categories={[
+            { value: "policy", label: "นโยบาย" },
+            { value: "report", label: "รายงาน" },
+            { value: "guideline", label: "แนวปฏิบัติ" },
+            { value: "process", label: "กระบวนการ" },
+            { value: "other", label: "อื่นๆ" },
+          ]}
+        />
+
+        {/* Evaluation template library — download + upload a new version */}
+        <FileVault
+          collectionName="esgTemplates"
+          eyebrow="แบบฟอร์มประเมิน"
+          title="Template การประเมิน"
+          intro="ไฟล์ template สำหรับใช้ประเมินคู่ค้า — ดาวน์โหลดไปใช้ได้ และอัปโหลดทับเวอร์ชันใหม่เมื่อมีการอัปเดต"
+          color="var(--accent)"
+          categories={[
+            { value: "risk", label: "Risk Assessment" },
+            { value: "performance", label: "Performance Evaluation" },
+            { value: "coc", label: "Code of Conduct (COC)" },
+          ]}
+        />
 
         {/* Reference docs note */}
         <Reveal>
