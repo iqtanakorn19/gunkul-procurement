@@ -19,6 +19,16 @@ export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentPage, setCurrentPage] = useState<Page>("home");
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  // Keep every page a user has opened mounted (hidden when inactive) instead of
+  // unmounting it. Each page's Firestore listener then reads its collection ONCE
+  // per session on first visit, rather than re-reading it on every navigation —
+  // a big cut in Firestore reads for a team that hops between pages all day.
+  const [visited, setVisited] = useState<Set<Page>>(() => new Set<Page>(["home"]));
+  const navigate = (p: Page) => {
+    setVisited((v) => (v.has(p) ? v : new Set(v).add(p)));
+    setCurrentPage(p);
+  };
+  const pageStyle = (p: Page) => ({ display: currentPage === p ? "block" : "none" } as const);
 
   useState(() => {
     onAuthStateChanged(auth, (user) => {
@@ -37,21 +47,21 @@ export default function App() {
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)" }}>
       <Sidebar
         currentPage={currentPage}
-        onNavigate={setCurrentPage}
+        onNavigate={navigate}
         userLabel={userLabel}
         onLogout={() => setLoggedIn(false)}
       />
       <main style={{ flex: 1, minWidth: 0, overflowY: "auto", display: "flex", flexDirection: "column" }}>
         <div style={{ flex: 1 }}>
-          {currentPage === "home" && <HomePage setPage={setCurrentPage} />}
-          {currentPage === "dashboard" && <DashboardPage />}
-          {currentPage === "project" && <ProjectPage />}
-          {currentPage === "vendor" && <VendorPage />}
-          {currentPage === "itemmaster" && <ItemMasterPage />}
-          {currentPage === "tracking" && <TrackingPage />}
-          {currentPage === "team" && <OrgChartPage />}
-          {currentPage === "knowledge" && <KnowledgePage />}
-          {currentPage === "esg" && <ESGPage />}
+          {visited.has("home") && <div style={pageStyle("home")}><HomePage setPage={navigate} /></div>}
+          {visited.has("dashboard") && <div style={pageStyle("dashboard")}><DashboardPage /></div>}
+          {visited.has("project") && <div style={pageStyle("project")}><ProjectPage /></div>}
+          {visited.has("vendor") && <div style={pageStyle("vendor")}><VendorPage /></div>}
+          {visited.has("itemmaster") && <div style={pageStyle("itemmaster")}><ItemMasterPage /></div>}
+          {visited.has("tracking") && <div style={pageStyle("tracking")}><TrackingPage /></div>}
+          {visited.has("team") && <div style={pageStyle("team")}><OrgChartPage /></div>}
+          {visited.has("knowledge") && <div style={pageStyle("knowledge")}><KnowledgePage /></div>}
+          {visited.has("esg") && <div style={pageStyle("esg")}><ESGPage /></div>}
         </div>
         <footer
           style={{

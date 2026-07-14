@@ -327,6 +327,9 @@ export default function TrackingPage() {
   // when the active tab has no local match (so normal browsing stays cheap),
   // debounced, and de-duped per search term to avoid repeat reads.
   const jumpedForRef = useRef<string>("");
+  // Cache other tabs' rows once fetched, so repeated cross-tab searches reuse
+  // them instead of re-reading whole collections from Firestore every time.
+  const otherTabCache = useRef<Map<string, Searchable[]>>(new Map());
   useEffect(() => {
     const q = search.trim().toLowerCase();
     if (!q || !activeTab || tabs.length <= 1) return;
@@ -339,10 +342,14 @@ export default function TrackingPage() {
       for (const t of tabs) {
         if (t.id === activeTab) continue;
         try {
-          const snap = await getDocs(collection(db, "trackingTabs", t.id, "rows"));
-          if (cancelled) return;
-          const hit = snap.docs.some((d) => rowMatchesSearch(d.data() as Searchable, q));
-          if (hit) { setActiveTab(t.id); return; }
+          let tabRows = otherTabCache.current.get(t.id);
+          if (!tabRows) {
+            const snap = await getDocs(collection(db, "trackingTabs", t.id, "rows"));
+            if (cancelled) return;
+            tabRows = snap.docs.map((d) => d.data() as Searchable);
+            otherTabCache.current.set(t.id, tabRows);
+          }
+          if (tabRows.some((r) => rowMatchesSearch(r, q))) { setActiveTab(t.id); return; }
         } catch { /* ignore a failed tab, keep searching the rest */ }
       }
     }, 450);
