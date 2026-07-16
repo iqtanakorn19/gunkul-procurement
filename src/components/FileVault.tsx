@@ -151,17 +151,34 @@ export default function FileVault({
 
   const catLabel = (v: string) => categories.find((c) => c.value === v)?.label ?? v;
 
+  // Fail loudly instead of hanging forever: if Storage is unreachable or the
+  // upload stalls (e.g. blocked by Storage rules / CORS), reject after 30s so
+  // the modal shows an error rather than sitting on "กำลังบันทึก..." indefinitely.
+  const withTimeout = <T,>(p: Promise<T>, ms = 30000): Promise<T> =>
+    Promise.race([
+      p,
+      new Promise<T>((_, reject) =>
+        setTimeout(() => reject(new Error("หมดเวลาอัปโหลด (30 วิ) — อาจติด Firebase Storage rules หรือเครือข่าย")), ms),
+      ),
+    ]);
+
   const upload = async (id: string, file: File) => {
     const fileRef = ref(storage, `${collectionName}/${id}-${file.name}`);
-    await uploadBytes(fileRef, file);
+    await withTimeout(uploadBytes(fileRef, file));
     return getDownloadURL(fileRef);
   };
 
   const addNew = async (data: { title: string; description: string; category: string }, file: File | null) => {
     if (!file) return;
     const newRef = await addDoc(collection(db, collectionName), { ...data, url: "", fileName: file.name });
-    const url = await upload(newRef.id, file);
-    await updateDoc(newRef, { url });
+    try {
+      const url = await upload(newRef.id, file);
+      await updateDoc(newRef, { url });
+    } catch (e) {
+      // Upload failed — don't leave an orphan doc with no file behind.
+      await deleteDoc(doc(db, collectionName, newRef.id)).catch(() => {});
+      throw e;
+    }
     setAdding(false);
   };
 
