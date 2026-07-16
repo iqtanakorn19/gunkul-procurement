@@ -8,7 +8,6 @@ import {
   IconBuildingFactory2,
   IconRecycle,
   IconCertificate,
-  IconFileCheck,
   IconUserPlus,
   IconListCheck,
   IconEye,
@@ -618,17 +617,6 @@ export default function ESGPage() {
             { value: "coc", label: "Code of Conduct (COC)" },
           ]}
         />
-
-        {/* Reference docs note */}
-        <Reveal>
-          <HoverCard interactive={false} style={{ display: "flex", alignItems: "center", gap: "var(--sp-3)" }}>
-            <IconBadge icon={IconFileCheck} color="var(--info)" />
-            <p style={{ margin: 0, fontSize: "var(--fs-sm)", color: "var(--text-muted)" }}>
-              อ้างอิงจาก POL-PU_68-001 (Sustainable Supply Chain Management), POL-BOD_68-020 (Supplier Code of Conduct),
-              FTSE Russell ESG Guidelines และรายงานความยั่งยืนของ GUNKUL และบริษัท Benchmark
-            </p>
-          </HoverCard>
-        </Reveal>
       </div>
     </div>
   );

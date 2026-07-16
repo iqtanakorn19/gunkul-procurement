@@ -143,6 +143,7 @@ export default function FileVault({
   const [filter, setFilter] = useState<string>("all");
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<VaultDoc | null>(null);
+  const [preview, setPreview] = useState<VaultDoc | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -274,7 +275,7 @@ export default function FileVault({
                     <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)" }}>
                       <IconFile size={18} stroke={1.75} style={{ color, flexShrink: 0 }} />
                       {d.url ? (
-                        <a href={d.url} target="_blank" rel="noopener noreferrer" title="เปิดดูไฟล์" style={{ fontWeight: 600, color: "var(--text-strong)", textDecoration: "none" }}>{d.title}</a>
+                        <button type="button" onClick={() => setPreview(d)} title="ดูตัวอย่างไฟล์" style={{ border: "none", background: "transparent", padding: 0, cursor: "pointer", font: "inherit", fontWeight: 600, color: "var(--text-strong)", textAlign: "left" }}>{d.title}</button>
                       ) : (
                         <span style={{ fontWeight: 600, color: "var(--text-strong)" }}>{d.title}</span>
                       )}
@@ -306,6 +307,32 @@ export default function FileVault({
 
       {adding && <VaultModal categories={categories} accept={accept} item={null} onSave={addNew} onClose={() => setAdding(false)} />}
       {editing && <VaultModal categories={categories} accept={accept} item={editing} onSave={saveEdit} onClose={() => setEditing(null)} />}
+      {preview && preview.url && createPortal(
+        <div
+          onMouseDown={(e) => { if (e.target === e.currentTarget) setPreview(null); }}
+          style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.75)", zIndex: 320, display: "flex", alignItems: "center", justifyContent: "center", padding: "var(--sp-4)" }}
+        >
+          <div style={{ background: "var(--surface)", borderRadius: "var(--radius-lg)", width: "100%", maxWidth: 900, height: "90vh", display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "var(--shadow-lg)" }}>
+            <div style={{ background: "linear-gradient(135deg, var(--navy-deep), var(--navy-mid))", padding: "var(--sp-4) var(--sp-5)", display: "flex", alignItems: "center", gap: "var(--sp-4)", flexShrink: 0 }}>
+              <IconFile size={22} stroke={1.75} style={{ color: "#fffdf8", flexShrink: 0 }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ margin: 0, color: "#fffdf8", fontSize: "var(--fs-body)", fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{preview.title}</p>
+                <p style={{ margin: 0, color: "rgba(255,255,255,0.55)", fontSize: "var(--fs-xs)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{preview.fileName}</p>
+              </div>
+              <a href={preview.url} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)", padding: "var(--sp-2) var(--sp-4)", background: "var(--accent)", color: "var(--navy-deep)", borderRadius: "var(--radius)", textDecoration: "none", fontSize: "var(--fs-sm)", fontWeight: 700, flexShrink: 0 }}>
+                <IconDownload size={16} stroke={2} /> ดาวน์โหลด
+              </a>
+              <button onClick={() => setPreview(null)} style={{ width: 36, height: 36, borderRadius: "var(--radius-full)", border: "none", background: "rgba(255,255,255,0.15)", color: "white", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <IconX size={18} stroke={2} />
+              </button>
+            </div>
+            <div style={{ flex: 1, overflow: "hidden", background: "#525659" }}>
+              <iframe src={preview.url} style={{ width: "100%", height: "100%", border: "none" }} title={preview.title} />
+            </div>
+          </div>
+        </div>,
+        document.body,
+      )}
     </Section>
   );
 }
