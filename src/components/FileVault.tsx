@@ -7,6 +7,7 @@ import { db, storage } from "../firebase";
 import { Section } from "./PageKit";
 import {
   IconX, IconUpload, IconDownload, IconPencil, IconTrash, IconPlus, IconFile, IconSearch,
+  IconChevronUp, IconChevronDown, IconSelector,
 } from "@tabler/icons-react";
 
 /* ============================================================
@@ -34,6 +35,16 @@ const inputStyle: React.CSSProperties = {
   font: "inherit", fontSize: "var(--fs-sm)", color: "var(--text)", background: "var(--surface)",
   border: "1px solid var(--border-strong)", borderRadius: "var(--radius-sm)", padding: "8px 10px", width: "100%",
 };
+
+const sortHeaderBtn: React.CSSProperties = {
+  display: "flex", alignItems: "center", gap: "4px", width: "100%", border: "none", background: "transparent",
+  cursor: "pointer", font: "inherit", fontWeight: 700, color: "inherit", padding: "10px 14px", textAlign: "left",
+};
+
+function SortIcon({ active, dir }: { active: boolean; dir: "asc" | "desc" }) {
+  if (!active) return <IconSelector size={13} stroke={1.75} style={{ opacity: 0.5 }} />;
+  return dir === "asc" ? <IconChevronUp size={13} stroke={2} /> : <IconChevronDown size={13} stroke={2} />;
+}
 
 function VaultModal({
   categories, accept, item, onSave, onClose,
@@ -141,6 +152,13 @@ export default function FileVault({
   const [docs, setDocs] = useState<VaultDoc[]>([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>("all");
+  type SortKey = "title" | "category" | "fileName";
+  const [sortKey, setSortKey] = useState<SortKey>("title");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const toggleSort = (key: SortKey) => {
+    if (key === sortKey) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else { setSortKey(key); setSortDir("asc"); }
+  };
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<VaultDoc | null>(null);
   const [preview, setPreview] = useState<VaultDoc | null>(null);
@@ -203,12 +221,14 @@ export default function FileVault({
 
   const shown = useMemo(() => {
     const q = search.trim().toLowerCase();
+    const dir = sortDir === "asc" ? 1 : -1;
+    const sortValue = (d: VaultDoc) => (sortKey === "category" ? catLabel(d.category) : d[sortKey]).toLowerCase();
     return docs
       .filter((d) => filter === "all" || d.category === filter)
       .filter((d) => !q || d.title.toLowerCase().includes(q) || d.description.toLowerCase().includes(q) || catLabel(d.category).toLowerCase().includes(q))
-      .sort((a, b) => a.title.localeCompare(b.title));
+      .sort((a, b) => sortValue(a).localeCompare(sortValue(b)) * dir);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [docs, search, filter]);
+  }, [docs, search, filter, sortKey, sortDir]);
 
   const chip = (active: boolean): React.CSSProperties => ({
     padding: "5px 14px", borderRadius: "var(--radius-full)", fontSize: "var(--fs-xs)", fontWeight: 600,
@@ -255,9 +275,23 @@ export default function FileVault({
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--fs-sm)" }}>
             <thead>
               <tr style={{ background: "var(--surface-2)", textAlign: "left", color: "var(--text-muted)", fontSize: "var(--fs-xs)" }}>
-                {categories.length > 1 && <th style={{ padding: "10px 14px", fontWeight: 700 }}>หมวดหมู่</th>}
-                <th style={{ padding: "10px 14px", fontWeight: 700 }}>ชื่อไฟล์</th>
-                <th style={{ padding: "10px 14px", fontWeight: 700 }}>ไฟล์</th>
+                {categories.length > 1 && (
+                  <th style={{ padding: 0, fontWeight: 700 }}>
+                    <button type="button" onClick={() => toggleSort("category")} style={sortHeaderBtn}>
+                      หมวดหมู่ <SortIcon active={sortKey === "category"} dir={sortDir} />
+                    </button>
+                  </th>
+                )}
+                <th style={{ padding: 0, fontWeight: 700 }}>
+                  <button type="button" onClick={() => toggleSort("title")} style={sortHeaderBtn}>
+                    ชื่อไฟล์ <SortIcon active={sortKey === "title"} dir={sortDir} />
+                  </button>
+                </th>
+                <th style={{ padding: 0, fontWeight: 700 }}>
+                  <button type="button" onClick={() => toggleSort("fileName")} style={sortHeaderBtn}>
+                    ไฟล์ <SortIcon active={sortKey === "fileName"} dir={sortDir} />
+                  </button>
+                </th>
                 <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>จัดการ</th>
               </tr>
             </thead>
