@@ -81,9 +81,20 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     return tabs.map((t) => ({ name: t.name, count: countByDistinctPr(rowsByTab[t.id] ?? []) }));
   }, [tabs, rowsByTab, scope]);
 
-  const urgentRows = useMemo(
-    () => rows.filter((r) => r.urgent).sort((a, b) => (b.no ?? 0) - (a.no ?? 0)).slice(0, 12),
+  const PAGE_SIZE = 15;
+  const [urgentPage, setUrgentPage] = useState(1);
+
+  const allUrgentRows = useMemo(
+    () => rows.filter((r) => r.urgent).sort((a, b) => (b.no ?? 0) - (a.no ?? 0)),
     [rows]
+  );
+  const urgentPageCount = Math.max(1, Math.ceil(allUrgentRows.length / PAGE_SIZE));
+  // Reset to page 1 whenever the underlying list changes (e.g. scope switched)
+  // so a stale page number never shows an empty page.
+  useEffect(() => { setUrgentPage(1); }, [allUrgentRows.length, scope]);
+  const urgentRows = useMemo(
+    () => allUrgentRows.slice((urgentPage - 1) * PAGE_SIZE, urgentPage * PAGE_SIZE),
+    [allUrgentRows, urgentPage]
   );
 
   return (
@@ -156,9 +167,9 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
       {/* Urgent list */}
       <div style={cardStyle}>
         <h3 style={{ margin: "0 0 var(--sp-3)", display: "flex", alignItems: "center", gap: 6, fontSize: "1rem", color: "var(--text-strong)" }}>
-          <IconAlertTriangle size={18} stroke={1.75} style={{ color: "var(--danger)" }} /> งานเร่งด่วน ({urgentRows.length})
+          <IconAlertTriangle size={18} stroke={1.75} style={{ color: "var(--danger)" }} /> งานเร่งด่วน ({allUrgentRows.length})
         </h3>
-        {urgentRows.length === 0 ? (
+        {allUrgentRows.length === 0 ? (
           <div style={{ color: "var(--text-faint)", fontSize: "var(--fs-sm)" }}>ไม่มีงานที่ตั้งเป็นเร่งด่วนในมุมมองนี้</div>
         ) : (
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--fs-xs)" }}>
@@ -183,6 +194,31 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
               ))}
             </tbody>
           </table>
+        )}
+        {urgentPageCount > 1 && (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "var(--sp-3)", marginTop: "var(--sp-3)" }}>
+            <span style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
+              หน้า {urgentPage} / {urgentPageCount}
+            </span>
+            <div style={{ display: "flex", gap: "6px" }}>
+              <button
+                type="button"
+                disabled={urgentPage <= 1}
+                onClick={() => setUrgentPage((p) => Math.max(1, p - 1))}
+                style={{ border: "1px solid var(--border-strong)", background: "var(--surface)", color: "var(--text)", borderRadius: "var(--radius-sm)", padding: "4px 10px", fontSize: "var(--fs-xs)", cursor: urgentPage <= 1 ? "default" : "pointer", opacity: urgentPage <= 1 ? 0.5 : 1 }}
+              >
+                ก่อนหน้า
+              </button>
+              <button
+                type="button"
+                disabled={urgentPage >= urgentPageCount}
+                onClick={() => setUrgentPage((p) => Math.min(urgentPageCount, p + 1))}
+                style={{ border: "1px solid var(--border-strong)", background: "var(--surface)", color: "var(--text)", borderRadius: "var(--radius-sm)", padding: "4px 10px", fontSize: "var(--fs-xs)", cursor: urgentPage >= urgentPageCount ? "default" : "pointer", opacity: urgentPage >= urgentPageCount ? 0.5 : 1 }}
+              >
+                ถัดไป
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>
