@@ -593,15 +593,8 @@ export default function ESGPage() {
           collectionName="esgDocs"
           eyebrow="คลังเอกสาร"
           title="เอกสาร ESG"
-          intro="ไฟล์ต้นฉบับที่เกี่ยวกับ ESG — นโยบาย, รายงานความยั่งยืน, คู่มือ SSCM, จรรยาบรรณคู่ค้า และเอกสารอ้างอิงอื่นๆ"
           color="var(--success)"
-          categories={[
-            { value: "policy", label: "นโยบาย" },
-            { value: "report", label: "รายงาน" },
-            { value: "guideline", label: "แนวปฏิบัติ" },
-            { value: "process", label: "กระบวนการ" },
-            { value: "other", label: "อื่นๆ" },
-          ]}
+          categories={[]}
         />
 
         {/* Evaluation template library — download + upload a new version */}
