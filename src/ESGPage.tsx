@@ -602,13 +602,8 @@ export default function ESGPage() {
           collectionName="esgTemplates"
           eyebrow="แบบฟอร์มประเมิน"
           title="Template การประเมิน"
-          intro="ไฟล์ template สำหรับใช้ประเมินคู่ค้า — ดาวน์โหลดไปใช้ได้ และอัปโหลดทับเวอร์ชันใหม่เมื่อมีการอัปเดต"
           color="var(--accent)"
-          categories={[
-            { value: "risk", label: "Risk Assessment" },
-            { value: "performance", label: "Performance Evaluation" },
-            { value: "coc", label: "Code of Conduct (COC)" },
-          ]}
+          categories={[]}
         />
       </div>
     </div>
