@@ -4,7 +4,7 @@ import type React from "react";
 import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../firebase";
-import { Section, grid } from "./PageKit";
+import { Section } from "./PageKit";
 import {
   IconX, IconUpload, IconDownload, IconPencil, IconTrash, IconPlus, IconFile, IconSearch,
 } from "@tabler/icons-react";
@@ -250,43 +250,57 @@ export default function FileVault({
           ยังไม่มีไฟล์ — กด “เพิ่มไฟล์” เพื่ออัปโหลด
         </div>
       ) : (
-        <div style={grid(280)}>
-          {shown.map((d) => (
-            <div key={d.id} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-4)", display: "flex", flexDirection: "column", gap: "var(--sp-2)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "var(--sp-2)" }}>
-                <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: "var(--radius)", background: "color-mix(in srgb, " + color + " 16%, transparent)", color, flexShrink: 0 }}>
-                  <IconFile size={22} stroke={1.75} />
-                </span>
-                <div style={{ display: "flex", gap: 4 }}>
-                  <button type="button" title="แก้ไข / อัปโหลดใหม่" onClick={() => setEditing(d)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-faint)", padding: 4 }}>
-                    <IconPencil size={16} stroke={1.75} />
-                  </button>
-                  <button type="button" title="ลบ" onClick={() => remove(d.id)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-faint)", padding: 4 }}>
-                    <IconTrash size={16} stroke={1.75} />
-                  </button>
-                </div>
-              </div>
-              {categories.length > 1 && (
-                <span style={{ alignSelf: "flex-start", fontSize: "10.5px", fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color, background: "color-mix(in srgb, " + color + " 12%, transparent)", borderRadius: "var(--radius-full)", padding: "2px 10px" }}>
-                  {catLabel(d.category)}
-                </span>
-              )}
-              {d.url ? (
-                <a href={d.url} target="_blank" rel="noopener noreferrer" title="เปิดดูไฟล์" style={{ fontWeight: 600, color: "var(--text-strong)", textDecoration: "none", cursor: "pointer" }}>{d.title}</a>
-              ) : (
-                <div style={{ fontWeight: 600, color: "var(--text-strong)" }}>{d.title}</div>
-              )}
-              {d.description && <p style={{ margin: 0, fontSize: "var(--fs-sm)", color: "var(--text-muted)", lineHeight: 1.6 }}>{d.description}</p>}
-              <div style={{ marginTop: "auto", paddingTop: "var(--sp-2)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--sp-2)" }}>
-                <span style={{ fontSize: "var(--fs-xs)", color: "var(--text-faint)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.fileName}</span>
-                {d.url && (
-                  <a href={d.url} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "4px", flexShrink: 0, color: "var(--primary)", fontSize: "var(--fs-sm)", fontWeight: 600, textDecoration: "none" }}>
-                    <IconDownload size={16} stroke={1.75} /> ดาวน์โหลด
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
+        <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--fs-sm)" }}>
+            <thead>
+              <tr style={{ background: "var(--surface-2)", textAlign: "left", color: "var(--text-muted)", fontSize: "var(--fs-xs)" }}>
+                {categories.length > 1 && <th style={{ padding: "10px 14px", fontWeight: 700 }}>หมวดหมู่</th>}
+                <th style={{ padding: "10px 14px", fontWeight: 700 }}>ชื่อไฟล์</th>
+                <th style={{ padding: "10px 14px", fontWeight: 700 }}>ไฟล์</th>
+                <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {shown.map((d) => (
+                <tr key={d.id} style={{ borderTop: "1px solid var(--border)" }}>
+                  {categories.length > 1 && (
+                    <td style={{ padding: "10px 14px", whiteSpace: "nowrap" }}>
+                      <span style={{ fontSize: "10.5px", fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color, background: "color-mix(in srgb, " + color + " 12%, transparent)", borderRadius: "var(--radius-full)", padding: "2px 10px" }}>
+                        {catLabel(d.category)}
+                      </span>
+                    </td>
+                  )}
+                  <td style={{ padding: "10px 14px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)" }}>
+                      <IconFile size={18} stroke={1.75} style={{ color, flexShrink: 0 }} />
+                      {d.url ? (
+                        <a href={d.url} target="_blank" rel="noopener noreferrer" title="เปิดดูไฟล์" style={{ fontWeight: 600, color: "var(--text-strong)", textDecoration: "none" }}>{d.title}</a>
+                      ) : (
+                        <span style={{ fontWeight: 600, color: "var(--text-strong)" }}>{d.title}</span>
+                      )}
+                    </div>
+                    {d.description && <div style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)", marginTop: 2 }}>{d.description}</div>}
+                  </td>
+                  <td style={{ padding: "10px 14px", color: "var(--text-faint)", fontSize: "var(--fs-xs)", maxWidth: 240, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.fileName}</td>
+                  <td style={{ padding: "10px 14px" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "var(--sp-2)" }}>
+                      {d.url && (
+                        <a href={d.url} target="_blank" rel="noopener noreferrer" title="ดาวน์โหลด" style={{ display: "inline-flex", alignItems: "center", gap: "4px", color: "var(--primary)", fontWeight: 600, textDecoration: "none", whiteSpace: "nowrap" }}>
+                          <IconDownload size={16} stroke={1.75} /> ดาวน์โหลด
+                        </a>
+                      )}
+                      <button type="button" title="แก้ไข / อัปโหลดใหม่" onClick={() => setEditing(d)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-faint)", padding: 4 }}>
+                        <IconPencil size={16} stroke={1.75} />
+                      </button>
+                      <button type="button" title="ลบ" onClick={() => remove(d.id)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-faint)", padding: 4 }}>
+                        <IconTrash size={16} stroke={1.75} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 
