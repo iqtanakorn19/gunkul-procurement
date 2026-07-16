@@ -49,12 +49,16 @@ function VaultModal({
   const [category, setCategory] = useState(item?.category ?? categories[0]?.value ?? "");
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSave = async () => {
     if (!title.trim() || (isNew && !file)) return;
     setSaving(true);
+    setError(null);
     try {
       await onSave({ title: title.trim(), description: description.trim(), category }, file);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setSaving(false);
     }
@@ -95,6 +99,11 @@ function VaultModal({
             <input type="file" accept={accept} onChange={(e) => setFile(e.target.files?.[0] ?? null)} style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)" }} />
           </div>
         </label>
+        {error && (
+          <div style={{ background: "color-mix(in srgb, var(--danger) 10%, transparent)", color: "var(--danger)", borderRadius: "var(--radius)", padding: "var(--sp-3)", marginBottom: "var(--sp-3)", fontSize: "var(--fs-xs)", wordBreak: "break-word" }}>
+            บันทึกไม่สำเร็จ: {error}
+          </div>
+        )}
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "var(--sp-2)" }}>
           <button type="button" onClick={onClose} style={{ border: "1px solid var(--border-strong)", background: "var(--surface)", color: "var(--text)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", cursor: "pointer" }}>
             ยกเลิก
