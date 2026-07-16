@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import type React from "react";
 import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -64,12 +65,15 @@ function VaultModal({
     }
   };
 
-  return (
+  // Portal to <body>: the modal is rendered inside a Section/Reveal that uses
+  // CSS transform, which would otherwise scope position:fixed to that box (so
+  // the overlay wouldn't cover the viewport and would overlap page content).
+  return createPortal(
     <div
       onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
       style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 320, padding: "var(--sp-4)" }}
     >
-      <div style={{ background: "var(--surface)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", width: "min(480px, 100%)", padding: "var(--sp-5)" }}>
+      <div style={{ background: "var(--surface)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", width: "min(480px, 100%)", maxHeight: "90vh", overflowY: "auto", padding: "var(--sp-5)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--sp-4)" }}>
           <h3 style={{ margin: 0, color: "var(--text-strong)" }}>{isNew ? "เพิ่มไฟล์ใหม่" : "แก้ไขข้อมูลไฟล์"}</h3>
           <button type="button" onClick={onClose} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-faint)" }}>
@@ -118,7 +122,8 @@ function VaultModal({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -266,7 +271,11 @@ export default function FileVault({
                   {catLabel(d.category)}
                 </span>
               )}
-              <div style={{ fontWeight: 600, color: "var(--text-strong)" }}>{d.title}</div>
+              {d.url ? (
+                <a href={d.url} target="_blank" rel="noopener noreferrer" title="เปิดดูไฟล์" style={{ fontWeight: 600, color: "var(--text-strong)", textDecoration: "none", cursor: "pointer" }}>{d.title}</a>
+              ) : (
+                <div style={{ fontWeight: 600, color: "var(--text-strong)" }}>{d.title}</div>
+              )}
               {d.description && <p style={{ margin: 0, fontSize: "var(--fs-sm)", color: "var(--text-muted)", lineHeight: 1.6 }}>{d.description}</p>}
               <div style={{ marginTop: "auto", paddingTop: "var(--sp-2)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--sp-2)" }}>
                 <span style={{ fontSize: "var(--fs-xs)", color: "var(--text-faint)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.fileName}</span>
