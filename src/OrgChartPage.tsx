@@ -16,6 +16,7 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import "./styles/orgchart.css";
+import StaffDirectory from "./components/StaffDirectory";
 
 /* ============================================================
    Data model — fully editable, persisted to Firestore so every
@@ -1111,6 +1112,8 @@ export default function OrgChartPage() {
           />
         </ul>
       </PanZoomCanvas>
+
+      <StaffDirectory />
     </div>
   );
 }
