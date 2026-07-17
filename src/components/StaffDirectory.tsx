@@ -47,7 +47,7 @@ const COLLECTION = "staffDirectory";
 
 const cellInputStyle: React.CSSProperties = {
   width: "100%", border: "1px solid transparent", background: "transparent", font: "inherit",
-  fontSize: "var(--fs-sm)", color: "var(--text)", padding: "6px 8px", borderRadius: "var(--radius-sm)",
+  fontSize: "0.7rem", color: "var(--text)", padding: "6px 8px", borderRadius: "var(--radius-sm)",
 };
 
 export default function StaffDirectory() {
@@ -133,7 +133,7 @@ export default function StaffDirectory() {
     <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--sp-5)", marginTop: "var(--sp-6)" }}>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--sp-3)", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--sp-4)" }}>
         <h3 style={{ margin: 0, display: "flex", alignItems: "center", gap: 8, fontSize: "1rem", color: "var(--text-strong)" }}>
-          <IconUsers size={18} stroke={1.75} /> ทำเนียบพนักงานฝ่ายจัดซื้อ (PU-GKE)
+          <IconUsers size={18} stroke={1.75} /> พนักงานฝ่ายจัดซื้อ (PU-GKE)
         </h3>
         <button
           type="button"
@@ -161,7 +161,7 @@ export default function StaffDirectory() {
       </div>
 
       <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--fs-sm)" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.7rem" }}>
           <thead>
             <tr style={{ background: "var(--surface-2)", textAlign: "left", color: "var(--text-muted)", fontSize: "var(--fs-xs)" }}>
               {columns.map((c) => (

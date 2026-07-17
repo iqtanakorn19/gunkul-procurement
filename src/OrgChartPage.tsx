@@ -997,10 +997,6 @@ export default function OrgChartPage() {
             โครงสร้างองค์กร
           </div>
           <h1 style={{ margin: 0, color: "var(--text-strong)" }}>Organization Chart</h1>
-          <p style={{ margin: "var(--sp-2) 0 0", color: "var(--text-muted)", fontSize: "var(--fs-sm)", maxWidth: "70ch" }}>
-            ผังโครงสร้างฝ่ายจัดซื้อ (PU Department, GKE) — คลิกที่ชื่อหรือตำแหน่งเพื่อแก้ไขได้ทันที
-            เพิ่ม/ลบคนหรือตำแหน่งได้เสมอ รองรับการ scale up หรือรวมสายงานในอนาคต
-          </p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-3)", position: "relative" }}>
           <div style={{ position: "relative" }}>
