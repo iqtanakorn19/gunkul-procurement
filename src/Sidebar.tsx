@@ -117,7 +117,7 @@ export default function Sidebar({
             height: 22,
             width: "auto",
             flexShrink: 0,
-            filter: !collapsed && theme === "dark" ? "brightness(0) invert(1)" : undefined,
+            filter: theme === "dark" ? "brightness(0) invert(1)" : undefined,
           }}
         />
         {!collapsed && (
