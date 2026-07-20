@@ -3,8 +3,9 @@ import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "./firebase";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
+  LineChart, Line, Legend,
 } from "recharts";
-import { IconAlertTriangle, IconClockHour4 } from "@tabler/icons-react";
+import { IconAlertTriangle, IconClockHour4, IconChartLine } from "@tabler/icons-react";
 import {
   STATUS_OPTIONS, STATUS_COLOR, normalizeStatus,
 } from "./TrackingPage";
@@ -33,6 +34,46 @@ function parseDate(s: string | undefined): Date | null {
 function daysBetween(a: Date, b: Date): number {
   return Math.round((b.getTime() - a.getTime()) / 86_400_000);
 }
+
+/* ============================================================
+   PR-received-per-month trend, broken down by person — shows whether
+   workload is rising/falling and who's carrying the load, month by
+   month, instead of just a lifetime total (see workloadData above).
+   ============================================================ */
+const TH_MONTHS_SHORT = ["", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+function monthKey(dateStr: string | undefined): string | null {
+  const d = parseDate(dateStr);
+  if (!d) return null;
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+function formatMonthLabel(ym: string): string {
+  const [y, m] = ym.split("-");
+  const beYearShort = (parseInt(y, 10) + 543) % 100;
+  return `${TH_MONTHS_SHORT[parseInt(m, 10)]} ${String(beYearShort).padStart(2, "0")}`;
+}
+// Same distinct-PR rule as countByDistinctPr, bucketed by the PR's month.
+function countDistinctPrByMonth(rows: TrackingRow[]): Record<string, number> {
+  const seenPerMonth: Record<string, Set<string>> = {};
+  const result: Record<string, number> = {};
+  for (const r of rows) {
+    const m = monthKey(r.prDate);
+    if (!m) continue;
+    const pr = r.prNo?.trim();
+    if (!pr) {
+      result[m] = (result[m] ?? 0) + 1;
+      continue;
+    }
+    const seen = (seenPerMonth[m] ??= new Set());
+    if (!seen.has(pr)) {
+      seen.add(pr);
+      result[m] = (result[m] ?? 0) + 1;
+    }
+  }
+  return result;
+}
+// Fixed categorical order (never reassigned when the person list is filtered),
+// reused from the palette already used elsewhere in the app (Project page).
+const PERSON_PALETTE = ["#7CA6D8", "#8FCBAE", "#F2B6A0", "#D6B8E0", "#F4D58D", "#9AD0D6", "#C9B7A0", "#A8B8D8"];
 
 const cardStyle: React.CSSProperties = {
   background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)",
@@ -104,6 +145,27 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     if (scope !== "all") return [];
     return tabs.map((t) => ({ name: t.name, count: countByDistinctPr(rowsByTab[t.id] ?? []) }));
   }, [tabs, rowsByTab, scope]);
+
+  const monthlyPrSeries = useMemo(() => {
+    // In "all" scope, one line per person; in a single-person scope, one line
+    // for that person only — always keyed by tab name so colors stay assigned
+    // by person, not by chart position.
+    const groups = scope === "all"
+      ? tabs.map((t) => ({ key: t.name, counts: countDistinctPrByMonth(rowsByTab[t.id] ?? []) }))
+      : [{ key: tabs.find((t) => t.id === scope)?.name ?? "รายการ", counts: countDistinctPrByMonth(rows) }];
+
+    const months = new Set<string>();
+    groups.forEach((g) => Object.keys(g.counts).forEach((m) => months.add(m)));
+    const sortedMonths = [...months].sort();
+
+    const chartData = sortedMonths.map((m) => {
+      const point: Record<string, number | string> = { month: m, monthLabel: formatMonthLabel(m) };
+      groups.forEach((g) => { point[g.key] = g.counts[m] ?? 0; });
+      return point;
+    });
+
+    return { chartData, seriesKeys: groups.map((g) => g.key) };
+  }, [scope, tabs, rowsByTab, rows]);
 
   const cycleTimeData = useMemo(() => {
     return CYCLE_STAGES.map(({ label, from, to }) => {
@@ -209,6 +271,38 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
           </div>
         )}
 
+      </div>
+
+      {/* PR received per month, by person */}
+      <div style={cardStyle}>
+        <h3 style={{ margin: "0 0 var(--sp-3)", display: "flex", alignItems: "center", gap: 6, fontSize: "1rem", color: "var(--text-strong)" }}>
+          <IconChartLine size={18} stroke={1.75} style={{ color: "var(--primary)" }} /> จำนวน PR ที่ได้รับต่อเดือน{scope === "all" ? " (แยกตามคน)" : ""}
+        </h3>
+        {monthlyPrSeries.chartData.length === 0 ? (
+          <div style={{ color: "var(--text-faint)", fontSize: "var(--fs-sm)" }}>ยังไม่มีข้อมูลวันที่ PR ให้แสดงแนวโน้มรายเดือน</div>
+        ) : (
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={monthlyPrSeries.chartData} margin={{ right: 16 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="monthLabel" tick={{ fontSize: 11 }} />
+              <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
+              <Tooltip />
+              {monthlyPrSeries.seriesKeys.length > 1 && <Legend wrapperStyle={{ fontSize: 11 }} />}
+              {monthlyPrSeries.seriesKeys.map((key, i) => (
+                <Line
+                  key={key}
+                  type="monotone"
+                  dataKey={key}
+                  name={key}
+                  stroke={PERSON_PALETTE[i % PERSON_PALETTE.length]}
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 5 }}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        )}
       </div>
 
       {/* Cycle time per pipeline stage */}
