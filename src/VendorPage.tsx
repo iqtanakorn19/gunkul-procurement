@@ -3,6 +3,7 @@ import {
   collection, onSnapshot, updateDoc, deleteDoc, doc,
 } from "firebase/firestore";
 import { db } from "./firebase";
+import * as XLSX from "xlsx";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
   PieChart, Pie, AreaChart, Area, CartesianGrid,
@@ -431,6 +432,26 @@ export default function VendorPage() {
 
   const totalSpendAll = vendors.reduce((s, v) => s + v.totalSpend, 0);
 
+  const exportToExcel = () => {
+    const data = filtered.map((v) => ({
+      "รหัส": v.vendorCode,
+      "ชื่อบริษัท": v.name,
+      "กลุ่ม": GROUP_LABEL[v.vendorGroup] || v.vendorGroup,
+      "หมวดหมู่": v.categories.join(", "),
+      "ยอดซื้อสะสม": v.totalSpend,
+      "จำนวน PO": v.numPOs,
+      "ซื้อล่าสุด": v.lastPurchase,
+      "เงื่อนไขชำระ": v.topPaymentTerms,
+      "โปรเจกต์หลัก": v.topProject,
+      "สถานะ": v.status === "active" ? "Active" : "Inactive",
+      "หมายเหตุ": v.note,
+    }));
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Vendors");
+    XLSX.writeFile(wb, "vendors.xlsx");
+  };
+
   const handleDelete = async (id: string) => {
     if (window.confirm("ต้องการลบ Vendor นี้มั้ย?")) {
       await deleteDoc(doc(db, "vendors", id));
@@ -494,9 +515,14 @@ export default function VendorPage() {
               </div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: "12px", width: "250px", flexShrink: 0 }}>
-              <button onClick={() => setShowImport(true)} style={{ alignSelf: "flex-end", background: "rgba(226,201,126,0.2)", border: "1px solid rgba(226,201,126,0.5)", color: "#e2c97e", padding: "10px 20px", borderRadius: "12px", cursor: "pointer", fontWeight: "700", fontSize: "14px" }}>
-                📥 นำเข้าข้อมูล
-              </button>
+              <div style={{ display: "flex", gap: "8px", alignSelf: "flex-end" }}>
+                <button onClick={exportToExcel} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.25)", color: "white", padding: "10px 16px", borderRadius: "12px", cursor: "pointer", fontWeight: "700", fontSize: "14px", whiteSpace: "nowrap" }}>
+                  📊 Export
+                </button>
+                <button onClick={() => setShowImport(true)} style={{ background: "rgba(226,201,126,0.2)", border: "1px solid rgba(226,201,126,0.5)", color: "#e2c97e", padding: "10px 20px", borderRadius: "12px", cursor: "pointer", fontWeight: "700", fontSize: "14px", whiteSpace: "nowrap" }}>
+                  📥 นำเข้าข้อมูล
+                </button>
+              </div>
               <CompanyUpdates />
             </div>
           </div>
