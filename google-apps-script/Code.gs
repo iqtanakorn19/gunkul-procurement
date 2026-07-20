@@ -117,6 +117,7 @@ function onEditInstallable(e) {
     for (var r = firstRow; r <= lastRow; r++) {
       syncRow(sheet, tabId, r);
     }
+    writeLastSyncedAt();
   } catch (err) {
     Logger.log("onEditInstallable error: " + err);
   }
@@ -143,6 +144,21 @@ function fullResync() {
     pruneDeletedRows(tabId, seenRowIds);
   });
   pruneDeletedTabs();
+  writeLastSyncedAt();
+}
+
+/* Stamps meta/trackingSync.lastSyncedAt so the website can show a
+   "last synced X ago" indicator instead of leaving data freshness a
+   guessing game. Cheap: one small write per sync run, not per row. */
+function writeLastSyncedAt() {
+  var url = firestoreBaseUrl() + "/meta/trackingSync?updateMask.fieldPaths=lastSyncedAt";
+  UrlFetchApp.fetch(url, {
+    method: "patch",
+    contentType: "application/json",
+    headers: { Authorization: "Bearer " + ScriptApp.getOAuthToken() },
+    payload: JSON.stringify({ fields: { lastSyncedAt: { timestampValue: new Date().toISOString() } } }),
+    muteHttpExceptions: true,
+  });
 }
 
 /* Removes Firestore tab docs (and their rows) for subsheets that were
