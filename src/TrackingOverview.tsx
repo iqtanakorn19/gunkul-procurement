@@ -5,7 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
   LineChart, Line, Legend,
 } from "recharts";
-import { IconAlertTriangle, IconClockHour4, IconChartLine } from "@tabler/icons-react";
+import { IconAlertTriangle, IconClockHour4, IconChartLine, IconX } from "@tabler/icons-react";
 import {
   STATUS_OPTIONS, STATUS_COLOR, normalizeStatus,
 } from "./TrackingPage";
@@ -79,6 +79,73 @@ const cardStyle: React.CSSProperties = {
   background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)",
   padding: "var(--sp-4)",
 };
+
+interface CycleTimeEntry {
+  id: string;
+  prNo?: string;
+  company?: string;
+  project?: string;
+  days: number;
+  fromDate: string;
+  toDate: string;
+}
+
+/* Drill-down: proof behind the median, not just the number. Lets the team
+   check whether the slowest PRs in a stage are legitimate special cases
+   (a paused project, etc.) or genuinely stuck with no reason — click any
+   bar in the cycle-time chart to open this for that stage. */
+function CycleTimeDrilldownModal({
+  stage, entries, onClose,
+}: { stage: string; entries: CycleTimeEntry[]; onClose: () => void }) {
+  const top = entries.slice(0, 10);
+  return (
+    <div
+      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: "var(--sp-4)" }}
+    >
+      <div style={{ background: "var(--surface)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow)", width: "min(760px, 100%)", maxHeight: "85vh", overflowY: "auto", padding: "var(--sp-5)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--sp-2)" }}>
+          <h3 style={{ margin: 0, color: "var(--text-strong)" }}>PR ที่ใช้เวลานานที่สุด: {stage}</h3>
+          <button type="button" onClick={onClose} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-faint)" }}>
+            <IconX size={20} stroke={1.75} />
+          </button>
+        </div>
+        <p style={{ margin: "0 0 var(--sp-4)", fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
+          Top {top.length} จากทั้งหมด {entries.length} รายการที่มีข้อมูลครบในขั้นตอนนี้ — ใช้ตรวจสอบว่ารายการที่ใช้เวลานาน
+          เป็นเคสพิเศษ (โปรเจกต์พักไว้ ฯลฯ) หรือค้างโดยไม่มีเหตุผล
+        </p>
+        {top.length === 0 ? (
+          <div style={{ color: "var(--text-faint)", fontSize: "var(--fs-sm)" }}>ไม่มีข้อมูล</div>
+        ) : (
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--fs-xs)" }}>
+            <thead>
+              <tr style={{ textAlign: "left", color: "var(--text-muted)" }}>
+                <th style={{ padding: "6px 8px" }}>PR No.</th>
+                <th style={{ padding: "6px 8px" }}>Company</th>
+                <th style={{ padding: "6px 8px" }}>Project</th>
+                <th style={{ padding: "6px 8px" }}>จากวันที่</th>
+                <th style={{ padding: "6px 8px" }}>ถึงวันที่</th>
+                <th style={{ padding: "6px 8px", textAlign: "right" }}>จำนวนวัน</th>
+              </tr>
+            </thead>
+            <tbody>
+              {top.map((e) => (
+                <tr key={e.id} style={{ borderTop: "1px solid var(--border)" }}>
+                  <td style={{ padding: "6px 8px", fontWeight: 600 }}>{e.prNo || "—"}</td>
+                  <td style={{ padding: "6px 8px" }}>{e.company || "—"}</td>
+                  <td style={{ padding: "6px 8px", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.project || "—"}</td>
+                  <td style={{ padding: "6px 8px", color: "var(--text-muted)" }}>{e.fromDate}</td>
+                  <td style={{ padding: "6px 8px", color: "var(--text-muted)" }}>{e.toDate}</td>
+                  <td style={{ padding: "6px 8px", textAlign: "right", fontWeight: 700, color: "var(--danger)" }}>{e.days}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+}
 
 // Count distinct jobs by PR No.: rows sharing a PR No. (the same request split
 // into multiple item/PO lines) count once; rows without a PR No. yet count
@@ -202,6 +269,38 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     return withSamples.reduce((max, d) => (d.medianDays > max.medianDays ? d : max));
   }, [cycleTimeData]);
 
+  // Per-stage list backing the drill-down modal — the actual rows behind
+  // each stage's median/mean, so a bottleneck claim can be checked against
+  // real PRs instead of taken on faith.
+  const cycleTimeDetails = useMemo(() => {
+    const details: Record<string, CycleTimeEntry[]> = {};
+    for (const { label, from, to } of CYCLE_STAGES) {
+      const list: CycleTimeEntry[] = [];
+      for (const r of rows) {
+        const df = parseDate(r[from] as string | undefined);
+        const dt = parseDate(r[to] as string | undefined);
+        if (!df || !dt) continue;
+        const diff = daysBetween(df, dt);
+        if (diff >= 0 && diff <= 365) {
+          list.push({
+            id: r.id,
+            prNo: r.prNo,
+            company: r.company,
+            project: r.project,
+            days: diff,
+            fromDate: r[from] as string,
+            toDate: r[to] as string,
+          });
+        }
+      }
+      list.sort((a, b) => b.days - a.days);
+      details[label] = list;
+    }
+    return details;
+  }, [rows]);
+
+  const [drilldownStage, setDrilldownStage] = useState<string | null>(null);
+
   const PAGE_SIZE = 15;
   const [urgentPage, setUrgentPage] = useState(1);
 
@@ -323,15 +422,18 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
           <IconClockHour4 size={18} stroke={1.75} style={{ color: "var(--accent)" }} /> เวลาที่ใช้แต่ละขั้นตอน — ค่ามัธยฐาน (วัน)
         </h3>
         {bottleneckStage ? (
-          <p style={{ margin: "0 0 var(--sp-3)", fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
+          <p style={{ margin: "0 0 var(--sp-1)", fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
             ขั้นตอนที่ช้าที่สุด: <strong style={{ color: "var(--danger)" }}>{bottleneckStage.label}</strong> มัธยฐาน {bottleneckStage.medianDays} วัน
             (จาก {bottleneckStage.n} รายการที่มีข้อมูลครบ) — ใช้ค่ามัธยฐานเพราะบาง PR ค้างนานผิดปกติจนดึงค่าเฉลี่ยให้สูงเกินจริง
           </p>
         ) : (
-          <p style={{ margin: "0 0 var(--sp-3)", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>
+          <p style={{ margin: "0 0 var(--sp-1)", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>
             ยังไม่มีข้อมูลวันที่ครบพอจะคำนวณ (ต้องมีทั้งวันเริ่มและวันจบของแต่ละขั้นตอน)
           </p>
         )}
+        <p style={{ margin: "0 0 var(--sp-3)", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>
+          💡 คลิกที่แท่งกราฟเพื่อดู PR ที่ใช้เวลานานที่สุดในขั้นตอนนั้น
+        </p>
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={cycleTimeData} layout="vertical" margin={{ left: 24 }}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -344,7 +446,15 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
                 return [`มัธยฐาน ${value} วัน (เฉลี่ย ${mean} วัน จาก ${n} รายการ)`, "เวลาที่ใช้"];
               }}
             />
-            <Bar dataKey="medianDays" radius={[0, 4, 4, 0]}>
+            <Bar
+              dataKey="medianDays"
+              radius={[0, 4, 4, 0]}
+              onClick={(data: unknown) => {
+                const label = (data as { payload?: { label?: string } })?.payload?.label;
+                if (label) setDrilldownStage(label);
+              }}
+              style={{ cursor: "pointer" }}
+            >
               {cycleTimeData.map((d) => (
                 <Cell key={d.label} fill={d.label === bottleneckStage?.label ? "var(--danger)" : "var(--primary)"} />
               ))}
@@ -352,6 +462,14 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
+      {drilldownStage && (
+        <CycleTimeDrilldownModal
+          stage={drilldownStage}
+          entries={cycleTimeDetails[drilldownStage] ?? []}
+          onClose={() => setDrilldownStage(null)}
+        />
+      )}
 
       {/* Urgent list */}
       <div style={cardStyle}>
