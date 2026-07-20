@@ -303,7 +303,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
               {monthlyPrSeries.seriesKeys.map((key, i) => (
                 <Line
                   key={key}
-                  type="monotone"
+                  type="linear"
                   dataKey={key}
                   name={key}
                   stroke={PERSON_PALETTE[i % PERSON_PALETTE.length]}
