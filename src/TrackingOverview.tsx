@@ -5,7 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
   LineChart, Line, Legend,
 } from "recharts";
-import { IconAlertTriangle, IconClockHour4, IconChartLine, IconX } from "@tabler/icons-react";
+import { IconAlertTriangle, IconClockHour4, IconChartLine, IconX, IconArrowsRightLeft } from "@tabler/icons-react";
 import {
   STATUS_OPTIONS, STATUS_COLOR, normalizeStatus,
 } from "./TrackingPage";
@@ -51,12 +51,15 @@ function formatMonthLabel(ym: string): string {
   const beYearShort = (parseInt(y, 10) + 543) % 100;
   return `${TH_MONTHS_SHORT[parseInt(m, 10)]} ${String(beYearShort).padStart(2, "0")}`;
 }
-// Same distinct-PR rule as countByDistinctPr, bucketed by the PR's month.
-function countDistinctPrByMonth(rows: TrackingRow[]): Record<string, number> {
+// Same distinct-PR rule as countByDistinctPr, bucketed by month — of
+// whichever date field is passed (PR date for "received", PO-approved date
+// for "completed"), so the same logic drives both the workload trend and
+// the received-vs-completed throughput chart below.
+function countDistinctPrByMonth(rows: TrackingRow[], dateField: keyof TrackingRow = "prDate"): Record<string, number> {
   const seenPerMonth: Record<string, Set<string>> = {};
   const result: Record<string, number> = {};
   for (const r of rows) {
-    const m = monthKey(r.prDate);
+    const m = monthKey(r[dateField] as string | undefined);
     if (!m) continue;
     const pr = r.prNo?.trim();
     if (!pr) {
@@ -240,6 +243,28 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
   // is slow" when it's really "a few dead requests never moved."
   const cycleTimeRows = useMemo(() => rows.filter((r) => r.status !== "Cancelled"), [rows]);
 
+  // Received vs completed, per month: "received" = PR date (everything that
+  // came in, whatever its eventual fate); "completed" = PO-approved date on
+  // a non-cancelled row. PO-approved is a real timestamp the team enters
+  // when the purchasing process actually finishes, so it's a more reliable
+  // "done" signal than the free-text status column (which is manually typed
+  // and can lag behind reality). If "received" stays above "completed" for
+  // several months running, backlog is building up.
+  const inflowOutflowData = useMemo(() => {
+    const received = countDistinctPrByMonth(rows, "prDate");
+    const completed = countDistinctPrByMonth(
+      cycleTimeRows.filter((r) => r.poApprovedDate),
+      "poApprovedDate"
+    );
+    const months = new Set([...Object.keys(received), ...Object.keys(completed)]);
+    return [...months].sort().map((m) => ({
+      month: m,
+      monthLabel: formatMonthLabel(m),
+      received: received[m] ?? 0,
+      completed: completed[m] ?? 0,
+    }));
+  }, [rows, cycleTimeRows]);
+
   const cycleTimeData = useMemo(() => {
     return CYCLE_STAGES.map(({ label, from, to }) => {
       const diffs: number[] = [];
@@ -417,6 +442,32 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
                   activeDot={{ r: 5 }}
                 />
               ))}
+            </LineChart>
+          </ResponsiveContainer>
+        )}
+      </div>
+
+      {/* Received vs completed throughput, per month */}
+      <div style={cardStyle}>
+        <h3 style={{ margin: "0 0 var(--sp-1)", display: "flex", alignItems: "center", gap: 6, fontSize: "1rem", color: "var(--text-strong)" }}>
+          <IconArrowsRightLeft size={18} stroke={1.75} style={{ color: "var(--primary)" }} /> PR ที่รับเข้า vs จบกระบวนการ ต่อเดือน
+        </h3>
+        <p style={{ margin: "0 0 var(--sp-3)", fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
+          รับเข้า = นับตามวันที่ PR, จบกระบวนการ = นับตามวันที่ PO อนุมัติ (ไม่รวมรายการที่ถูกยกเลิก) —
+          ถ้าเส้น "รับเข้า" อยู่เหนือ "จบกระบวนการ" ต่อเนื่องหลายเดือน แปลว่า backlog กำลังสะสม
+        </p>
+        {inflowOutflowData.length === 0 ? (
+          <div style={{ color: "var(--text-faint)", fontSize: "var(--fs-sm)" }}>ยังไม่มีข้อมูลวันที่ให้แสดงแนวโน้มรายเดือน</div>
+        ) : (
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={inflowOutflowData} margin={{ right: 16 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="monthLabel" tick={{ fontSize: 11 }} />
+              <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
+              <Tooltip />
+              <Legend wrapperStyle={{ fontSize: 11 }} />
+              <Line type="linear" dataKey="received" name="รับเข้า" stroke="var(--primary)" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+              <Line type="linear" dataKey="completed" name="จบกระบวนการ" stroke="var(--success)" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
             </LineChart>
           </ResponsiveContainer>
         )}
