@@ -111,7 +111,7 @@ function CycleTimeDrilldownModal({
           </button>
         </div>
         <p style={{ margin: "0 0 var(--sp-4)", fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
-          Top {top.length} จากทั้งหมด {entries.length} รายการที่มีข้อมูลครบในขั้นตอนนี้ — ใช้ตรวจสอบว่ารายการที่ใช้เวลานาน
+          Top {top.length} จากทั้งหมด {entries.length} รายการที่มีข้อมูลครบในขั้นตอนนี้ (ไม่รวมรายการที่ถูกยกเลิก) — ใช้ตรวจสอบว่ารายการที่ใช้เวลานาน
           เป็นเคสพิเศษ (โปรเจกต์พักไว้ ฯลฯ) หรือค้างโดยไม่มีเหตุผล
         </p>
         {top.length === 0 ? (
@@ -234,10 +234,16 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     return { chartData, seriesKeys: groups.map((g) => g.key) };
   }, [scope, tabs, rowsByTab, rows]);
 
+  // Cancelled PRs sat idle because the request was abandoned, not because a
+  // stage was slow — including them would count that idle time as real
+  // process time and bias the whole cycle-time picture toward "everything
+  // is slow" when it's really "a few dead requests never moved."
+  const cycleTimeRows = useMemo(() => rows.filter((r) => r.status !== "Cancelled"), [rows]);
+
   const cycleTimeData = useMemo(() => {
     return CYCLE_STAGES.map(({ label, from, to }) => {
       const diffs: number[] = [];
-      for (const r of rows) {
+      for (const r of cycleTimeRows) {
         const df = parseDate(r[from] as string | undefined);
         const dt = parseDate(r[to] as string | undefined);
         if (!df || !dt) continue;
@@ -261,7 +267,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
         n,
       };
     });
-  }, [rows]);
+  }, [cycleTimeRows]);
 
   const bottleneckStage = useMemo(() => {
     const withSamples = cycleTimeData.filter((d) => d.n > 0);
@@ -276,7 +282,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     const details: Record<string, CycleTimeEntry[]> = {};
     for (const { label, from, to } of CYCLE_STAGES) {
       const list: CycleTimeEntry[] = [];
-      for (const r of rows) {
+      for (const r of cycleTimeRows) {
         const df = parseDate(r[from] as string | undefined);
         const dt = parseDate(r[to] as string | undefined);
         if (!df || !dt) continue;
@@ -297,7 +303,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
       details[label] = list;
     }
     return details;
-  }, [rows]);
+  }, [cycleTimeRows]);
 
   const [drilldownStage, setDrilldownStage] = useState<string | null>(null);
 
@@ -424,7 +430,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
         {bottleneckStage ? (
           <p style={{ margin: "0 0 var(--sp-1)", fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
             ขั้นตอนที่ช้าที่สุด: <strong style={{ color: "var(--danger)" }}>{bottleneckStage.label}</strong> มัธยฐาน {bottleneckStage.medianDays} วัน
-            (จาก {bottleneckStage.n} รายการที่มีข้อมูลครบ) — ใช้ค่ามัธยฐานเพราะบาง PR ค้างนานผิดปกติจนดึงค่าเฉลี่ยให้สูงเกินจริง
+            (จาก {bottleneckStage.n} รายการที่มีข้อมูลครบ ไม่รวมรายการที่ถูกยกเลิก) — ใช้ค่ามัธยฐานเพราะบาง PR ค้างนานผิดปกติจนดึงค่าเฉลี่ยให้สูงเกินจริง
           </p>
         ) : (
           <p style={{ margin: "0 0 var(--sp-1)", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>
