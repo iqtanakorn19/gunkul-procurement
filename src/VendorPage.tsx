@@ -269,7 +269,7 @@ function VendorDetailModal({ vendor, onClose, onDelete, onToggleStatus, onSaveCa
                       <XAxis dataKey="m" tick={{ fontSize: 10, fill: "#94a3b8" }} />
                       <YAxis tickFormatter={(v: any) => bahtShort(v)} tick={{ fontSize: 10, fill: "#94a3b8" }} width={48} />
                       <Tooltip formatter={(v: any) => bahtFull(v)} />
-                      <Area type="monotone" dataKey="v" stroke="#1a3c6e" strokeWidth={2} fill="url(#vg)" />
+                      <Area type="linear" dataKey="v" stroke="#1a3c6e" strokeWidth={2} fill="url(#vg)" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -552,7 +552,7 @@ export default function VendorPage() {
                       <XAxis dataKey="m" tick={{ fontSize: 11, fill: "#94a3b8" }} />
                       <YAxis tickFormatter={(v: any) => bahtShort(v)} tick={{ fontSize: 11, fill: "#94a3b8" }} width={56} />
                       <Tooltip formatter={(v: any) => bahtFull(v)} />
-                      <Area type="monotone" dataKey="v" stroke="#c9a84c" strokeWidth={2.5} fill="url(#og)" />
+                      <Area type="linear" dataKey="v" stroke="#c9a84c" strokeWidth={2.5} fill="url(#og)" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </ChartCard>
