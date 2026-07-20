@@ -4,12 +4,13 @@ import {
   collection, onSnapshot, doc, addDoc, updateDoc, deleteDoc, writeBatch, setDoc, arrayUnion,
 } from "firebase/firestore";
 import { db } from "./firebase";
+import * as XLSX from "xlsx";
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
 } from "recharts";
 import {
-  IconBuildingFactory2, IconSearch, IconPlus, IconPencil, IconTrash, IconX,
+  IconBuildingFactory2, IconSearch, IconPlus, IconPencil, IconTrash, IconX, IconFileSpreadsheet,
 } from "@tabler/icons-react";
 import { Reveal, Section } from "./components/PageKit";
 
@@ -566,6 +567,43 @@ export default function ProjectPage() {
     return result;
   }, [projects, search, filterColor, filterType, sortBy, sortAsc]);
 
+  const exportToExcel = () => {
+    const data = filtered.map((p) => ({
+      "Job": p.jobNo ?? "",
+      "ชื่อโครงการ": p.name,
+      "สถานะ": p.colorStatus,
+      "TOC": p.toc,
+      "ประเภทหลังคา": p.roofType,
+      "ประเภทสัญญา": p.contractType,
+      "kWp": p.capacityKwp ?? "",
+      "คู่สัญญา": p.counterparty,
+      "Location": p.location,
+      "ราคาตามสัญญา": p.contractPrice ?? "",
+      "Award Subcon": p.subconAwardAmount ?? "",
+      "Material THB/W": p.materialThbWatt ?? "",
+      "Labour THB/W": p.labourThbWatt ?? "",
+      "Subcon Name": p.subconName,
+      "Award Date": p.awardDate,
+      "PV Brand": p.pvBrand,
+      "Power Class": p.powerClass,
+      "Inverter Brand": p.inverterBrand,
+      "Inverter Model": p.inverterModel,
+      "Optimizer": p.optimizer,
+      "BESS Brand": p.bessBrand,
+      "BESS Size": p.bessSize,
+      "OM": p.om,
+      "Kick off Date": p.kickoffDate,
+      "PU PIC": p.puPic,
+      "PM PIC": p.pmPic,
+      "ENG PIC": p.engPic,
+      "Remark": p.note,
+    }));
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Projects");
+    XLSX.writeFile(wb, "projects.xlsx");
+  };
+
   const colorChartData = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of projects) counts[p.colorStatus] = (counts[p.colorStatus] ?? 0) + 1;
@@ -833,12 +871,21 @@ export default function ProjectPage() {
         eyebrow="Project List"
         title="รายการโครงการ"
         right={
-          <button onClick={() => setAddingProject(true)} style={{
-            display: "flex", alignItems: "center", gap: "0.4rem", border: "none", background: "var(--primary)",
-            color: "white", borderRadius: "var(--radius-sm)", padding: "0.5rem 0.9rem", cursor: "pointer", fontSize: "var(--fs-sm)",
-          }}>
-            <IconPlus size={16} /> เพิ่มโครงการ
-          </button>
+          <div style={{ display: "flex", gap: "var(--sp-2)" }}>
+            <button onClick={exportToExcel} style={{
+              display: "flex", alignItems: "center", gap: "0.4rem", border: "1px solid var(--border-strong)",
+              background: "var(--surface)", color: "var(--text)", borderRadius: "var(--radius-sm)",
+              padding: "0.5rem 0.9rem", cursor: "pointer", fontSize: "var(--fs-sm)",
+            }}>
+              <IconFileSpreadsheet size={16} /> Export Excel
+            </button>
+            <button onClick={() => setAddingProject(true)} style={{
+              display: "flex", alignItems: "center", gap: "0.4rem", border: "none", background: "var(--primary)",
+              color: "white", borderRadius: "var(--radius-sm)", padding: "0.5rem 0.9rem", cursor: "pointer", fontSize: "var(--fs-sm)",
+            }}>
+              <IconPlus size={16} /> เพิ่มโครงการ
+            </button>
+          </div>
         }
       >
         <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--sp-3)", marginBottom: "var(--sp-4)" }}>

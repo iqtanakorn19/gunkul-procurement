@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { collection, deleteDoc, doc, onSnapshot, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { IconCopy, IconCopyCheck, IconPlus, IconSearch, IconTrash, IconUsers } from "@tabler/icons-react";
+import * as XLSX from "xlsx";
+import { IconCopy, IconCopyCheck, IconFileSpreadsheet, IconPlus, IconSearch, IconTrash, IconUsers } from "@tabler/icons-react";
 
 /* ============================================================
    Editable, searchable staff directory — sits below the org chart
@@ -111,6 +112,22 @@ export default function StaffDirectory() {
     } catch { /* clipboard unavailable — silently ignore */ }
   };
 
+  const exportToExcel = () => {
+    const data = shown.map((r) => ({
+      "รหัสพนักงาน": r.employeeId,
+      "ชื่อ-สกุล": r.nameThai,
+      "Name-Surname": r.nameEn,
+      "ตำแหน่ง": r.position,
+      "เบอร์โทร": r.phone,
+      "E-mail": r.email,
+      "Notes": r.notes,
+    }));
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Staff");
+    XLSX.writeFile(wb, "staff-directory.xlsx");
+  };
+
   const shown = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return rows;
@@ -135,13 +152,22 @@ export default function StaffDirectory() {
         <h3 style={{ margin: 0, display: "flex", alignItems: "center", gap: 8, fontSize: "1rem", color: "var(--text-strong)" }}>
           <IconUsers size={18} stroke={1.75} /> พนักงานฝ่ายจัดซื้อ (PU-GKE)
         </h3>
-        <button
-          type="button"
-          onClick={addRow}
-          style={{ display: "flex", alignItems: "center", gap: "0.4rem", border: "none", background: "var(--primary)", color: "var(--primary-contrast)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", fontWeight: 600, cursor: "pointer" }}
-        >
-          <IconPlus size={16} stroke={2} /> เพิ่มพนักงาน
-        </button>
+        <div style={{ display: "flex", gap: "var(--sp-2)" }}>
+          <button
+            type="button"
+            onClick={exportToExcel}
+            style={{ display: "flex", alignItems: "center", gap: "0.4rem", border: "1px solid var(--border-strong)", background: "var(--surface)", color: "var(--text)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", fontWeight: 600, cursor: "pointer" }}
+          >
+            <IconFileSpreadsheet size={16} stroke={1.75} /> Export Excel
+          </button>
+          <button
+            type="button"
+            onClick={addRow}
+            style={{ display: "flex", alignItems: "center", gap: "0.4rem", border: "none", background: "var(--primary)", color: "var(--primary-contrast)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", fontWeight: 600, cursor: "pointer" }}
+          >
+            <IconPlus size={16} stroke={2} /> เพิ่มพนักงาน
+          </button>
+        </div>
       </div>
 
       {loadError && (
