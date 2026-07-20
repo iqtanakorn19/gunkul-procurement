@@ -12,17 +12,17 @@ import type { TrackingRow, Tab } from "./TrackingPage";
 
 /* ============================================================
    Cycle-time analysis — average calendar days spent in each stage
-   of the PR -> PA -> PO -> delivery pipeline, so the team can see
-   which step is the actual bottleneck instead of guessing. Only
-   rows with BOTH boundary dates present (and a plausible <1yr gap,
-   to ignore obvious typos) count toward a stage's average.
+   of the PR -> PA -> PO pipeline, so the team can see which step is
+   the actual bottleneck instead of guessing. Delivery isn't tracked
+   consistently by the team, so it's excluded here. Only rows with
+   BOTH boundary dates present (and a plausible <1yr gap, to ignore
+   obvious typos) count toward a stage's average.
    ============================================================ */
 const CYCLE_STAGES: { label: string; from: keyof TrackingRow; to: keyof TrackingRow }[] = [
-  { label: "PR → ยื่น PA", from: "prDate", to: "paSubmittedDate" },
-  { label: "ยื่น PA → อนุมัติ PA", from: "paSubmittedDate", to: "paApprovedDate" },
-  { label: "อนุมัติ PA → ยื่น PO", from: "paApprovedDate", to: "poSubmittedDate" },
-  { label: "ยื่น PO → อนุมัติ PO", from: "poSubmittedDate", to: "poApprovedDate" },
-  { label: "อนุมัติ PO → ส่งมอบ", from: "poApprovedDate", to: "deliveredDate" },
+  { label: "ได้รับ PR → เปิด PA", from: "prDate", to: "paSubmittedDate" },
+  { label: "เปิด PA → อนุมัติ PA", from: "paSubmittedDate", to: "paApprovedDate" },
+  { label: "อนุมัติ PA → เปิด PO", from: "paApprovedDate", to: "poSubmittedDate" },
+  { label: "เปิด PO → อนุมัติ PO", from: "poSubmittedDate", to: "poApprovedDate" },
 ];
 
 function parseDate(s: string | undefined): Date | null {
