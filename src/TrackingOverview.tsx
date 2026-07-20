@@ -5,7 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
   LineChart, Line, Legend,
 } from "recharts";
-import { IconAlertTriangle, IconClockHour4, IconChartLine, IconX, IconArrowsRightLeft } from "@tabler/icons-react";
+import { IconAlertTriangle, IconClockHour4, IconChartLine, IconX } from "@tabler/icons-react";
 import {
   STATUS_OPTIONS, STATUS_COLOR, normalizeStatus,
 } from "./TrackingPage";
@@ -243,23 +243,6 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
   // is slow" when it's really "a few dead requests never moved."
   const cycleTimeRows = useMemo(() => rows.filter((r) => r.status !== "Cancelled"), [rows]);
 
-  // PRs completed per month — bucketed by PO-approved date on a non-cancelled
-  // row. PO-approved is a real timestamp the team enters when the purchasing
-  // process actually finishes, so it's a more reliable "done" signal than the
-  // free-text status column (which is manually typed and can lag behind
-  // reality).
-  const completedPerMonthData = useMemo(() => {
-    const completed = countDistinctPrByMonth(
-      cycleTimeRows.filter((r) => r.poApprovedDate),
-      "poApprovedDate"
-    );
-    return Object.keys(completed).sort().map((m) => ({
-      month: m,
-      monthLabel: formatMonthLabel(m),
-      completed: completed[m],
-    }));
-  }, [cycleTimeRows]);
-
   const cycleTimeData = useMemo(() => {
     return CYCLE_STAGES.map(({ label, from, to }) => {
       const diffs: number[] = [];
@@ -438,29 +421,6 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
                 />
               ))}
             </LineChart>
-          </ResponsiveContainer>
-        )}
-      </div>
-
-      {/* PRs completed per month */}
-      <div style={cardStyle}>
-        <h3 style={{ margin: "0 0 var(--sp-1)", display: "flex", alignItems: "center", gap: 6, fontSize: "1rem", color: "var(--text-strong)" }}>
-          <IconArrowsRightLeft size={18} stroke={1.75} style={{ color: "var(--success)" }} /> จำนวน PR ที่จบกระบวนการต่อเดือน
-        </h3>
-        <p style={{ margin: "0 0 var(--sp-3)", fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
-          นับตามวันที่ PO อนุมัติ (ไม่รวมรายการที่ถูกยกเลิก)
-        </p>
-        {completedPerMonthData.length === 0 ? (
-          <div style={{ color: "var(--text-faint)", fontSize: "var(--fs-sm)" }}>ยังไม่มีข้อมูลวันที่ PO อนุมัติให้แสดงแนวโน้มรายเดือน</div>
-        ) : (
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={completedPerMonthData} margin={{ right: 16 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="monthLabel" tick={{ fontSize: 11 }} />
-              <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Bar dataKey="completed" name="จบกระบวนการ" fill="var(--success)" radius={[4, 4, 0, 0]} />
-            </BarChart>
           </ResponsiveContainer>
         )}
       </div>
