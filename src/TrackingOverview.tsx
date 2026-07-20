@@ -169,25 +169,37 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
 
   const cycleTimeData = useMemo(() => {
     return CYCLE_STAGES.map(({ label, from, to }) => {
-      let total = 0;
-      let n = 0;
+      const diffs: number[] = [];
       for (const r of rows) {
         const df = parseDate(r[from] as string | undefined);
         const dt = parseDate(r[to] as string | undefined);
         if (!df || !dt) continue;
         const diff = daysBetween(df, dt);
         // Guard against obviously bad data (negative gaps, >1yr typos) so a
-        // handful of mis-keyed dates can't skew the whole average.
-        if (diff >= 0 && diff <= 365) { total += diff; n += 1; }
+        // handful of mis-keyed dates can't skew the result.
+        if (diff >= 0 && diff <= 365) diffs.push(diff);
       }
-      return { label, avgDays: n ? Math.round((total / n) * 10) / 10 : 0, n };
+      diffs.sort((a, b) => a - b);
+      const n = diffs.length;
+      // Median, not mean: procurement lead times are long-tailed (a handful of
+      // stuck/backlog PRs can sit for months), so a straight average gets
+      // dragged way above what most rows actually experience. Median reflects
+      // the typical case; mean is kept alongside (tooltip) for transparency.
+      const median = n === 0 ? 0 : n % 2 === 1 ? diffs[(n - 1) / 2] : (diffs[n / 2 - 1] + diffs[n / 2]) / 2;
+      const mean = n === 0 ? 0 : diffs.reduce((a, b) => a + b, 0) / n;
+      return {
+        label,
+        medianDays: Math.round(median * 10) / 10,
+        meanDays: Math.round(mean * 10) / 10,
+        n,
+      };
     });
   }, [rows]);
 
   const bottleneckStage = useMemo(() => {
     const withSamples = cycleTimeData.filter((d) => d.n > 0);
     if (!withSamples.length) return null;
-    return withSamples.reduce((max, d) => (d.avgDays > max.avgDays ? d : max));
+    return withSamples.reduce((max, d) => (d.medianDays > max.medianDays ? d : max));
   }, [cycleTimeData]);
 
   const PAGE_SIZE = 15;
@@ -308,12 +320,12 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
       {/* Cycle time per pipeline stage */}
       <div style={cardStyle}>
         <h3 style={{ margin: "0 0 var(--sp-1)", display: "flex", alignItems: "center", gap: 6, fontSize: "1rem", color: "var(--text-strong)" }}>
-          <IconClockHour4 size={18} stroke={1.75} style={{ color: "var(--accent)" }} /> เวลาเฉลี่ยแต่ละขั้นตอน (วัน)
+          <IconClockHour4 size={18} stroke={1.75} style={{ color: "var(--accent)" }} /> เวลาที่ใช้แต่ละขั้นตอน — ค่ามัธยฐาน (วัน)
         </h3>
         {bottleneckStage ? (
           <p style={{ margin: "0 0 var(--sp-3)", fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
-            ขั้นตอนที่ช้าที่สุด: <strong style={{ color: "var(--danger)" }}>{bottleneckStage.label}</strong> เฉลี่ย {bottleneckStage.avgDays} วัน
-            (จาก {bottleneckStage.n} รายการที่มีข้อมูลครบ)
+            ขั้นตอนที่ช้าที่สุด: <strong style={{ color: "var(--danger)" }}>{bottleneckStage.label}</strong> มัธยฐาน {bottleneckStage.medianDays} วัน
+            (จาก {bottleneckStage.n} รายการที่มีข้อมูลครบ) — ใช้ค่ามัธยฐานเพราะบาง PR ค้างนานผิดปกติจนดึงค่าเฉลี่ยให้สูงเกินจริง
           </p>
         ) : (
           <p style={{ margin: "0 0 var(--sp-3)", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>
@@ -328,10 +340,11 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
             <Tooltip
               formatter={(value, _name, item) => {
                 const n = item?.payload?.n ?? 0;
-                return [`${value} วัน (จาก ${n} รายการ)`, "เฉลี่ย"];
+                const mean = item?.payload?.meanDays ?? 0;
+                return [`มัธยฐาน ${value} วัน (เฉลี่ย ${mean} วัน จาก ${n} รายการ)`, "เวลาที่ใช้"];
               }}
             />
-            <Bar dataKey="avgDays" radius={[0, 4, 4, 0]}>
+            <Bar dataKey="medianDays" radius={[0, 4, 4, 0]}>
               {cycleTimeData.map((d) => (
                 <Cell key={d.label} fill={d.label === bottleneckStage?.label ? "var(--danger)" : "var(--primary)"} />
               ))}
