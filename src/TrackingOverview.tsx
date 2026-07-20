@@ -4,11 +4,35 @@ import { db } from "./firebase";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from "recharts";
-import { IconAlertTriangle } from "@tabler/icons-react";
+import { IconAlertTriangle, IconClockHour4 } from "@tabler/icons-react";
 import {
   STATUS_OPTIONS, STATUS_COLOR, normalizeStatus,
 } from "./TrackingPage";
 import type { TrackingRow, Tab } from "./TrackingPage";
+
+/* ============================================================
+   Cycle-time analysis — average calendar days spent in each stage
+   of the PR -> PA -> PO -> delivery pipeline, so the team can see
+   which step is the actual bottleneck instead of guessing. Only
+   rows with BOTH boundary dates present (and a plausible <1yr gap,
+   to ignore obvious typos) count toward a stage's average.
+   ============================================================ */
+const CYCLE_STAGES: { label: string; from: keyof TrackingRow; to: keyof TrackingRow }[] = [
+  { label: "PR → ยื่น PA", from: "prDate", to: "paSubmittedDate" },
+  { label: "ยื่น PA → อนุมัติ PA", from: "paSubmittedDate", to: "paApprovedDate" },
+  { label: "อนุมัติ PA → ยื่น PO", from: "paApprovedDate", to: "poSubmittedDate" },
+  { label: "ยื่น PO → อนุมัติ PO", from: "poSubmittedDate", to: "poApprovedDate" },
+  { label: "อนุมัติ PO → ส่งมอบ", from: "poApprovedDate", to: "deliveredDate" },
+];
+
+function parseDate(s: string | undefined): Date | null {
+  if (!s) return null;
+  const d = new Date(s);
+  return isNaN(d.getTime()) ? null : d;
+}
+function daysBetween(a: Date, b: Date): number {
+  return Math.round((b.getTime() - a.getTime()) / 86_400_000);
+}
 
 const cardStyle: React.CSSProperties = {
   background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)",
@@ -80,6 +104,29 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     if (scope !== "all") return [];
     return tabs.map((t) => ({ name: t.name, count: countByDistinctPr(rowsByTab[t.id] ?? []) }));
   }, [tabs, rowsByTab, scope]);
+
+  const cycleTimeData = useMemo(() => {
+    return CYCLE_STAGES.map(({ label, from, to }) => {
+      let total = 0;
+      let n = 0;
+      for (const r of rows) {
+        const df = parseDate(r[from] as string | undefined);
+        const dt = parseDate(r[to] as string | undefined);
+        if (!df || !dt) continue;
+        const diff = daysBetween(df, dt);
+        // Guard against obviously bad data (negative gaps, >1yr typos) so a
+        // handful of mis-keyed dates can't skew the whole average.
+        if (diff >= 0 && diff <= 365) { total += diff; n += 1; }
+      }
+      return { label, avgDays: n ? Math.round((total / n) * 10) / 10 : 0, n };
+    });
+  }, [rows]);
+
+  const bottleneckStage = useMemo(() => {
+    const withSamples = cycleTimeData.filter((d) => d.n > 0);
+    if (!withSamples.length) return null;
+    return withSamples.reduce((max, d) => (d.avgDays > max.avgDays ? d : max));
+  }, [cycleTimeData]);
 
   const PAGE_SIZE = 15;
   const [urgentPage, setUrgentPage] = useState(1);
@@ -162,6 +209,41 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
           </div>
         )}
 
+      </div>
+
+      {/* Cycle time per pipeline stage */}
+      <div style={cardStyle}>
+        <h3 style={{ margin: "0 0 var(--sp-1)", display: "flex", alignItems: "center", gap: 6, fontSize: "1rem", color: "var(--text-strong)" }}>
+          <IconClockHour4 size={18} stroke={1.75} style={{ color: "var(--accent)" }} /> เวลาเฉลี่ยแต่ละขั้นตอน (วัน)
+        </h3>
+        {bottleneckStage ? (
+          <p style={{ margin: "0 0 var(--sp-3)", fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}>
+            ขั้นตอนที่ช้าที่สุด: <strong style={{ color: "var(--danger)" }}>{bottleneckStage.label}</strong> เฉลี่ย {bottleneckStage.avgDays} วัน
+            (จาก {bottleneckStage.n} รายการที่มีข้อมูลครบ)
+          </p>
+        ) : (
+          <p style={{ margin: "0 0 var(--sp-3)", fontSize: "var(--fs-xs)", color: "var(--text-faint)" }}>
+            ยังไม่มีข้อมูลวันที่ครบพอจะคำนวณ (ต้องมีทั้งวันเริ่มและวันจบของแต่ละขั้นตอน)
+          </p>
+        )}
+        <ResponsiveContainer width="100%" height={260}>
+          <BarChart data={cycleTimeData} layout="vertical" margin={{ left: 24 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis type="number" allowDecimals={false} unit=" วัน" />
+            <YAxis type="category" dataKey="label" width={150} tick={{ fontSize: 11 }} />
+            <Tooltip
+              formatter={(value, _name, item) => {
+                const n = item?.payload?.n ?? 0;
+                return [`${value} วัน (จาก ${n} รายการ)`, "เฉลี่ย"];
+              }}
+            />
+            <Bar dataKey="avgDays" radius={[0, 4, 4, 0]}>
+              {cycleTimeData.map((d) => (
+                <Cell key={d.label} fill={d.label === bottleneckStage?.label ? "var(--danger)" : "var(--primary)"} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
 
       {/* Urgent list */}
