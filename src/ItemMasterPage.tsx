@@ -55,7 +55,7 @@ function PriceHistoryChart({ points, unit }: { points: PricePoint[]; unit: strin
             labelFormatter={(d) => `วันที่ ${d}`}
             contentStyle={{ borderRadius: "10px", border: "1px solid #e2e8f0", fontSize: "12px" }}
           />
-          <Line type="monotone" dataKey="price" stroke="#2d5a9e" strokeWidth={2}
+          <Line type="linear" dataKey="price" stroke="#2d5a9e" strokeWidth={2}
             dot={{ r: 3, fill: "#2d5a9e" }} activeDot={{ r: 5 }} />
         </LineChart>
       </ResponsiveContainer>
