@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { collection, getDocs, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "./firebase";
+import SyncStatus from "./components/SyncStatus";
 import * as XLSX from "xlsx";
 import {
   IconX,
@@ -414,7 +415,10 @@ export default function TrackingPage() {
         <IconClipboardList size={16} stroke={1.75} />
         PR / PA / PO Tracking
       </div>
-      <h1 style={{ margin: "0 0 var(--sp-2)", color: "var(--text-strong)" }}>Tracking Sheet</h1>
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "var(--sp-3)", marginBottom: "var(--sp-2)" }}>
+        <h1 style={{ margin: 0, color: "var(--text-strong)" }}>Tracking Sheet</h1>
+        <SyncStatus />
+      </div>
       <p style={{ margin: "0 0 var(--sp-5)", fontSize: "var(--fs-sm)", color: "var(--text-muted)" }}>
         ข้อมูลแบบ real-time จาก Google Sheet กลาง — แก้ไขข้อมูลได้ที่ Sheet เท่านั้น หน้านี้สำหรับ monitor
       </p>

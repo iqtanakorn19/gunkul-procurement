@@ -3,6 +3,7 @@ import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "./firebase";
 import { IconLayoutDashboard } from "@tabler/icons-react";
 import TrackingOverview from "./TrackingOverview";
+import SyncStatus from "./components/SyncStatus";
 import type { Tab } from "./TrackingPage";
 
 export default function DashboardPage() {
@@ -28,7 +29,10 @@ export default function DashboardPage() {
         <IconLayoutDashboard size={16} stroke={1.75} />
         ภาพรวม
       </div>
-      <h1 style={{ margin: "0 0 var(--sp-5)", color: "var(--text-strong)" }}>Dashboard</h1>
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "var(--sp-3)", marginBottom: "var(--sp-5)" }}>
+        <h1 style={{ margin: 0, color: "var(--text-strong)" }}>Dashboard</h1>
+        <SyncStatus />
+      </div>
 
       {loadError ? (
         <div style={{
