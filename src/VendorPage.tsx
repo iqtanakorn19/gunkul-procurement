@@ -407,7 +407,9 @@ export default function VendorPage() {
     }
     const catData = Object.entries(cat).map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value).slice(0, 10);
-    const monData = Object.entries(mon).sort((a, b) => a[0].localeCompare(b[0]))
+    const monData = Object.entries(mon)
+      .filter(([ym]) => ym >= "2025-01") // start the chart at Jan 2025 (2568) — older months are noise, mostly empty
+      .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([ym, v]) => ({ m: monthLabel(ym), v }));
     const topVendors = [...vendors].sort((a, b) => b.totalSpend - a.totalSpend).slice(0, 10)
       .map(v => ({ name: v.name.replace(/^บจก\.|^บมจ\.|^หจก\./, "").trim().slice(0, 18), value: v.totalSpend }));
