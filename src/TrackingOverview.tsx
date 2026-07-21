@@ -217,7 +217,9 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
 
     const months = new Set<string>();
     groups.forEach((g) => Object.keys(g.counts).forEach((m) => months.add(m)));
-    const sortedMonths = [...months].sort();
+    // Start at Jan 2026 (2569) — older months are mostly empty and flatten
+    // the chart; future months keep appearing automatically as data comes in.
+    const sortedMonths = [...months].filter((m) => m >= "2026-01").sort();
 
     const chartData = sortedMonths.map((m) => {
       const point: Record<string, number | string> = { month: m, monthLabel: formatMonthLabel(m) };
