@@ -69,6 +69,15 @@ function countRowsByMonth(rows: TrackingRow[], dateField: keyof TrackingRow = "p
 // reused from the palette already used elsewhere in the app (Project page).
 const PERSON_PALETTE = ["#7CA6D8", "#8FCBAE", "#F2B6A0", "#D6B8E0", "#F4D58D", "#9AD0D6", "#C9B7A0", "#A8B8D8"];
 
+// Some team members pre-add rows in the sheet to reserve a row number before
+// any real request exists yet — no PR/PA/PO No. filled in at all, just a
+// Company + "Draft" status placeholder. Counting those as tracked work would
+// inflate the KPI total and per-person workload with items that haven't
+// actually started.
+function isPlaceholderRow(r: TrackingRow): boolean {
+  return !r.prNo?.trim() && !r.paNo?.trim() && !r.poNo?.trim();
+}
+
 const cardStyle: React.CSSProperties = {
   background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)",
   padding: "var(--sp-4)",
@@ -165,19 +174,24 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     return rowsByTab[scope] ?? [];
   }, [rowsByTab, scope, tabs]);
 
+  // Excludes placeholder rows (no PR/PA/PO No. at all — a reserved row
+  // number with nothing tracked yet) from anything measuring "how much work
+  // is there", so pre-added blank rows don't inflate the numbers.
+  const trackedRows = useMemo(() => rows.filter((r) => !isPlaceholderRow(r)), [rows]);
+
   const kpis = useMemo(() => {
-    const urgentCount = rows.filter((r) => r.urgent).length;
-    const completedCount = rows.filter((r) => r.status === "Completed").length;
+    const urgentCount = trackedRows.filter((r) => r.urgent).length;
+    const completedCount = trackedRows.filter((r) => r.status === "Completed").length;
     return {
       // Row count, not distinct PR count: the PR<->PA<->PO relationship is
       // many-to-many (one PR can span several POs; one PO can cover several
       // PRs), so a row is the real unit of tracked work — matches the row
       // count the team already sees in Tracking Sheet.
-      count: rows.length,
+      count: trackedRows.length,
       urgentCount,
-      completedPct: rows.length ? Math.round((completedCount / rows.length) * 100) : 0,
+      completedPct: trackedRows.length ? Math.round((completedCount / trackedRows.length) * 100) : 0,
     };
-  }, [rows]);
+  }, [trackedRows]);
 
   const statusData = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -190,7 +204,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
 
   const workloadData = useMemo(() => {
     if (scope !== "all") return [];
-    return tabs.map((t) => ({ name: t.name, count: (rowsByTab[t.id] ?? []).length }));
+    return tabs.map((t) => ({ name: t.name, count: (rowsByTab[t.id] ?? []).filter((r) => !isPlaceholderRow(r)).length }));
   }, [tabs, rowsByTab, scope]);
 
   const monthlyPrSeries = useMemo(() => {
@@ -198,8 +212,8 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     // for that person only — always keyed by tab name so colors stay assigned
     // by person, not by chart position.
     const groups = scope === "all"
-      ? tabs.map((t) => ({ key: t.name, counts: countRowsByMonth(rowsByTab[t.id] ?? []) }))
-      : [{ key: tabs.find((t) => t.id === scope)?.name ?? "รายการ", counts: countRowsByMonth(rows) }];
+      ? tabs.map((t) => ({ key: t.name, counts: countRowsByMonth((rowsByTab[t.id] ?? []).filter((r) => !isPlaceholderRow(r))) }))
+      : [{ key: tabs.find((t) => t.id === scope)?.name ?? "รายการ", counts: countRowsByMonth(trackedRows) }];
 
     const months = new Set<string>();
     groups.forEach((g) => Object.keys(g.counts).forEach((m) => months.add(m)));
@@ -212,7 +226,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     });
 
     return { chartData, seriesKeys: groups.map((g) => g.key) };
-  }, [scope, tabs, rowsByTab, rows]);
+  }, [scope, tabs, rowsByTab, trackedRows]);
 
   // Cancelled PRs sat idle because the request was abandoned, not because a
   // stage was slow — including them would count that idle time as real
