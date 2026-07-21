@@ -51,26 +51,17 @@ function formatMonthLabel(ym: string): string {
   const beYearShort = (parseInt(y, 10) + 543) % 100;
   return `${TH_MONTHS_SHORT[parseInt(m, 10)]} ${String(beYearShort).padStart(2, "0")}`;
 }
-// Same distinct-PR rule as countByDistinctPr, bucketed by month — of
-// whichever date field is passed (PR date for "received", PO-approved date
-// for "completed"), so the same logic drives both the workload trend and
-// the received-vs-completed throughput chart below.
-function countDistinctPrByMonth(rows: TrackingRow[], dateField: keyof TrackingRow = "prDate"): Record<string, number> {
-  const seenPerMonth: Record<string, Set<string>> = {};
+// Counts every row, bucketed by month of the given date field. Rows are the
+// unit of work here — a PR/PA/PO combination is many-to-many (one PR can
+// span several POs; one PO can cover several PRs), so deduping by PR No.
+// would silently drop rows that are genuinely distinct tracked work, not
+// duplicates. Matches the row count the team already sees in Tracking Sheet.
+function countRowsByMonth(rows: TrackingRow[], dateField: keyof TrackingRow = "prDate"): Record<string, number> {
   const result: Record<string, number> = {};
   for (const r of rows) {
     const m = monthKey(r[dateField] as string | undefined);
     if (!m) continue;
-    const pr = r.prNo?.trim();
-    if (!pr) {
-      result[m] = (result[m] ?? 0) + 1;
-      continue;
-    }
-    const seen = (seenPerMonth[m] ??= new Set());
-    if (!seen.has(pr)) {
-      seen.add(pr);
-      result[m] = (result[m] ?? 0) + 1;
-    }
+    result[m] = (result[m] ?? 0) + 1;
   }
   return result;
 }
@@ -150,24 +141,6 @@ function CycleTimeDrilldownModal({
   );
 }
 
-// Count distinct jobs by PR No.: rows sharing a PR No. (the same request split
-// into multiple item/PO lines) count once; rows without a PR No. yet count
-// individually so nothing in the pipeline is hidden.
-function countByDistinctPr(rows: TrackingRow[]): number {
-  const seenPr = new Set<string>();
-  let count = 0;
-  for (const r of rows) {
-    const pr = r.prNo?.trim();
-    if (!pr) {
-      count += 1;
-    } else if (!seenPr.has(pr)) {
-      seenPr.add(pr);
-      count += 1;
-    }
-  }
-  return count;
-}
-
 export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
   const [rowsByTab, setRowsByTab] = useState<Record<string, TrackingRow[]>>({});
   const [scope, setScope] = useState<string>("all");
@@ -196,7 +169,11 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     const urgentCount = rows.filter((r) => r.urgent).length;
     const completedCount = rows.filter((r) => r.status === "Completed").length;
     return {
-      count: countByDistinctPr(rows),
+      // Row count, not distinct PR count: the PR<->PA<->PO relationship is
+      // many-to-many (one PR can span several POs; one PO can cover several
+      // PRs), so a row is the real unit of tracked work — matches the row
+      // count the team already sees in Tracking Sheet.
+      count: rows.length,
       urgentCount,
       completedPct: rows.length ? Math.round((completedCount / rows.length) * 100) : 0,
     };
@@ -213,7 +190,7 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
 
   const workloadData = useMemo(() => {
     if (scope !== "all") return [];
-    return tabs.map((t) => ({ name: t.name, count: countByDistinctPr(rowsByTab[t.id] ?? []) }));
+    return tabs.map((t) => ({ name: t.name, count: (rowsByTab[t.id] ?? []).length }));
   }, [tabs, rowsByTab, scope]);
 
   const monthlyPrSeries = useMemo(() => {
@@ -221,8 +198,8 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
     // for that person only — always keyed by tab name so colors stay assigned
     // by person, not by chart position.
     const groups = scope === "all"
-      ? tabs.map((t) => ({ key: t.name, counts: countDistinctPrByMonth(rowsByTab[t.id] ?? []) }))
-      : [{ key: tabs.find((t) => t.id === scope)?.name ?? "รายการ", counts: countDistinctPrByMonth(rows) }];
+      ? tabs.map((t) => ({ key: t.name, counts: countRowsByMonth(rowsByTab[t.id] ?? []) }))
+      : [{ key: tabs.find((t) => t.id === scope)?.name ?? "รายการ", counts: countRowsByMonth(rows) }];
 
     const months = new Set<string>();
     groups.forEach((g) => Object.keys(g.counts).forEach((m) => months.add(m)));
@@ -393,10 +370,10 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
 
       </div>
 
-      {/* PR received per month, by person */}
+      {/* Rows received per month, by person */}
       <div style={cardStyle}>
         <h3 style={{ margin: "0 0 var(--sp-3)", display: "flex", alignItems: "center", gap: 6, fontSize: "1rem", color: "var(--text-strong)" }}>
-          <IconChartLine size={18} stroke={1.75} style={{ color: "var(--primary)" }} /> จำนวน PR ที่ได้รับต่อเดือน{scope === "all" ? " (แยกตามคน)" : ""}
+          <IconChartLine size={18} stroke={1.75} style={{ color: "var(--primary)" }} /> จำนวนรายการที่ได้รับต่อเดือน{scope === "all" ? " (แยกตามคน)" : ""}
         </h3>
         {monthlyPrSeries.chartData.length === 0 ? (
           <div style={{ color: "var(--text-faint)", fontSize: "var(--fs-sm)" }}>ยังไม่มีข้อมูลวันที่ PR ให้แสดงแนวโน้มรายเดือน</div>
