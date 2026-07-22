@@ -842,6 +842,11 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
                     แขวงลุมพินี เขตปทุมวัน<br />
                     กรุงเทพมหานคร 10330
                   </p>
+                  <p style={{ margin: "var(--sp-2) 0 0", color: "var(--text-faint)", fontSize: "var(--fs-xs)", lineHeight: 1.6 }}>
+                    548 One City Centre Building (OCC), 44th Floor<br />
+                    Phloen Chit Road, Lumphini, Pathum Wan<br />
+                    Bangkok 10330
+                  </p>
                   <a
                     href="https://maps.app.goo.gl/aGzA72G58n75Wx649"
                     target="_blank"
