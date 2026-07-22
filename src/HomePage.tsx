@@ -842,7 +842,8 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
                     แขวงลุมพินี เขตปทุมวัน<br />
                     กรุงเทพมหานคร 10330
                   </p>
-                  <p style={{ margin: "var(--sp-2) 0 0", color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.7, fontFamily: '"IBM Plex Sans", system-ui, "Segoe UI", Roboto, sans-serif' }}>
+                  <hr style={{ margin: "var(--sp-2) 0", border: "none", borderTop: "1px dashed var(--border-strong)" }} />
+                  <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.7, fontFamily: '"IBM Plex Sans", system-ui, "Segoe UI", Roboto, sans-serif' }}>
                     548 One City Centre Building (OCC), 44th Floor<br />
                     Phloen Chit Road, Lumphini, Pathum Wan<br />
                     Bangkok 10330
