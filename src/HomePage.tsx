@@ -179,6 +179,15 @@ const LEAD_TIMES = [
   { scale: "ทั้งโปรเจกต์ (รวมใบอนุญาต)", time: "≈ 2 ปี" },
 ];
 
+/* Group companies whose PR/PA/PO we handle — code, Thai + English legal name,
+   and tax ID, so the team can look up the right registered entity. */
+const COMPANIES = [
+  { code: "GSP1", nameTh: "บริษัท กันกุล โซลาร์ พาวเวอร์ 1 จำกัด", nameEn: "Gunkul Solar Power 1 Co., Ltd.", taxId: "0105556137896" },
+  { code: "GUE", nameTh: "บริษัท กันกุล ยูทิลิตี้ แอนด์ เอ็นเนอร์ยี่ จำกัด", nameEn: "Gunkul Utility And Energy Co., Ltd.", taxId: "0105557054781" },
+  { code: "GKE", nameTh: "บริษัท กันกุลเอ็นจิเนียริ่ง จำกัด (มหาชน)", nameEn: "Gunkul Engineering Public Company Limited", taxId: "0107552000146" },
+  { code: "GSC", nameTh: "บริษัท กันกุล โซลาร์ คอมมูนิตี้ จำกัด", nameEn: "Gunkul Solar Community Co., Ltd.", taxId: "0105557084184" },
+];
+
 /* ============================================================
    Page
    ============================================================ */
@@ -826,81 +835,117 @@ export default function HomePage({ setPage }: { setPage: (p: Page) => void }) {
           </div>
         </Section>
 
-        {/* 10. Office + website */}
+        {/* 10. Office + companies + website */}
         <Section eyebrow="ติดต่อ" title="ที่ตั้งและช่องทางบริษัท">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "var(--sp-4)" }}>
-            <HoverCard interactive={false}>
-              <div style={{ display: "flex", gap: "var(--sp-3)" }}>
-                <IconBadge icon={IconMapPin} color="var(--primary)" />
-                <div>
-                  <div style={{ fontWeight: 600, color: "var(--text-strong)", marginBottom: "var(--sp-1)" }}>
-                    ที่ตั้งฝ่ายจัดซื้อ
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-4)" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "var(--sp-4)" }}>
+              <HoverCard interactive={false}>
+                <div style={{ display: "flex", gap: "var(--sp-3)" }}>
+                  <IconBadge icon={IconMapPin} color="var(--primary)" />
+                  <div>
+                    <div style={{ fontWeight: 600, color: "var(--text-strong)", marginBottom: "var(--sp-1)" }}>
+                      ที่ตั้งฝ่ายจัดซื้อ
+                    </div>
+                    <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.7 }}>
+                      548 อาคาร วัน ซิตี้ เซ็นเตอร์ (โอซีซี)<br />
+                      ชั้นที่ 44 ถนนเพลินจิต<br />
+                      แขวงลุมพินี เขตปทุมวัน<br />
+                      กรุงเทพมหานคร 10330
+                    </p>
+                    <hr style={{ margin: "var(--sp-2) 0", border: "none", borderTop: "1px dashed var(--border-strong)" }} />
+                    <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.7, fontFamily: '"IBM Plex Sans", system-ui, "Segoe UI", Roboto, sans-serif' }}>
+                      548 One City Centre Building (OCC), 44th Floor<br />
+                      Phloen Chit Road, Lumphini, Pathum Wan<br />
+                      Bangkok 10330
+                    </p>
+                    <a
+                      href="https://maps.app.goo.gl/aGzA72G58n75Wx649"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        marginTop: "var(--sp-2)",
+                        color: "var(--primary)",
+                        fontSize: "var(--fs-sm)",
+                        fontWeight: 600,
+                        textDecoration: "none",
+                      }}
+                    >
+                      <IconMapPin size={16} stroke={1.75} />
+                      เปิดใน Google Maps
+                    </a>
                   </div>
-                  <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.7 }}>
-                    548 อาคาร วัน ซิตี้ เซ็นเตอร์ (โอซีซี)<br />
-                    ชั้นที่ 44 ถนนเพลินจิต<br />
-                    แขวงลุมพินี เขตปทุมวัน<br />
-                    กรุงเทพมหานคร 10330
-                  </p>
-                  <hr style={{ margin: "var(--sp-2) 0", border: "none", borderTop: "1px dashed var(--border-strong)" }} />
-                  <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.7, fontFamily: '"IBM Plex Sans", system-ui, "Segoe UI", Roboto, sans-serif' }}>
-                    548 One City Centre Building (OCC), 44th Floor<br />
-                    Phloen Chit Road, Lumphini, Pathum Wan<br />
-                    Bangkok 10330
-                  </p>
-                  <a
-                    href="https://maps.app.goo.gl/aGzA72G58n75Wx649"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      marginTop: "var(--sp-2)",
-                      color: "var(--primary)",
-                      fontSize: "var(--fs-sm)",
-                      fontWeight: 600,
-                      textDecoration: "none",
-                    }}
-                  >
-                    <IconMapPin size={16} stroke={1.75} />
-                    เปิดใน Google Maps
-                  </a>
                 </div>
-              </div>
-            </HoverCard>
+              </HoverCard>
+
+              <HoverCard interactive={false}>
+                <div style={{ display: "flex", gap: "var(--sp-3)" }}>
+                  <IconBadge icon={IconBuildingSkyscraper} color="var(--info)" />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 600, color: "var(--text-strong)", marginBottom: "var(--sp-3)" }}>
+                      บริษัทในเครือที่ดูแล
+                    </div>
+                    <div style={{ overflowX: "auto" }}>
+                      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--fs-xs)" }}>
+                        <thead>
+                          <tr style={{ textAlign: "left", color: "var(--text-muted)" }}>
+                            <th style={{ padding: "6px 8px", fontWeight: 700, whiteSpace: "nowrap" }}>ชื่อย่อ</th>
+                            <th style={{ padding: "6px 8px", fontWeight: 700 }}>ชื่อบริษัท</th>
+                            <th style={{ padding: "6px 8px", fontWeight: 700, whiteSpace: "nowrap" }}>เลขผู้เสียภาษี</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {COMPANIES.map((c) => (
+                            <tr key={c.code} style={{ borderTop: "1px solid var(--border)" }}>
+                              <td style={{ padding: "8px", fontWeight: 700, color: "var(--text-strong)", verticalAlign: "top", whiteSpace: "nowrap" }}>{c.code}</td>
+                              <td style={{ padding: "8px", verticalAlign: "top", lineHeight: 1.5 }}>
+                                <div style={{ color: "var(--text)" }}>{c.nameTh}</div>
+                                <div style={{ color: "var(--text-muted)", fontFamily: '"IBM Plex Sans", system-ui, "Segoe UI", Roboto, sans-serif' }}>{c.nameEn}</div>
+                              </td>
+                              <td style={{ padding: "8px", color: "var(--text-muted)", verticalAlign: "top", whiteSpace: "nowrap", fontFamily: '"IBM Plex Sans", system-ui, "Segoe UI", Roboto, sans-serif' }}>{c.taxId}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </HoverCard>
+            </div>
 
             <HoverCard interactive={false}>
-              <div style={{ display: "flex", gap: "var(--sp-3)" }}>
+              <div style={{ display: "flex", gap: "var(--sp-3)", alignItems: "center", flexWrap: "wrap" }}>
                 <IconBadge icon={IconBuildingBank} color="var(--accent)" />
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, minWidth: 200 }}>
                   <div style={{ fontWeight: 600, color: "var(--text-strong)", marginBottom: "var(--sp-1)" }}>
                     Website บริษัท
                   </div>
-                  <p style={{ margin: "0 0 var(--sp-3)", color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.6 }}>
+                  <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "var(--fs-sm)", lineHeight: 1.6 }}>
                     เว็บไซต์หลักของกลุ่มบริษัท กันกุล เอ็นจิเนียริ่ง
                   </p>
-                  <a
-                    href="https://www.gunkul.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "var(--sp-2)",
-                      background: "var(--primary)",
-                      color: "var(--primary-contrast)",
-                      textDecoration: "none",
-                      padding: "var(--sp-3) var(--sp-5)",
-                      borderRadius: "var(--radius)",
-                      fontWeight: 600,
-                      fontSize: "var(--fs-sm)",
-                    }}
-                  >
-                    <IconWorld size={18} stroke={1.75} />
-                    www.gunkul.com
-                  </a>
                 </div>
+                <a
+                  href="https://www.gunkul.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "var(--sp-2)",
+                    background: "var(--primary)",
+                    color: "var(--primary-contrast)",
+                    textDecoration: "none",
+                    padding: "var(--sp-3) var(--sp-5)",
+                    borderRadius: "var(--radius)",
+                    fontWeight: 600,
+                    fontSize: "var(--fs-sm)",
+                  }}
+                >
+                  <IconWorld size={18} stroke={1.75} />
+                  www.gunkul.com
+                </a>
               </div>
             </HoverCard>
           </div>
