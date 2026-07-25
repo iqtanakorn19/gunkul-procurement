@@ -127,6 +127,15 @@ function onEditInstallable(e) {
    Time-based safety net — catches paste/delete operations that
    onEdit might not fully cover, and removes Firestore rows whose
    sheet row was deleted.
+
+   PERFORMANCE: this used to call syncRow() per row, which makes
+   several Spreadsheet round-trips PER ROW — with a few hundred rows
+   across many tabs it blew past Apps Script's 6-minute execution
+   limit and failed every run. It now reads each whole sheet in ONE
+   getValues(), computes hashes in memory, writes only changed rows,
+   and fires all Firestore writes/deletes for a sheet in a single
+   parallel UrlFetchApp.fetchAll() batch. Helper columns (_RowID,
+   _Hash) are written back in one setValues() per sheet.
    ============================================================ */
 function fullResync() {
   var ss = SpreadsheetApp.getActive();
@@ -134,17 +143,86 @@ function fullResync() {
     var name = sheet.getName();
     if (name === CONFIG_SHEET_NAME) return;
     var tabId = getOrCreateTabId(name);
-    var lastRow = sheet.getLastRow();
-    var seenRowIds = {};
-
-    for (var r = 2; r <= lastRow; r++) {
-      var rowId = syncRow(sheet, tabId, r);
-      if (rowId) seenRowIds[rowId] = true;
-    }
-    pruneDeletedRows(tabId, seenRowIds);
+    syncSheetBatched(sheet, tabId);
   });
   pruneDeletedTabs();
   writeLastSyncedAt();
+}
+
+/* Batched equivalent of looping syncRow() over one sheet. Reads the
+   whole data block once, decides per row what to do in memory, then
+   issues all Firestore calls in parallel and all helper-cell updates
+   in one write. Behaviour matches syncRow row-for-row (same hash
+   skip, same blank-row delete, same _RowID assignment). */
+function syncSheetBatched(sheet, tabId) {
+  var rowIdCol = HEADERS.length + 1;   // hidden _RowID
+  var hashCol = HEADERS.length + 2;    // hidden _Hash
+  var lastRow = sheet.getLastRow();
+  var seenRowIds = {};
+  if (lastRow < 2) { pruneDeletedRows(tabId, seenRowIds); return; }
+
+  var numRows = lastRow - 1;
+  // One read for data + both helper columns (width = HEADERS + _RowID + _Hash).
+  var block = sheet.getRange(2, 1, numRows, HEADERS.length + 2).getValues();
+  var helpers = [];        // [ [rowId, hash], ... ] written back once at the end
+  var requests = [];       // Firestore write/delete requests for fetchAll
+  var helpersDirty = false;
+
+  for (var i = 0; i < numRows; i++) {
+    var values = block[i];
+    var rowId = block[i][HEADERS.length];
+    var oldHash = block[i][HEADERS.length + 1];
+
+    var isBlank = true;
+    for (var c = 0; c < HEADERS.length; c++) {
+      if (values[c] !== "" && values[c] !== null) { isBlank = false; break; }
+    }
+
+    if (isBlank) {
+      if (rowId) {
+        requests.push(buildDeleteRequest(tabId, rowId));
+        helpers.push(["", ""]);
+        helpersDirty = true;
+      } else {
+        helpers.push([rowId, oldHash]);
+      }
+      continue;
+    }
+
+    if (!rowId) { rowId = "row-" + Utilities.getUuid(); helpersDirty = true; }
+    seenRowIds[rowId] = true;
+
+    var data = {};
+    for (var h = 0; h < HEADERS.length; h++) {
+      if (FIELD_MAP[HEADERS[h]]) {
+        data[FIELD_MAP[HEADERS[h]].key] = coerce(values[h], FIELD_MAP[HEADERS[h]].type);
+      }
+    }
+    var suppliers = SUPPLIER_COLS.map(function (label) {
+      var idx = HEADERS.indexOf(label);
+      return idx >= 0 ? values[idx] : "";
+    }).filter(function (v) { return v !== "" && v !== null; });
+    if (suppliers.length) data.compareSuppliers = suppliers;
+
+    var newHash = rowHash(data);
+    if (String(oldHash) === newHash) {
+      helpers.push([rowId, oldHash]);   // unchanged — no Firestore write
+      continue;
+    }
+    requests.push(buildWriteRequest(tabId, rowId, data));
+    helpers.push([rowId, newHash]);
+    helpersDirty = true;
+  }
+
+  // Fire every Firestore call for this sheet in parallel, chunked so a huge
+  // first-time sync can't exceed fetchAll's request-count limits.
+  for (var s = 0; s < requests.length; s += 50) {
+    UrlFetchApp.fetchAll(requests.slice(s, s + 50));
+  }
+  if (helpersDirty) {
+    sheet.getRange(2, rowIdCol, numRows, 2).setValues(helpers);
+  }
+  pruneDeletedRows(tabId, seenRowIds);
 }
 
 /* Stamps meta/trackingSync.lastSyncedAt so the website can show a
@@ -295,32 +373,45 @@ function fsValue(v) {
   return { stringValue: String(v) };
 }
 
-function writeFirestoreRow(tabId, rowId, data) {
+/* Build (but don't send) a Firestore row write. Returned in the shape
+   UrlFetchApp.fetch/fetchAll expects (a `url` plus fetch params), so the
+   same request works for a single fetch() or a batched fetchAll(). */
+function buildWriteRequest(tabId, rowId, data) {
   var fields = {};
   Object.keys(data).forEach(function (k) {
     if (data[k] !== undefined) fields[k] = fsValue(data[k]);
   });
   var mask = Object.keys(fields).map(function (k) { return "updateMask.fieldPaths=" + encodeURIComponent(k); }).join("&");
-  var url = firestoreBaseUrl() + "/trackingTabs/" + tabId + "/rows/" + rowId + "?" + mask;
-  var resp = UrlFetchApp.fetch(url, {
+  return {
+    url: firestoreBaseUrl() + "/trackingTabs/" + tabId + "/rows/" + rowId + "?" + mask,
     method: "patch",
     contentType: "application/json",
     headers: { Authorization: "Bearer " + ScriptApp.getOAuthToken() },
     payload: JSON.stringify({ fields: fields }),
     muteHttpExceptions: true,
-  });
+  };
+}
+
+function buildDeleteRequest(tabId, rowId) {
+  return {
+    url: firestoreBaseUrl() + "/trackingTabs/" + tabId + "/rows/" + rowId,
+    method: "delete",
+    headers: { Authorization: "Bearer " + ScriptApp.getOAuthToken() },
+    muteHttpExceptions: true,
+  };
+}
+
+function writeFirestoreRow(tabId, rowId, data) {
+  var req = buildWriteRequest(tabId, rowId, data);
+  var resp = UrlFetchApp.fetch(req.url, req);
   if (resp.getResponseCode() >= 300) {
     Logger.log("writeFirestoreRow FAILED (" + resp.getResponseCode() + "): " + resp.getContentText());
   }
 }
 
 function deleteFirestoreRow(tabId, rowId) {
-  var url = firestoreBaseUrl() + "/trackingTabs/" + tabId + "/rows/" + rowId;
-  UrlFetchApp.fetch(url, {
-    method: "delete",
-    headers: { Authorization: "Bearer " + ScriptApp.getOAuthToken() },
-    muteHttpExceptions: true,
-  });
+  var req = buildDeleteRequest(tabId, rowId);
+  UrlFetchApp.fetch(req.url, req);
 }
 
 function pruneDeletedRows(tabId, seenRowIds) {
