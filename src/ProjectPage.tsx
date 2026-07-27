@@ -13,6 +13,7 @@ import {
   IconBuildingFactory2, IconSearch, IconPlus, IconPencil, IconTrash, IconX, IconFileSpreadsheet,
 } from "@tabler/icons-react";
 import { Reveal, Section } from "./components/PageKit";
+import ProjectFarm from "./components/ProjectFarm";
 
 function formatNumber(v: number | string | null | undefined): string {
   if (v === null || v === undefined || v === "") return "-";
@@ -1091,6 +1092,8 @@ export default function ProjectPage() {
           </div>
         )}
       </Section>
+
+      <ProjectFarm />
 
       {editingProject && (
         <ProjectEditModal project={editingProject} onSave={saveProjectEdit} onClose={() => setEditingProject(null)} customBrandOptions={customBrandOptions} onAddCustomBrand={addCustomBrand} />
