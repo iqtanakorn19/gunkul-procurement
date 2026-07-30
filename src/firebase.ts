@@ -1,6 +1,12 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import {
+  getFirestore,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+} from "firebase/firestore";
+import type { Firestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -15,5 +21,22 @@ const firebaseConfig = {
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+
+// Firestore with PERSISTENT local cache (IndexedDB). Repeat visits and page
+// refreshes are served from the on-device cache and cost ZERO server reads —
+// only changed documents are re-fetched. This is the main lever for keeping
+// total reads under the Spark (free) plan's 50k/day quota. The multi-tab
+// manager keeps the cache consistent when the app is open in several tabs.
+// initializeFirestore must run before any getFirestore(app); if the app was
+// already initialized (e.g. Vite HMR re-import), fall back to the existing one.
+let firestore: Firestore;
+try {
+  firestore = initializeFirestore(app, {
+    localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+  });
+} catch {
+  firestore = getFirestore(app);
+}
+export const db = firestore;
+
 export const storage = getStorage(app);
