@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import {
   collection, onSnapshot, doc, addDoc, updateDoc, deleteDoc, writeBatch,
 } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "./firebase";
+import { db } from "./firebase";
 import {
   IconFileText,
   IconShieldCheck,
@@ -19,9 +18,18 @@ import {
   IconPencil,
   IconTrash,
   IconPlus,
-  IconUpload,
+  IconLink,
 } from "@tabler/icons-react";
 import { Reveal, IconBadge, Section, HoverCard, grid, tint } from "./components/PageKit";
+
+/* Google Drive share links (".../file/d/FILE_ID/view") don't embed in an
+   <iframe> directly — Drive's dedicated ".../preview" path does. Converts
+   when a file id is recognized; otherwise returns the url unchanged (e.g.
+   the seeded docs below, which point at static PDFs under public/). */
+function driveEmbedUrl(url: string): string {
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  return m ? `https://drive.google.com/file/d/${m[1]}/preview` : url;
+}
 
 type DocType = "wi" | "manual" | "scope";
 
@@ -158,7 +166,7 @@ function DocEditModal({
   onClose,
 }: {
   doc: Doc | null;
-  onSave: (data: { title: string; description: string; type: DocType; pages: string }, file: File | null) => Promise<void>;
+  onSave: (data: { title: string; description: string; type: DocType; pages: string; url: string }) => Promise<void>;
   onClose: () => void;
 }) {
   const isNew = doc === null;
@@ -166,7 +174,7 @@ function DocEditModal({
   const [description, setDescription] = useState(doc?.description ?? "");
   const [type, setType] = useState<DocType>(doc?.type ?? "wi");
   const [pages, setPages] = useState(doc?.pages ?? "");
-  const [file, setFile] = useState<File | null>(null);
+  const [url, setUrl] = useState(doc?.url ?? "");
   const [saving, setSaving] = useState(false);
   const inputStyle: React.CSSProperties = {
     font: "inherit", fontSize: "var(--fs-sm)", color: "var(--text)", background: "var(--surface)",
@@ -174,10 +182,10 @@ function DocEditModal({
   };
 
   const handleSave = async () => {
-    if (!title.trim() || (isNew && !file)) return;
+    if (!title.trim() || !url.trim()) return;
     setSaving(true);
     try {
-      await onSave({ title: title.trim(), description: description.trim(), type, pages: pages.trim() }, file);
+      await onSave({ title: title.trim(), description: description.trim(), type, pages: pages.trim(), url: url.trim() });
     } finally {
       setSaving(false);
     }
@@ -218,15 +226,10 @@ function DocEditModal({
           </label>
         </div>
         <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)", marginBottom: "var(--sp-4)" }}>
-          {isNew ? "ไฟล์ PDF" : "แทนที่ไฟล์ PDF (ไม่บังคับ — เช่น หลัง Revise WI ใหม่)"}
+          ลิงก์ไฟล์ PDF (Google Drive — ตั้งค่าแชร์เป็น "ทุกคนที่มีลิงก์" ก่อน)
           <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)" }}>
-            <IconUpload size={16} stroke={1.75} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
-            <input
-              type="file"
-              accept="application/pdf"
-              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)" }}
-            />
+            <IconLink size={16} stroke={1.75} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
+            <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://drive.google.com/file/d/.../view" style={inputStyle} />
           </div>
         </label>
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "var(--sp-2)" }}>
@@ -235,7 +238,7 @@ function DocEditModal({
           </button>
           <button
             type="button"
-            disabled={saving || !title.trim() || (isNew && !file)}
+            disabled={saving || !title.trim() || !url.trim()}
             onClick={handleSave}
             style={{ border: "none", background: "var(--primary)", color: "var(--primary-contrast)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", fontWeight: 600, cursor: saving ? "default" : "pointer", opacity: saving ? 0.7 : 1 }}
           >
@@ -282,25 +285,14 @@ export default function KnowledgePage() {
     return unsub;
   }, []);
 
-  const uploadPdf = async (id: string, file: File) => {
-    const fileRef = ref(storage, `knowledgeDocs/${id}-${file.name}`);
-    await uploadBytes(fileRef, file);
-    return getDownloadURL(fileRef);
-  };
-
-  const saveDocEdit = async (data: { title: string; description: string; type: DocType; pages: string }, file: File | null) => {
+  const saveDocEdit = async (data: { title: string; description: string; type: DocType; pages: string; url: string }) => {
     if (!editingDoc) return;
-    const update: Partial<Doc> = { ...data };
-    if (file) update.url = await uploadPdf(editingDoc.id, file);
-    await updateDoc(doc(db, "knowledgeDocs", editingDoc.id), update);
+    await updateDoc(doc(db, "knowledgeDocs", editingDoc.id), data);
     setEditingDoc(null);
   };
 
-  const addNewDoc = async (data: { title: string; description: string; type: DocType; pages: string }, file: File | null) => {
-    if (!file) return;
-    const newRef = await addDoc(collection(db, "knowledgeDocs"), { ...data, url: "" });
-    const url = await uploadPdf(newRef.id, file);
-    await updateDoc(newRef, { url });
+  const addNewDoc = async (data: { title: string; description: string; type: DocType; pages: string; url: string }) => {
+    await addDoc(collection(db, "knowledgeDocs"), data);
     setAddingDoc(false);
   };
 
@@ -400,7 +392,8 @@ export default function KnowledgePage() {
               <div style={{ display: "flex", gap: "var(--sp-2)" }}>
                 <a
                   href={selectedDoc.url}
-                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -415,7 +408,7 @@ export default function KnowledgePage() {
                   }}
                 >
                   <IconDownload size={16} stroke={2} />
-                  ดาวน์โหลด
+                  เปิดใน Drive
                 </a>
                 <button
                   onClick={() => deleteDocItem(selectedDoc.id)}
@@ -455,7 +448,7 @@ export default function KnowledgePage() {
               </div>
             </div>
             <div style={{ flex: 1, overflow: "hidden", background: "#525659" }}>
-              <iframe src={selectedDoc.url} style={{ width: "100%", height: "100%", border: "none" }} title={selectedDoc.title} />
+              <iframe src={driveEmbedUrl(selectedDoc.url)} style={{ width: "100%", height: "100%", border: "none" }} title={selectedDoc.title} />
             </div>
           </div>
         </div>

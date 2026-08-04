@@ -2,20 +2,30 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import type React from "react";
 import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../firebase";
+import { db } from "../firebase";
 import { Section } from "./PageKit";
 import {
-  IconX, IconUpload, IconDownload, IconPencil, IconTrash, IconPlus, IconFile, IconSearch,
+  IconX, IconLink, IconDownload, IconPencil, IconTrash, IconPlus, IconFile, IconSearch,
   IconChevronUp, IconChevronDown, IconSelector,
 } from "@tabler/icons-react";
 
 /* ============================================================
-   Reusable file repository — upload / list / download / replace /
-   delete files, backed by a Firestore collection + Storage folder
-   (both named `collectionName`). Used on the ESG page for the ESG
-   document library and the evaluation-template library.
+   Reusable file repository — list / open / replace / delete files,
+   backed by a Firestore collection (named `collectionName`). Files
+   themselves live in Google Drive (not Firebase Storage — Storage
+   requires the paid Blaze plan on new Firebase projects even within
+   the free quota, so this app stays on the free Spark plan by linking
+   out to Drive instead of uploading bytes). Used on the ESG page for
+   the ESG document library and the evaluation-template library.
    ============================================================ */
+
+/* Google Drive share links (".../file/d/FILE_ID/view") don't embed in an
+   <iframe> directly — Drive's dedicated ".../preview" path does. Converts
+   when a file id is recognized; otherwise returns the url unchanged. */
+function driveEmbedUrl(url: string): string {
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  return m ? `https://drive.google.com/file/d/${m[1]}/preview` : url;
+}
 
 export interface VaultCategory {
   value: string;
@@ -47,28 +57,29 @@ function SortIcon({ active, dir }: { active: boolean; dir: "asc" | "desc" }) {
 }
 
 function VaultModal({
-  categories, accept, item, onSave, onClose,
+  categories, item, onSave, onClose,
 }: {
   categories: VaultCategory[];
   accept: string;
   item: VaultDoc | null;
-  onSave: (data: { title: string; description: string; category: string }, file: File | null) => Promise<void>;
+  onSave: (data: { title: string; description: string; category: string; url: string; fileName: string }) => Promise<void>;
   onClose: () => void;
 }) {
   const isNew = item === null;
   const [title, setTitle] = useState(item?.title ?? "");
   const [description, setDescription] = useState(item?.description ?? "");
   const [category, setCategory] = useState(item?.category ?? categories[0]?.value ?? "");
-  const [file, setFile] = useState<File | null>(null);
+  const [url, setUrl] = useState(item?.url ?? "");
+  const [fileName, setFileName] = useState(item?.fileName ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSave = async () => {
-    if (!title.trim() || (isNew && !file)) return;
+    if (!title.trim() || !url.trim()) return;
     setSaving(true);
     setError(null);
     try {
-      await onSave({ title: title.trim(), description: description.trim(), category }, file);
+      await onSave({ title: title.trim(), description: description.trim(), category, url: url.trim(), fileName: fileName.trim() || title.trim() });
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -107,12 +118,16 @@ function VaultModal({
             </select>
           </label>
         )}
-        <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)", marginBottom: "var(--sp-4)" }}>
-          {isNew ? "เลือกไฟล์" : "แทนที่ไฟล์ (ไม่บังคับ — อัปโหลดเวอร์ชันใหม่)"}
+        <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)", marginBottom: "var(--sp-3)" }}>
+          ลิงก์ไฟล์ (Google Drive — ตั้งค่าแชร์เป็น "ทุกคนที่มีลิงก์" ก่อน)
           <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)" }}>
-            <IconUpload size={16} stroke={1.75} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
-            <input type="file" accept={accept} onChange={(e) => setFile(e.target.files?.[0] ?? null)} style={{ fontSize: "var(--fs-xs)", color: "var(--text-muted)" }} />
+            <IconLink size={16} stroke={1.75} style={{ color: "var(--text-faint)", flexShrink: 0 }} />
+            <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://drive.google.com/file/d/.../view" style={inputStyle} />
           </div>
+        </label>
+        <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: "var(--fs-xs)", color: "var(--text-muted)", marginBottom: "var(--sp-4)" }}>
+          ชื่อไฟล์ที่แสดง (ไม่บังคับ)
+          <input value={fileName} onChange={(e) => setFileName(e.target.value)} placeholder="เช่น scope-of-work.pdf" style={inputStyle} />
         </label>
         {error && (
           <div style={{ background: "color-mix(in srgb, var(--danger) 10%, transparent)", color: "var(--danger)", borderRadius: "var(--radius)", padding: "var(--sp-3)", marginBottom: "var(--sp-3)", fontSize: "var(--fs-xs)", wordBreak: "break-word" }}>
@@ -125,9 +140,9 @@ function VaultModal({
           </button>
           <button
             type="button"
-            disabled={saving || !title.trim() || (isNew && !file)}
+            disabled={saving || !title.trim() || !url.trim()}
             onClick={handleSave}
-            style={{ border: "none", background: "var(--primary)", color: "var(--primary-contrast)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", fontWeight: 600, cursor: saving ? "default" : "pointer", opacity: saving || !title.trim() || (isNew && !file) ? 0.6 : 1 }}
+            style={{ border: "none", background: "var(--primary)", color: "var(--primary-contrast)", borderRadius: "var(--radius)", padding: "8px 16px", fontSize: "var(--fs-sm)", fontWeight: 600, cursor: saving ? "default" : "pointer", opacity: saving || !title.trim() || !url.trim() ? 0.6 : 1 }}
           >
             {saving ? "กำลังบันทึก..." : "บันทึก"}
           </button>
@@ -175,42 +190,14 @@ export default function FileVault({
 
   const catLabel = (v: string) => categories.find((c) => c.value === v)?.label ?? v;
 
-  // Fail loudly instead of hanging forever: if Storage is unreachable or the
-  // upload stalls (e.g. blocked by Storage rules / CORS), reject after 30s so
-  // the modal shows an error rather than sitting on "กำลังบันทึก..." indefinitely.
-  const withTimeout = <T,>(p: Promise<T>, ms = 30000): Promise<T> =>
-    Promise.race([
-      p,
-      new Promise<T>((_, reject) =>
-        setTimeout(() => reject(new Error("หมดเวลาอัปโหลด (30 วิ) — อาจติด Firebase Storage rules หรือเครือข่าย")), ms),
-      ),
-    ]);
-
-  const upload = async (id: string, file: File) => {
-    const fileRef = ref(storage, `${collectionName}/${id}-${file.name}`);
-    await withTimeout(uploadBytes(fileRef, file));
-    return getDownloadURL(fileRef);
-  };
-
-  const addNew = async (data: { title: string; description: string; category: string }, file: File | null) => {
-    if (!file) return;
-    const newRef = await addDoc(collection(db, collectionName), { ...data, url: "", fileName: file.name });
-    try {
-      const url = await upload(newRef.id, file);
-      await updateDoc(newRef, { url });
-    } catch (e) {
-      // Upload failed — don't leave an orphan doc with no file behind.
-      await deleteDoc(doc(db, collectionName, newRef.id)).catch(() => {});
-      throw e;
-    }
+  const addNew = async (data: { title: string; description: string; category: string; url: string; fileName: string }) => {
+    await addDoc(collection(db, collectionName), data);
     setAdding(false);
   };
 
-  const saveEdit = async (data: { title: string; description: string; category: string }, file: File | null) => {
+  const saveEdit = async (data: { title: string; description: string; category: string; url: string; fileName: string }) => {
     if (!editing) return;
-    const update: Partial<VaultDoc> = { ...data };
-    if (file) { update.url = await upload(editing.id, file); update.fileName = file.name; }
-    await updateDoc(doc(db, collectionName, editing.id), update);
+    await updateDoc(doc(db, collectionName, editing.id), data);
     setEditing(null);
   };
 
@@ -354,14 +341,14 @@ export default function FileVault({
                 <p style={{ margin: 0, color: "rgba(255,255,255,0.55)", fontSize: "var(--fs-xs)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{preview.fileName}</p>
               </div>
               <a href={preview.url} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: "var(--sp-2)", padding: "var(--sp-2) var(--sp-4)", background: "var(--accent)", color: "var(--navy-deep)", borderRadius: "var(--radius)", textDecoration: "none", fontSize: "var(--fs-sm)", fontWeight: 700, flexShrink: 0 }}>
-                <IconDownload size={16} stroke={2} /> ดาวน์โหลด
+                <IconDownload size={16} stroke={2} /> เปิดใน Drive
               </a>
               <button onClick={() => setPreview(null)} style={{ width: 36, height: 36, borderRadius: "var(--radius-full)", border: "none", background: "rgba(255,255,255,0.15)", color: "white", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <IconX size={18} stroke={2} />
               </button>
             </div>
             <div style={{ flex: 1, overflow: "hidden", background: "#525659" }}>
-              <iframe src={preview.url} style={{ width: "100%", height: "100%", border: "none" }} title={preview.title} />
+              <iframe src={driveEmbedUrl(preview.url)} style={{ width: "100%", height: "100%", border: "none" }} title={preview.title} />
             </div>
           </div>
         </div>,
