@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import { db } from "./firebase";
+import { subscribeRows, getRowsSnapshot } from "./data/trackingStore";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
   LineChart, Line, Legend,
@@ -156,13 +155,10 @@ export default function TrackingOverview({ tabs }: { tabs: Tab[] }) {
 
   useEffect(() => {
     const unsubs = tabs.map((tab) =>
-      onSnapshot(query(collection(db, "trackingTabs", tab.id, "rows"), orderBy("no")), (snap) => {
+      subscribeRows(tab.id, () => {
         setRowsByTab((prev) => ({
           ...prev,
-          [tab.id]: snap.docs.map((d) => {
-            const data = d.data() as Omit<TrackingRow, "id">;
-            return { id: d.id, ...data, status: normalizeStatus(data.status) };
-          }),
+          [tab.id]: getRowsSnapshot(tab.id).map((r) => ({ ...r, status: normalizeStatus(r.status) })),
         }));
       })
     );

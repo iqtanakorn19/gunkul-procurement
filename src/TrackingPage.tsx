@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { collection, getDocs, onSnapshot, orderBy, query } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import SyncStatus from "./components/SyncStatus";
+import { subscribeTabs, getTabsSnapshot, getTabsError, subscribeRows, getRowsSnapshot } from "./data/trackingStore";
 import * as XLSX from "xlsx";
 import {
   IconX,
@@ -295,32 +296,21 @@ export default function TrackingPage() {
   };
 
   useEffect(() => {
-    const q = query(collection(db, "trackingTabs"), orderBy("order"));
-    const unsub = onSnapshot(
-      q,
-      (snap) => {
-        setLoadError(null);
-        const list = snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Tab, "id">) }));
-        setTabs(list);
-        setActiveTab((cur) => (cur && list.some((t) => t.id === cur) ? cur : list[0]?.id ?? null));
-      },
-      (err) => setLoadError(err.message)
-    );
-    return unsub;
+    return subscribeTabs(() => {
+      const err = getTabsError();
+      setLoadError(err);
+      if (err) return;
+      const list = getTabsSnapshot();
+      setTabs(list);
+      setActiveTab((cur) => (cur && list.some((t) => t.id === cur) ? cur : list[0]?.id ?? null));
+    });
   }, []);
 
   useEffect(() => {
     if (!activeTab) { setRows([]); return; }
-    const q = query(collection(db, "trackingTabs", activeTab, "rows"), orderBy("no"));
-    const unsub = onSnapshot(
-      q,
-      (snap) => setRows(snap.docs.map((d) => {
-        const data = d.data() as Omit<TrackingRow, "id">;
-        return { id: d.id, ...data, status: normalizeStatus(data.status) };
-      })),
-      (err) => setLoadError(err.message)
-    );
-    return unsub;
+    return subscribeRows(activeTab, () => {
+      setRows(getRowsSnapshot(activeTab).map((r) => ({ ...r, status: normalizeStatus(r.status) })));
+    });
   }, [activeTab]);
 
   // Cross-tab search: if the searched number isn't in the current person's tab,

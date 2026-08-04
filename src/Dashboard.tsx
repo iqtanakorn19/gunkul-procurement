@@ -1,26 +1,19 @@
 import { useEffect, useState } from "react";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import { db } from "./firebase";
 import { IconLayoutDashboard } from "@tabler/icons-react";
 import TrackingOverview from "./TrackingOverview";
 import SyncStatus from "./components/SyncStatus";
 import type { Tab } from "./TrackingPage";
+import { subscribeTabs, getTabsSnapshot, getTabsError } from "./data/trackingStore";
 
 export default function DashboardPage() {
-  const [tabs, setTabs] = useState<Tab[]>([]);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const [tabs, setTabs] = useState<Tab[]>(getTabsSnapshot());
+  const [loadError, setLoadError] = useState<string | null>(getTabsError());
 
   useEffect(() => {
-    const q = query(collection(db, "trackingTabs"), orderBy("order"));
-    const unsub = onSnapshot(
-      q,
-      (snap) => {
-        setLoadError(null);
-        setTabs(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Tab, "id">) })));
-      },
-      (err) => setLoadError(err.message)
-    );
-    return unsub;
+    return subscribeTabs(() => {
+      setTabs(getTabsSnapshot());
+      setLoadError(getTabsError());
+    });
   }, []);
 
   return (
