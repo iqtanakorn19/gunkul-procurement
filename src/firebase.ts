@@ -7,13 +7,15 @@ import {
   persistentMultipleTabManager,
 } from "firebase/firestore";
 import type { Firestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
 
+// No firebase/storage import: Cloud Storage for Firebase requires the paid
+// Blaze plan on new projects even within the free quota. Document/file
+// uploads across the app link out to Google Drive instead (see FileVault.tsx,
+// KnowledgePage.tsx), so this project can run entirely on the free Spark plan.
 const firebaseConfig = {
   apiKey: "AIzaSyCLcKumFHPB9k3qnlQE5yE0-fFBBTFoyMI",
   authDomain: "gunkul-internship.firebaseapp.com",
   projectId: "gunkul-internship",
-  storageBucket: "gunkul-internship.firebasestorage.app",
   messagingSenderId: "380788772670",
   appId: "1:380788772670:web:bece97fb479875a2e8e66f",
   measurementId: "G-2RMRM2W29D"
@@ -38,5 +40,3 @@ try {
   firestore = getFirestore(app);
 }
 export const db = firestore;
-
-export const storage = getStorage(app);
